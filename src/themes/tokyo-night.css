@@ -1,0 +1,33 @@
+[data-theme="tokyo-night"] {
+  color-scheme: dark;
+
+  --background: #1a1b26;
+  --foreground: #c0caf5;
+
+  --surface: #24283b;
+  --surface-foreground: #c0caf5;
+
+  --overlay: #24283b;
+  --overlay-foreground: #c0caf5;
+
+  --default: #414868;
+  --default-foreground: #c0caf5;
+
+  --accent: #7aa2f7;
+  --accent-foreground: #ffffff;
+
+  --field-background: #24283b;
+  --field-foreground: #c0caf5;
+
+  --success: #9ece6a;
+  --warning: #e0af68;
+  --danger: #f7768e;
+
+  --border: #414868;
+  --separator: #414868;
+
+  --focus: var(--accent);
+  --link: var(--accent);
+
+  --radius: 0.75rem;
+}

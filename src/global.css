@@ -1,0 +1,120 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+@import "./themes/fortune.css";
+@import "./themes/ocean.css";
+@import "./themes/tokyo-night.css";
+
+@font-face {
+    font-family: "HKFont";
+    src: url("/font/xjkmslgt.ttf") format("truetype");
+    unicode-range: U+0000-024F;
+}
+
+@font-face {
+    font-family: "HKFont";
+    src: url("/font/三极泼墨体.ttf") format("truetype");
+    unicode-range: U+4E00-9FFF;
+}
+
+:root {
+    --plyr-color-main: var(--color-accent) !important;
+    user-select: none;
+    font-family: "HKFont", sans-serif;
+    font-display: swap;
+    line-height: normal;
+    -webkit-font-smoothing: antialiased;
+    text-size-adjust: none;
+
+    ::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--color-accent-soft-hover);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        cursor: pointer;
+        background: var(--color-accent);
+    }
+}
+
+input[type="range" i] {
+    cursor: pointer !important;
+}
+
+.plyr {
+    width: 100%;
+}
+
+.tabs__indicator {
+    box-shadow: var(--shadow-sm);
+}
+
+.plyr__control--back:before {
+    background-color: transparent !important;
+}
+
+.plyr__menu__container {
+    --theme_color: rgba(0, 0, 0, 0.2);
+    background-color: var(--theme_color);
+    backdrop-filter: blur(20px);
+
+    &::after {
+        border-top-color: var(--color-accent);
+    }
+}
+
+.plyr__control--overlaid {
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+.hk_title {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        right: -2vh;
+        top: 0.5vh;
+        width: 1vh;
+        height: 2vh;
+        background: var(--color-accent);
+        border-radius: var(--radius-xs);
+        box-shadow: 1px 1px 8px var(--color-accent);
+    }
+}
+
+.bg_blur {
+    z-index: -1;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    /* filter: blur(10px); */
+    transition: 45ms ease-in background;
+
+    &::after {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        content: '';
+        /* background-color: var(--color-background); */
+        /* background-image: var(--hover_bg); */
+        background-repeat: no-repeat;
+        background-size: 70% auto;
+        transition: 45ms ease-out background;
+        background-position-x: right;
+    }
+
+    &::before {
+        z-index: 1;
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        content: '';
+        background: linear-gradient(to bottom, transparent 50%, var(--color-background) 90%);
+    }
+}
