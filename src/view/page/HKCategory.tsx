@@ -33,7 +33,7 @@ export default function () {
         <div>
             {
                 data.category.list.filter(item => item.label != '-').map((item, idx) => {
-                    return <div key={idx}>
+                    return <div key={idx} className="flex items-center gap-x-7">
                         <Label className="text-xl hk_title">{item.label}</Label>
                         <div className="flex flex-wrap gap-1 mt-2 mb-4">
                             {
