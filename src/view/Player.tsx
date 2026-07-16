@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from "react-router";
 import type { SourceInfo } from "plyr";
 import { Button, Card, Label, Tag, TagGroup } from "@heroui/react";
 import type { AnalysisDetailObjPlayListType, AnalysisDetailObjType } from "../api/analysis/analysis_detail";
-import { CircleX, List } from "lucide-react";
+import { CircleX, X, Minimize2, List } from "lucide-react";
 import Hls from "hls.js";
 import GlobalWebViewEbent from "../event/GlobalWebViewEbent";
 import HKPlayList from "../components/HKPlayList";
@@ -41,7 +41,7 @@ const plyrProps: PlyrPropsType = {
             "volume",
             "captions",
             "settings",
-            "pip",
+            // "pip",
             // "airplay",
             "fullscreen",
         ],
@@ -134,7 +134,15 @@ export default function () {
                     </TagGroup>
                 </div>
                 <div className="w-auto pointer-events-auto">
-                    <CircleX className="cursor-pointer active:scale-90" size={28} onClick={() => navigate(-1)} />
+                    <X className="cursor-pointer active:scale-90" size={28} onClick={() => {
+                        GlobalWebViewEbent.sendOnce({
+                            id: crypto.randomUUID(),
+                            data: { type: 'win', data: { type: 'Reset' } }
+                        })
+                        setTimeout(() => {
+                            navigate(-1)
+                        }, 100);
+                    }} />
                 </div>
             </div>
             <div className="">

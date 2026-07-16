@@ -40,7 +40,7 @@ export default function () {
                 返回
             </Button>
         </div>
-        <div className="flex h-130 gap-2">
+        <div className="flex max-h-140 gap-2">
             <Card className="flex-1 flex-row backdrop-blur-sm shadow-sm mt-2">
                 <div className="flex-1">
                     <Label className="text-3xl">{detail.head.title}</Label>
@@ -106,6 +106,6 @@ export default function () {
                 </div>
             </>
         }
-        <div className="h-20"></div>
+        <div className="h-10"></div>
     </div>
 }

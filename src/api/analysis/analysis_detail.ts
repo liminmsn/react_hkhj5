@@ -72,7 +72,7 @@ export default function (document: Document) {
             list: Array.from(item.querySelectorAll('a') || []).map(a => {
                 return {
                     name: a.textContent || '-',
-                    url: a.getAttribute('onclick') || '-'
+                    url: (String(a.getAttribute('onclick')).match(/bb_a\('([^']+)'/) as any)[1]|| '-'
                 }
             })
         }

@@ -15,6 +15,7 @@ export default function ({ panelStyle, gridCols, playList, detail, replace, onCl
             onClick(item)
             return;
         }
+
         getPlayerUrl(item.url, (m3u8_url) => navigate("/player", {
             preventScrollReset: true,
             viewTransition: true,

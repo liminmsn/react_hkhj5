@@ -6,7 +6,7 @@ export default class GlobalWebViewEbent {
         window.chrome.webview.addEventListener("message", (event) => {
             const { data } = event;
             console.log(event);
-            
+
             if (data) {
                 const callBackFun = this.listenerArr.get(data.id);
                 if (callBackFun) {
@@ -20,6 +20,9 @@ export default class GlobalWebViewEbent {
     }
     static send(parameter: WebView2EventData, callback: (data: any) => void) {
         this.listenerArr.set(parameter.id, callback);
+        window.chrome.webview.postMessage(parameter);
+    }
+    static sendOnce(parameter: WebView2EventData) {
         window.chrome.webview.postMessage(parameter)
     }
 }

@@ -71,7 +71,7 @@ input[type="range" i] {
 }
 
 .plyr__control--overlaid {
-    transform: translate(-50%, -50%) scale(1.2);
+    transform: translate(-50%, -50%) scale(1.9);
 }
 
 .hk_title {
