@@ -45,6 +45,11 @@ export default function ({ item }: { item: AnalysisHomeObjItemTypeListItem; }) {
                 }
             >
                 <HKImg url={item.imgUrl} />
+                <div className="absolute bottom-0 bg-black/30 text-center w-full p-1">
+                    <Label className="text-sm text-white" >
+                        {item.date}
+                    </Label>
+                </div>
             </Card>
             <div className="mt-2">
                 <Label
@@ -57,7 +62,9 @@ export default function ({ item }: { item: AnalysisHomeObjItemTypeListItem; }) {
                 >
                     {item.name}
                 </Label>
+            </div>
 
+            <div className="mt-1">
                 {
                     item.tags.length > 0 &&
                     <div className="flex flex-wrap gap-1">
@@ -68,9 +75,6 @@ export default function ({ item }: { item: AnalysisHomeObjItemTypeListItem; }) {
                         ))}
                     </div>
                 }
-                {/* <Label className="mt-1 text-xs text-muted" >
-                    {item.date}
-                </Label> */}
             </div>
         </div>
     );

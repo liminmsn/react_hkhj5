@@ -33,7 +33,7 @@ export default function (document: Document) {
                     url: item.children[1].children[0]?.getAttribute('href') || '-',
                     imgUrl: item.querySelector('.tu.lazyload')?.getAttribute('data-original') || '-',
                     tags: item.children[2].textContent.split(',') || [],
-                    date: item.querySelector('.module-item-text')?.textContent || '-',
+                    date: item.querySelector('.tu.lazyload')?.textContent || '-',
                 }
             }),
             side: {
@@ -44,7 +44,7 @@ export default function (document: Document) {
                         title: item.children[1].childNodes.item(1).textContent || '-',
                         date: item.children[0].textContent || '-'
                     }
-                })
+                }).splice(1,12)
             }
         })
     });

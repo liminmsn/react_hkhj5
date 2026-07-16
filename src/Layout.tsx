@@ -37,7 +37,7 @@ export default function () {
 
     return <Tabs className="h-screen shadow-md" selectedKey={selectedKey} onSelectionChange={(key) => {
         if (key == 'HKCategory') {
-            setUrl("/love/1.html");
+            setUrl("/list/1---.html");
         }
         setSelectedKey(key);
     }}>

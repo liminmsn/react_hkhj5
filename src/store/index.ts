@@ -72,7 +72,7 @@ export const useCateGoryStore = create<CateGoryStoreType>((set) => ({
     setData: (data) => {
         set({ data })
     },
-    url: "/love/1.html",
+    url: `/list/1---.html`,
     setUrl: (url) => {
         set({ url })
     }

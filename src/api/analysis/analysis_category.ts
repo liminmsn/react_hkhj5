@@ -30,10 +30,10 @@ const analysis_category_obj: AnalysisCateGoryObjItemType = {
 }
 export default function (document: Document) {
     const obj = analysis_category_obj;
-    const page_heading = Array.from(document.querySelector(".page-heading .box")?.children || []);
-    const page_pagination = Array.from(document.getElementById("page")?.children || []);
+    const page_heading = Array.from(document.querySelectorAll(".category") || []);
+    const page_pagination = Array.from(document.querySelector(".page.mt")?.children || []);
     console.log(document);
-    
+
 
     obj.category = {
         info: (function () {
@@ -42,24 +42,24 @@ export default function (document: Document) {
         })(),
         list: page_heading.map(item => {
             return {
-                label: item.querySelector('.library-item-first')?.textContent || '-',
-                list: Array.from(item.querySelectorAll('.library-list a') || []).map(a => {
+                label: item.children[0].children[0]?.textContent || '-',
+                list: Array.from(item.children[0].children[1].children || []).map(a => {
                     return {
                         label: a.textContent || '-',
                         url: a.getAttribute('href') || '-',
-                        select: a.className.indexOf('selected') > -1
+                        select: a.className.indexOf('on') > -1
                     }
                 })
             }
         })
     };
-    obj.list = Array.from(document.querySelectorAll('.module-items .module-item') || []).map(item => {
+    obj.list = Array.from(document.querySelectorAll('.list li') || []).map(item => {
         return {
-            name: item.querySelector('.module-item-titlebox a')?.getAttribute('title') || '-',
-            url: item.querySelector('.module-item-titlebox a')?.getAttribute('href') || '/',
-            imgUrl: item.querySelector('.module-item-pic img')?.getAttribute('data-src') || '-',
-            tags: Array.from(item.querySelector('.module-item-caption')?.children || []).map(item => item.textContent),
-            date: item.querySelector('.module-item-text')?.textContent || '-',
+            name: item.querySelector('.tu.lazyload')?.getAttribute('title') || '-',
+            url: item.children[1].children[0]?.getAttribute('href') || '-',
+            imgUrl: item.querySelector('.tu.lazyload')?.getAttribute('data-original') || '-',
+            tags: item.children[2].textContent.split(',') || [],
+            date: item.querySelector('.tu.lazyload')?.textContent || '-',
         }
     });
     obj.pagination = page_pagination.map(item => {
