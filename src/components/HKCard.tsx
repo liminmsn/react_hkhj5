@@ -24,7 +24,8 @@ export default function ({ item }: { item: AnalysisHomeObjItemTypeListItem; }) {
         >
             <Card
                 className="
-                    h-64
+                    rounded-xl
+                    h-58
                     w-full
                     mb-2
                     overflow-hidden
@@ -45,14 +46,6 @@ export default function ({ item }: { item: AnalysisHomeObjItemTypeListItem; }) {
             >
                 <HKImg url={item.imgUrl} />
             </Card>
-            <div className="flex flex-wrap gap-1">
-                {item.tags.map((tag, idx) => (
-                    <Chip key={idx} className=" backdrop-blur-sm">
-                        {tag}
-                    </Chip>
-                ))}
-            </div>
-
             <div className="mt-2">
                 <Label
                     className="
@@ -65,9 +58,19 @@ export default function ({ item }: { item: AnalysisHomeObjItemTypeListItem; }) {
                     {item.name}
                 </Label>
 
-                <Label className="mt-1 text-xs text-muted" >
+                {
+                    item.tags.length > 0 &&
+                    <div className="flex flex-wrap gap-1">
+                        {item.tags.map((tag, idx) => (
+                            <Chip size="sm" key={idx} className=" backdrop-blur-sm">
+                                {tag}
+                            </Chip>
+                        ))}
+                    </div>
+                }
+                {/* <Label className="mt-1 text-xs text-muted" >
                     {item.date}
-                </Label>
+                </Label> */}
             </div>
         </div>
     );

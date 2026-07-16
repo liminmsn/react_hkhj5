@@ -21,7 +21,7 @@ export default function ({ side }: { side: AnalysisHomeObjItemSideType }) {
             <Label className='text-2xl hk_title'>{side.title}</Label><ListBox aria-label="Users" className="" selectionMode="none">
                 {side.list.map((item, idx) => {
                     return <ListBox.Item key={idx} id={idx} textValue={item.title}>
-                        <Avatar>
+                        <Avatar size="sm">
                             <Avatar.Fallback className={`${getColor(idx)} text-xl`}>{idx + 1}</Avatar.Fallback>
                         </Avatar>
                         <div className="flex flex-col" onClick={() => openDetail(item)}>

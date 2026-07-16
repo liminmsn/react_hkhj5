@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "local_dev": "start ../scripts/web_dev.ps1",
+    "local_dev": "start powershell -NoExit -c \"npm run dev\"",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

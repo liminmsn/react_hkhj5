@@ -43,7 +43,7 @@ export default function () {
     }}>
         <Tabs.ListContainer className='fixed left-0 right-0 bottom-4 z-10'>
             <div className='w-2/6 mx-auto'>
-                <Tabs.List aria-label="Options" className='backdrop-blur-xs bg-foreground/20'>
+                <Tabs.List aria-label="Options" className='backdrop-blur-md bg-foreground/20'>
                     {
                         tabs.map(item => {
                             return <Tabs.Tab id={item.id} key={item.id}>

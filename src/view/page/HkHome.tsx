@@ -15,8 +15,9 @@ export default function () {
     const { list: dataList, update: setdataList } = useHkHomeStore();
 
     useEffect(() => {
+        //  import.meta.env['VITE_URL']
         if (!dataList) {
-            new Analysis<AnalysisHomeObjItemType[]>(crypto.randomUUID(), import.meta.env['VITE_URL'], analysis_home, (res) => {
+            new Analysis<AnalysisHomeObjItemType[]>(crypto.randomUUID(),import.meta.env['VITE_URL'], analysis_home, (res) => {
                 console.log(res);
                 setdataList(res)
                 if (res)
@@ -32,8 +33,8 @@ export default function () {
             <div className="bg_blur"></div>
             <div className="flex justify-between mt-6 z-2">
                 <div className="flex items-start gap-x-2">
-                    {/* <img src="/logo.png" className="w-10 inline" />
-                    <Label className="text-2xl">好看韩剧5</Label> */}
+                    <img src="/logo.png" className="w-10 inline" />
+                    <Label className="text-2xl">好看韩剧5</Label>
                 </div>
                 <HKSearch />
             </div>

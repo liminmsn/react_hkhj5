@@ -38,7 +38,7 @@ export default function () {
                         <div className="flex flex-wrap gap-1 mt-2 mb-4">
                             {
                                 item.list.map((item_, idx_) => {
-                                    return <div key={idx_} onClick={() => ToggleCateGory(item_.url)} className={`px-4 py-1 rounded-2xl backdrop-blur-sm text-nowrap cursor-pointer ${item_.select ? 'bg-accent' : 'active:scale-95 bg-field-border-hover'}`}>
+                                    return <div key={idx_} onClick={() => ToggleCateGory(item_.url)} className={`px-4 py-1 rounded-2xl backdrop-blur-sm text-nowrap cursor-pointer ${item_.select ? 'bg-accent' : 'active:scale-95 bg-default'}`}>
                                         <Label>{item_.label}</Label>
                                     </div>
                                 })
