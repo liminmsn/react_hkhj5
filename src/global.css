@@ -40,6 +40,10 @@
     }
 }
 
+img {
+    object-fit: cover;
+}
+
 input[type="range" i] {
     cursor: pointer !important;
 }

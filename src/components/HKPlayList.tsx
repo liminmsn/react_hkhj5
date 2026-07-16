@@ -49,7 +49,7 @@ export default function ({ panelStyle, gridCols, playList, detail, replace, onCl
                         <div className={`grid ${gridCols} gap-1`}>
                             {
                                 item.list.map((item, idx) => {
-                                    return <Button key={item.url} className="w-full" variant={`${play_select_item == idx ? 'primary' : 'outline'}`} onClick={() => {
+                                    return <Button key={idx} className="w-full" variant={`${play_select_item == idx ? 'primary' : 'outline'}`} onClick={() => {
                                         select(play_select_ctegory, idx);
                                         Play(item);
                                     }} >

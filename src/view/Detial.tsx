@@ -32,10 +32,10 @@ export default function () {
         return <HkLoding />
     }
 
-    return <div className="pt-10 px-10 relative">
+    return <div className="pt-10 px-3 relative">
         <div className="bg_blur"></div>
         <div className="text-right mb-2">
-            <Button variant="tertiary" onClick={() => navigate(-1)} >
+            <Button onClick={() => navigate(-1)} variant="secondary">
                 <ArrowLeft />
                 返回
             </Button>
@@ -70,7 +70,7 @@ export default function () {
                                                 Array.isArray(item.item)
                                                     ? <div className="pt-1 gap-1 flex flex-wrap">
                                                         {
-                                                            item.item.map(item => <Chip key={item.url} className="bg-accent-soft">
+                                                            item.item.map((item, idx) => <Chip key={idx} className="bg-accent-soft">
                                                                 {item.name}
                                                             </Chip>)
                                                         }
@@ -93,14 +93,19 @@ export default function () {
                 <HKImg url={state.imgUrl || detail.head.imgUrl} />
             </Card>
         </div>
-        <div className="my-2 mt-6">
-            <Label className='text-xl hk_title'>猜你喜欢</Label>
-        </div>
-        <div className='grid grid-cols-6 gap-2 mt'>
-            {
-                detail.list.map(item => <HKCard item={item} key={item.url} />)
-            }
-        </div>
+        {
+            detail.list.length > 0 &&
+            <>
+                <div className="my-2 mt-6">
+                    <Label className='text-xl hk_title'>猜你喜欢</Label>
+                </div>
+                <div className='grid grid-cols-6 gap-2 mt'>
+                    {
+                        detail.list.map(item => <HKCard item={item} key={item.url} />)
+                    }
+                </div>
+            </>
+        }
         <div className="h-20"></div>
     </div>
 }

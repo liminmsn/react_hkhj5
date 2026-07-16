@@ -66,6 +66,6 @@ export default function () {
                         </div>
                     </div>
             })}
-            <div className="h-25"></div>
+            <div className="h-10"></div>
         </div>
 }

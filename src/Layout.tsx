@@ -44,8 +44,8 @@ export default function () {
             setSelectedKey(key);
         }}>
         <Tabs.ListContainer className='fixed left-0 right-0 bottom-4 z-10'>
-            <div className={`w-2/6 mx-auto transition-all transition-delay-300 ${scrollTop > 300 ? 'translate-y-20 scale-0' : ''}`}>
-                <Tabs.List aria-label="Options" className='backdrop-blur-md bg-foreground/20'>
+            <div className={`w-2/6 mx-auto`}>
+                <Tabs.List aria-label="Options" className={`backdrop-blur-md bg-foreground/20 transition-all transition-delay-300 ${scrollTop > 300 ? 'translate-y-20 scale-0 pointer-events-none' : ''}`}>
                     {
                         tabs.map(item => {
                             return <Tabs.Tab id={item.id} key={item.id}>

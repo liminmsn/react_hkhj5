@@ -18,9 +18,9 @@ export default function () {
 
     return <HKModal
         btn={
-            <Button variant="tertiary">
+            <Button variant="secondary">
                 <Search size={40} />
-                <Label>搜索</Label>
+                搜索
             </Button>
         }
         head={
@@ -37,26 +37,31 @@ export default function () {
             </Button>
         }
     >
-        <Label className="text-sm text-accent-foreground pl-2">大家都在搜这些影片</Label>
-        <div className="max-h-100 overflow-auto mt-1">
-            <ListBox aria-label="Tags" selectionMode="none">
-                {
-                    tags.map((item, idx) => {
-                        return <ListBox.Item key={idx} id={idx} textValue={item.tag}>
-                            <Avatar size="sm">
-                                <Avatar.Fallback className={`${getColor(idx)} text-xl`}>{idx + 1}</Avatar.Fallback>
-                            </Avatar>
-                            <div className="flex items-center" onClick={() => openDetail(item)}>
-                                <Label className="text mr-2">{item.tag}</Label>
-                                {
-                                    idx < 3 && <Flame size={20} color="orange" />
-                                }
-                            </div>
-                            <ListBox.ItemIndicator />
-                        </ListBox.Item>
-                    })
-                }
-            </ListBox>
-        </div>
+        {
+            tags.length > 0 &&
+            <>
+                <Label className="text-sm pl-2">大家都在搜这些影片</Label>
+                <div className="max-h-100 overflow-auto mt-1">
+                    <ListBox aria-label="Tags" selectionMode="none">
+                        {
+                            tags.map((item, idx) => {
+                                return <ListBox.Item key={idx} id={idx} textValue={item.tag}>
+                                    <Avatar size="sm">
+                                        <Avatar.Fallback className={`${getColor(idx)} text-xl`}>{idx + 1}</Avatar.Fallback>
+                                    </Avatar>
+                                    <div className="flex items-center" onClick={() => openDetail(item)}>
+                                        <Label className="text mr-2">{item.tag}</Label>
+                                        {
+                                            idx < 3 && <Flame size={20} color="orange" />
+                                        }
+                                    </div>
+                                    <ListBox.ItemIndicator />
+                                </ListBox.Item>
+                            })
+                        }
+                    </ListBox>
+                </div>
+            </>
+        }
     </HKModal>
 }

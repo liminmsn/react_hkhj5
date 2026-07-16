@@ -46,56 +46,45 @@ const analysis_detail_obj = {
 
 export default function (document: Document) {
     const obj: AnalysisDetailObjType = analysis_detail_obj;
-    const head_dom = document.querySelector('.video-info-header');
-    const main_dom = document.querySelector('.video-info-main');
+    const head_dom = document.querySelector("#wp1ay .detail");
     obj.head = {
-        title: head_dom?.querySelector('.page-title')?.textContent || '-',
-        tags: Array.from(head_dom?.querySelector('.video-info-aux.scroll-content')?.children || []).map(item => {
-            return item.textContent.replaceAll('\n', '')
-        }),
-        papUrl: head_dom?.querySelector('.video-info-play')?.getAttribute('href') || '-',
-        imgUrl: document?.querySelector('img')?.getAttribute('data-src') || '-',
+        title: head_dom?.querySelector('.info')?.children[0].children[1]?.textContent || '-',
+        tags: head_dom?.querySelector('.info')?.children[1].children[1].textContent.split(',') || [],
+        papUrl: '-',
+        imgUrl: head_dom?.querySelector('img')?.getAttribute('data-original') || '-',
     }
-    obj.main = Array.from(main_dom?.querySelectorAll('.video-info-items') || []).map(item => {
+    obj.main = Array.from(head_dom?.querySelectorAll('.info dl') || []).splice(2, 5).map(dl => {
         return {
-            title: item.querySelector('.video-info-itemtitle')?.textContent || '-',
+            title: dl.children[0]?.textContent || '-',
             item: (() => {
-                const arr = Array.from(item.querySelector('.video-info-item')?.children || [])
-                if (arr.length > 1) {
-                    arr.pop()
-                    return arr.map(a => {
-                        return {
-                            name: a.textContent,
-                            url: a.getAttribute('href')
-                        }
-                    })
-                }
-                if (arr.length == 1) {
-                    return arr[0].textContent
-                }
-                return item.querySelector('.video-info-item')?.textContent || '-'
+                return dl.children[1].textContent || '-';
             })()
         }
     })
-    obj.playList = Array.from(document.querySelectorAll(".tab-content.myui-panel_bd ul") || []).map((item, idx) => {
+    obj.main.push({
+        title: document.querySelector('#jq')?.children[0].textContent || '-',
+        item: document.querySelector('#jq')?.children[1].textContent || '-'
+    })
+
+    obj.playList = Array.from(document.querySelectorAll(".box.mt").item(1).querySelectorAll('.play') || []).map((item, idx) => {
         return {
             title: `播放源${idx + 1}`,
             list: Array.from(item.querySelectorAll('a') || []).map(a => {
                 return {
                     name: a.textContent || '-',
-                    url: a.getAttribute('href') || '-'
+                    url: a.getAttribute('onclick') || '-'
                 }
             })
         }
     })
 
-    obj.list = Array.from(document.querySelectorAll('.module-item') || []).map(item => {
+    obj.list = Array.from(document.querySelectorAll('.box.mt .list li') || []).map(item => {
         return {
-            name: item.querySelector('.module-item-titlebox a')?.getAttribute('title') || '-',
-            url: item.querySelector('.module-item-titlebox a')?.getAttribute('href') || '/',
-            imgUrl: item.querySelector('.module-item-pic img')?.getAttribute('data-src') || '-',
-            tags: Array.from(item.querySelector('.module-item-caption')?.children || []).map(item => item.textContent),
-            date: item.querySelector('.module-item-text')?.textContent || '-',
+            name: item.querySelector('.tu.lazyload')?.getAttribute('title') || '-',
+            url: item.children[1].children[0]?.getAttribute('href') || '-',
+            imgUrl: item.querySelector('.tu.lazyload')?.getAttribute('data-original') || '-',
+            tags: item.children[2].textContent.split(',') || [],
+            date: item.querySelector('.tu.lazyload')?.textContent || '-',
         }
     })
 
