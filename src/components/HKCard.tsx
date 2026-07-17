@@ -45,8 +45,8 @@ export default function ({ item }: { item: AnalysisHomeObjItemTypeListItem; }) {
                 }
             >
                 <HKImg url={item.imgUrl} />
-                <div className="absolute bottom-0 bg-black/30 text-center w-full p-1">
-                    <Label className="text-sm text-white" >
+                <div className="absolute bottom-0 bg-foreground/40 text-center w-full p-1">
+                    <Label className="text-sm  text-segment" >
                         {item.date}
                     </Label>
                 </div>

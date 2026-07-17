@@ -18,7 +18,7 @@ export default function () {
 
     return <HKModal
         btn={
-            <Button variant="secondary">
+            <Button variant="primary">
                 <Search size={40} />
                 搜索
             </Button>
@@ -26,14 +26,15 @@ export default function () {
         head={
             <div className="pl-2">
                 <div className="flex items-center mb-2">
-                    <Label className="text-2xl">韩剧搜索</Label>
+                    <Label className="text-2xl">搜索韩剧</Label>
                 </div>
                 <Input className="w-full bg-field-hover" placeholder="输入要搜索的片名" />
             </div>
         }
         footer={
-            <Button>
-                <Label>搜索</Label>
+            <Button variant="primary">
+                <Search size={40} />
+                搜索
             </Button>
         }
     >

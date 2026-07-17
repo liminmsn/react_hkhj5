@@ -25,7 +25,6 @@ export default function () {
             }, (document) => setTags(analysis_search_tags(document))).get()
         }
     })
-
     if (!dataList) {
         return <HkLoding />
     } else

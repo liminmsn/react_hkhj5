@@ -48,8 +48,8 @@ export default function () {
                     {
                         tabs.map(item => {
                             return <Tabs.Tab id={item.id} key={item.id}>
-                                <Label className='cursor-pointer'>{item.title}</Label>
-                                <Tabs.Indicator />
+                                <Label className='cursor-pointer text-segment'>{item.title}</Label>
+                                <Tabs.Indicator className='bg-accent' />
                             </Tabs.Tab>
                         })
                     }

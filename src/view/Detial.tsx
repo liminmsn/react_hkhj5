@@ -39,7 +39,7 @@ export default function () {
             <Button
                 onClick={() => {
                     toast.success("操作已完成")
-                    add_remove({ head: detail.head, main: detail.main })
+                    add_remove({ head: detail.head, main: detail.main, url: state.url })
                 }}
                 variant={`${list.filter(item => item.head.imgUrl === detail.head.imgUrl).length > 0 ? 'danger' : 'secondary'}`}
                 className="mr-2">

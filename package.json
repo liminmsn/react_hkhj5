@@ -23,6 +23,7 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router": "^7.18.0",
+    "react-spinners": "^0.17.0",
     "shaka-player": "^5.1.12",
     "tailwindcss": "^4.3.1",
     "video.js": "^8.23.9",

@@ -119,6 +119,6 @@ input[type="range" i] {
         width: 100vw;
         height: 100vh;
         content: '';
-        background: linear-gradient(to bottom, transparent 50%, var(--color-background) 90%);
+        background: linear-gradient(to bottom, transparent 50%, var(--default) 90%);
     }
 }

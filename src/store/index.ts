@@ -38,7 +38,7 @@ interface PlayListStoreType {
     select: (play_select_ctegory?: Key, play_select_item?: number) => void;
 }
 
-type WatchItem = Pick<AnalysisDetailObjType, "head" | "main">;
+type WatchItem = Pick<AnalysisDetailObjType, "head" | "main"> & { url: string };
 interface WatchListStoreType {
     list: WatchItem[];
     add_remove: (item: WatchItem) => void;
