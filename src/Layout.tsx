@@ -3,6 +3,7 @@ import HkHome from './view/page/HkHome';
 import { useCateGoryStore, useLayoutStore } from './store';
 import HKCategory from './view/page/HKCategory';
 import { useState } from 'react';
+import HKWatchList from './view/page/HKWatchList';
 export default function () {
     const selectedKey = useLayoutStore().selectedKey;
     const setSelectedKey = useLayoutStore().setSelectedKey;
@@ -22,10 +23,8 @@ export default function () {
         },
         {
             title: '追剧列表',
-            id: 'a',
-            component: function () {
-                return <div>hello world</div>
-            }
+            id: 'HKWatchList',
+            component: HKWatchList
         },
         {
             title: '我的',

@@ -38,6 +38,13 @@ interface PlayListStoreType {
     select: (play_select_ctegory?: Key, play_select_item?: number) => void;
 }
 
+type WatchItem = Pick<AnalysisDetailObjType, "head" | "main">;
+interface WatchListStoreType {
+    list: WatchItem[];
+    add_remove: (item: WatchItem) => void;
+    clear: () => void;
+}
+
 export const useLayoutStore = create<LayoutStoreType>((set) => ({
     selectedKey: "HkHome",
     setSelectedKey: (key) => {
@@ -87,4 +94,24 @@ export const usePlayListStore = create<PlayListStoreType>((set) => ({
             play_select_item
         })
     }
-}))
+}));
+
+// 追剧列表
+export const useWatchListStore = create<WatchListStoreType>((set => ({
+    list: JSON.parse(localStorage.getItem('watch_list')!) || [],
+    add_remove(item) {
+        let list_data = [];
+        set(data => {
+            if (data.list.filter(item_ => item_.head.imgUrl === item.head.imgUrl).length > 0) {
+                list_data = data.list.filter(i => i.head.imgUrl !== item.head.imgUrl)
+                return { list: list_data }
+            }
+            list_data = [...data.list, item];
+            localStorage.setItem('watch_list', JSON.stringify(list_data));
+            return { list: list_data }
+        })
+    },
+    clear() {
+        set({ list: [] })
+    },
+})));

@@ -5,10 +5,10 @@ import HkLoding from "../components/HkLoding";
 import type { AnalysisHomeObjItemTypeListItem } from "../api/analysis/analysis_home";
 import { useEffect } from "react";
 import { setUrlVar } from "../utils/setStyleVar";
-import { Avatar, Button, Card, Chip, Description, Label, ListBox, Tag, TagGroup } from "@heroui/react";
-import { ArrowLeft, TagIcon } from "lucide-react";
+import { Avatar, Button, Card, Chip, Description, Label, ListBox, Tag, TagGroup, Toast, toast } from "@heroui/react";
+import { ArrowLeft, TagIcon, Star } from "lucide-react";
 import HKImg from "../components/HKImg";
-import { useDetailStore, usePlayListStore } from "../store";
+import { useDetailStore, usePlayListStore, useWatchListStore } from "../store";
 import HKCard from "../components/HKCard";
 import HKPlayList from "../components/HKPlayList";
 
@@ -18,6 +18,7 @@ export default function () {
 
     const { detail, setDetail } = useDetailStore();
     const { state } = useLocation() as { state: AnalysisHomeObjItemTypeListItem }
+    const { list, add_remove } = useWatchListStore();
 
     useEffect(() => {
         setUrlVar('--hover_bg', state.imgUrl)
@@ -35,6 +36,17 @@ export default function () {
     return <div className="pt-10 px-3 relative">
         <div className="bg_blur"></div>
         <div className="text-right mb-2">
+            <Button
+                onClick={() => {
+                    toast.success("操作已完成")
+                    add_remove({ head: detail.head, main: detail.main })
+                }}
+                variant={`${list.filter(item => item.head.imgUrl === detail.head.imgUrl).length > 0 ? 'danger' : 'secondary'}`}
+                className="mr-2">
+                <Toast.Provider placement="top" translate="yes" />
+                <Star />
+                追剧
+            </Button>
             <Button onClick={() => navigate(-1)} variant="secondary">
                 <ArrowLeft />
                 返回
