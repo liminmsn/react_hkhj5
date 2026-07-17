@@ -12,5 +12,5 @@ export default React.forwardRef((props: PlyrPropsType, ref: Ref<APITypes>) => {
         source,
         options,
     })
-    return <video ref={raptorRef} className="plyr-react plyr" {...rest} />
+    return <video ref={raptorRef} crossOrigin="anonymous" className="plyr-react plyr" {...rest} />
 })

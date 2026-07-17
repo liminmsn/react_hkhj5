@@ -1,16 +1,16 @@
-import "plyr-react/plyr.css"
+import "plyr-react/plyr.css";
 import type { PlyrPropsType } from "../components/HKPlayer";
-import HKPlayer from "../components/HKPlayer";
 import { useEffect, useRef } from "react";
 import type { APITypes } from "plyr-react";
 import { useLocation, useNavigate } from "react-router";
 import type { SourceInfo } from "plyr";
 import { Button, Card, Label, Tag, TagGroup } from "@heroui/react";
 import type { AnalysisDetailObjPlayListType, AnalysisDetailObjType } from "../api/analysis/analysis_detail";
-import { CircleX, X, Minimize2, List } from "lucide-react";
+import { X, List } from "lucide-react";
 import Hls from "hls.js";
 import GlobalWebViewEbent from "../event/GlobalWebViewEbent";
 import HKPlayList from "../components/HKPlayList";
+import { Plyr } from 'plyr-react';
 
 export type PlayerInfoType = {
     m3u8url: string;
@@ -48,22 +48,13 @@ const plyrProps: PlyrPropsType = {
     },
 }
 
-const hls = new Hls();
-
-hls.on(Hls.Events.ERROR, (e) => {
-    console.log(e);
-})
-
-function hlsPlay(url: string) {
-    hls.loadSource(url);
-}
-
 export default function () {
     const navigate = useNavigate();
     const player = useRef<APITypes>(null);
     const { state } = useLocation() as { state: PlayerInfoType };
     const playerControl = useRef<HTMLDivElement>(null);
     const playerListRef = useRef<HTMLDivElement>(null);
+    const hlsRef = useRef<Hls | null>(null);
 
     const source: SourceInfo = {
         type: "video",
@@ -86,37 +77,66 @@ export default function () {
 
     useEffect(() => {
         setTimeout(() => {
-            if (player.current) {
-                const video = (player.current.plyr as any).media;
-                hls.attachMedia(video);
-                hlsPlay(state.m3u8url);
+            if (!player.current) return;
+            // 绑定播放器控件
+            const dom = document.querySelector(".plyr__controls");
+            if (dom && playerControl.current) {
+                dom.appendChild(playerControl.current);
+            }
 
-                // 绑定自定义控件
-                const dom = document.querySelector(".plyr__controls")
-                if (dom && playerControl.current) {
-                    dom.appendChild(playerControl.current);
-                }
-                //从写全屏按钮事件
-                const btn_full = document.querySelector("button[data-plyr='fullscreen']") as HTMLButtonElement;
-                if (btn_full) {
-                    btn_full.onclick = function () {
-                        GlobalWebViewEbent.send({
-                            id: crypto.randomUUID(),
+            const btnFull = document.querySelector(
+                "button[data-plyr='fullscreen']"
+            ) as HTMLButtonElement;
+
+            if (btnFull) {
+                btnFull.onclick = () => {
+                    GlobalWebViewEbent.sendOnce({
+                        id: crypto.randomUUID(),
+                        data: {
+                            type: "win",
                             data: {
-                                type: 'win',
-                                data: { type: 'toggleFullscreen' }
+                                type: "toggleFullscreen"
                             }
-                        }, (data) => {
-                            console.log(data);
-                        })
-                    }
+                        }
+                    });
+                };
+            }
+
+
+            const video = (player.current.plyr as any).media as HTMLVideoElement;
+            const isHls = state.m3u8url.toLowerCase().includes(".m3u8");
+            if (isHls) {
+                if (hlsRef.current) {
+                    hlsRef.current.destroy();
                 }
+                if (Hls.isSupported()) {
+                    const hls = new Hls({ enableWorker: false });
+                    hlsRef.current = hls;
+                    hls.attachMedia(video);
+                    hls.loadSource(state.m3u8url);
+                    hls.on(Hls.Events.ERROR, (_, data) => {
+                        console.log("HLS Error:", data);
+                    });
+                } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+                    video.src = state.m3u8url;
+                    video.load();
+                }
+            } else {
+                if (hlsRef.current) {
+                    hlsRef.current.destroy();
+                    hlsRef.current = null;
+                }
+                video.src = state.m3u8url;
+                video.load();
             }
         }, 100);
-        // setTimeout(() => {
-        //     togglePlayerListRefShow()
-        // }, 2000);
-    }, [state.m3u8url])
+
+        return () => {
+            hlsRef.current?.destroy();
+            hlsRef.current = null;
+        };
+
+    }, [state.m3u8url]);
 
     return <div className="flex w-screen h-screen">
         <div ref={playerControl} className="absolute pointer-events-none left-0 right-0 bottom-0 h-screen text-left p-4">
@@ -158,6 +178,6 @@ export default function () {
                 </div>
             </div>
         </div>
-        <HKPlayer ref={player} options={plyrProps.options} source={source} />
+        <Plyr ref={player} options={plyrProps.options} source={source} />
     </div>
 }
