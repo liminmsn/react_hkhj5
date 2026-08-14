@@ -16,7 +16,7 @@ createRoot(document.getElementById('root')!).render(
     disableTransitionOnChange
   >
     <div className='h-svh'>
-        <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </div>
   </ThemeProvider>
 )

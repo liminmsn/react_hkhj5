@@ -42,6 +42,8 @@
 
 img {
     object-fit: cover;
+    image-rendering: auto;
+    filter: contrast(110%) brightness(105%) saturate(110%);
 }
 
 input[type="range" i] {

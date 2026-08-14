@@ -46,7 +46,7 @@ interface WatchListStoreType {
 }
 
 export const useLayoutStore = create<LayoutStoreType>((set) => ({
-    selectedKey: "HkHome",
+    selectedKey: "HKUser",
     setSelectedKey: (key) => {
         set({ selectedKey: key })
     }
@@ -97,7 +97,7 @@ export const usePlayListStore = create<PlayListStoreType>((set) => ({
 }));
 
 // 追剧列表
-export const useWatchListStore = create<WatchListStoreType>((set => ({
+export const useWatchListStore = create<WatchListStoreType>(set => ({
     list: JSON.parse(localStorage.getItem('watch_list')!) || [],
     add_remove(item) {
         let list_data = [];
@@ -114,4 +114,19 @@ export const useWatchListStore = create<WatchListStoreType>((set => ({
     clear() {
         set({ list: [] })
     },
-})));
+}));
+
+type UseUserInfoType = {
+    login: boolean;
+    info: NetUser.Response.ModelUser.Login | null;
+    setLogin: (bol: boolean) => void;
+}
+export const useUserInfo = create<UseUserInfoType>(set => ({
+    login: false,
+    info: null,
+    setLogin(login: boolean) {
+        set(data => {
+            return { ...data, login }
+        })
+    }
+}));

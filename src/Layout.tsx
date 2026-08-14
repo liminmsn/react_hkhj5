@@ -4,6 +4,8 @@ import { useCateGoryStore, useLayoutStore } from './store';
 import HKCategory from './view/page/HKCategory';
 import { useState } from 'react';
 import HKWatchList from './view/page/HKWatchList';
+import HKUser from './view/page/HKUser';
+import HKMap from './view/page/HKMap';
 export default function () {
     const selectedKey = useLayoutStore().selectedKey;
     const setSelectedKey = useLayoutStore().setSelectedKey;
@@ -27,11 +29,14 @@ export default function () {
             component: HKWatchList
         },
         {
+            title: '地图',
+            id: 'HKMap',
+            component: HKMap
+        },
+        {
             title: '我的',
-            id: 'User',
-            component: function () {
-                return <div>hello world</div>
-            }
+            id: 'HKUser',
+            component: HKUser
         },
     ]
 
@@ -42,8 +47,8 @@ export default function () {
             }
             setSelectedKey(key);
         }}>
-        <Tabs.ListContainer className='fixed left-0 right-0 bottom-4 z-10'>
-            <div className={`w-2/6 mx-auto`}>
+        <Tabs.ListContainer className='fixed left-0 right-0 bottom-4 z-500'>
+            <div className={`w-1/2 mx-auto`}>
                 <Tabs.List aria-label="Options" className={`backdrop-blur-md bg-foreground/20 transition-all transition-delay-300 ${scrollTop > 300 ? 'translate-y-20 scale-0 pointer-events-none' : ''}`}>
                     {
                         tabs.map(item => {
@@ -58,7 +63,7 @@ export default function () {
         </Tabs.ListContainer>
         {
             tabs.map(item => {
-                return <Tabs.Panel className="h-full overflow-y-auto" id={item.id} key={item.id} onScrollCapture={(e) => {
+                return <Tabs.Panel className="h-full overflow-y-auto p-0" id={item.id} key={item.id} onScrollCapture={(e) => {
                     const { scrollTop } = e.target as HTMLDivElement;
                     setScrollTop(scrollTop);
                 }}>

@@ -8,7 +8,7 @@
     ],
     "module": "esnext",
     "types": [
-      "vite/client"
+      "vite/client",
     ],
     "skipLibCheck": true,
     /* Bundler mode */
@@ -26,10 +26,11 @@
   },
   "include": [
     "src",
-    "types"
+    "types",
+    "node_modules/tianditu-v4-types"
   ],
   "optimizeDeps": {
-  "exclude": [
+    "exclude": [
       "shaka-player"
     ]
   }
