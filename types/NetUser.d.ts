@@ -33,6 +33,9 @@ export declare global {
                     captcha: string;
                     captchaId: string;
                 }
+                interface Captcha {
+                    email: string;
+                }
             }
         }
         namespace Response {

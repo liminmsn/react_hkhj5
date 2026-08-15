@@ -6,6 +6,7 @@ import { useState } from 'react';
 import HKWatchList from './view/page/HKWatchList';
 import HKUser from './view/page/HKUser';
 import HKMap from './view/page/HKMap';
+import { Blocks, CircleUserRound, FolderHeart, House, Map } from 'lucide-react';
 export default function () {
     const selectedKey = useLayoutStore().selectedKey;
     const setSelectedKey = useLayoutStore().setSelectedKey;
@@ -14,27 +15,43 @@ export default function () {
 
     const tabs = [
         {
-            title: '首页',
+            title: 
+            <>
+                <House />
+                {/* 首页 */}
+            </>,
             id: 'HkHome',
             component: HkHome
         },
         {
-            title: '分类',
+            title: <>
+                <Blocks />
+                {/* 分类 */}
+            </>,
             id: 'HKCategory',
             component: HKCategory
         },
         {
-            title: '追剧列表',
+            title: <>
+                <FolderHeart />
+                {/* 追剧列表 */}
+            </>,
             id: 'HKWatchList',
             component: HKWatchList
         },
         {
-            title: '地图',
+            title: <>
+                <Map />
+                {/* 地图 */}
+            </>,
             id: 'HKMap',
             component: HKMap
         },
         {
-            title: '我的',
+            title: <>
+                <CircleUserRound />
+                {/* 我的 */}
+            </>,
             id: 'HKUser',
             component: HKUser
         },
@@ -48,12 +65,12 @@ export default function () {
             setSelectedKey(key);
         }}>
         <Tabs.ListContainer className='fixed left-0 right-0 bottom-4 z-500'>
-            <div className={`w-1/2 mx-auto`}>
+            <div className={`w-75 mx-auto`}>
                 <Tabs.List aria-label="Options" className={`backdrop-blur-md bg-foreground/20 transition-all transition-delay-300 ${scrollTop > 300 ? 'translate-y-20 scale-0 pointer-events-none' : ''}`}>
                     {
                         tabs.map(item => {
                             return <Tabs.Tab id={item.id} key={item.id}>
-                                <Label className='cursor-pointer text-segment'>{item.title}</Label>
+                                <Label className='cursor-pointer text-segment flex items-center gap-0.5'>{item.title}</Label>
                                 <Tabs.Indicator className='bg-accent' />
                             </Tabs.Tab>
                         })

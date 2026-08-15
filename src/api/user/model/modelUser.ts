@@ -1,10 +1,8 @@
 import UserNet, { Api } from "../UserNet";
 
 /**发送验证码 */
-export function net_model_user_sendCaptcha() {
-    // new UserNet(Api.sendCaptcha).post()<NetUser.Response.Captcha>(res => {
-    //     console.log(res);
-    // });
+export function net_model_user_sendCaptcha(parameter: NetUser.Parameter.ModelUser.Captcha, callFun: (data: NetUser.ResType<NetUser.Response.Captcha>) => void) {
+    new UserNet(Api.sendCaptcha).post(JSON.stringify(parameter))(async data => callFun(await UserNet.utils.toJson(data)));
 }
 
 /**用户登录 */
@@ -14,6 +12,7 @@ export function net_model_user_login(parameter: NetUser.Parameter.ModelUser.Logi
 }
 
 /**用户注册 */
-export function net_model_user_register() {
-    new UserNet(Api.register)
+export function net_model_user_register(parameter: NetUser.Parameter.ModelUser.Login, callFun: (data: NetUser.ResType<NetUser.Response.ModelUser.Login>) => void) {
+    new UserNet(Api.register).post(JSON.stringify(parameter))(async data => callFun(await UserNet.utils.toJson(data)));
+
 }

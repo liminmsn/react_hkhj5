@@ -15,7 +15,7 @@
     --disabled-opacity: .5;
     --ring-offset-width: 2px;
 
-    --radius: .75rem;
+    --radius: .25rem;
     --field-radius: calc(var(--radius) * 1.5);
 
     /* ===================================================
