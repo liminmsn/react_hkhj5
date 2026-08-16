@@ -1,113 +1,117 @@
 [data-theme="fortune"] {
-    color-scheme: light;
+   ::selection {
+      background: var(--accent);
+      /* 背景色（选中高亮色） */
+      color: var(--white);
+      /* 文字颜色 */
+   }
 
-    /* Primitive */
-    --white: #FFFFFF;
-    --black: #000000;
+   color-scheme: light;
 
-    --snow: #FFFDF9;
-    --eclipse: #6D4C39;
+   /* Primitive */
+   --white: #FFFFFF;
+   --black: #000000;
 
-    /* Layout */
-    --spacing: 0.25rem;
-    --border-width: 1px;
-    --field-border-width: 0px;
-    --disabled-opacity: .5;
-    --ring-offset-width: 2px;
+   --snow: #FFFDF9;
+   --eclipse: #6D4C39;
 
-    --radius: .25rem;
-    --field-radius: calc(var(--radius) * 1.5);
+   /* Layout */
+   --spacing: 0.25rem;
+   --border-width: 1px;
+   --field-border-width: 0px;
+   --disabled-opacity: .5;
+   --ring-offset-width: 2px;
 
-    /* ===================================================
+   --radius: .25rem;
+   --field-radius: calc(var(--radius) * 1.5);
+
+   /* ===================================================
        Background（土60%）
     ==================================================== */
 
-    --background: #FFE9CC;
-    --foreground: #6D4C39;
+   --background: #FFE9CC;
+   --foreground: #6D4C39;
 
-    --surface: #FFF6E8;
-    --surface-foreground: var(--foreground);
+   --surface: #FFF6E8;
+   --surface-foreground: var(--foreground);
 
-    --overlay: #FFF9F1;
-    --overlay-foreground: var(--foreground);
+   --overlay: #FFF9F1;
+   --overlay-foreground: var(--foreground);
 
-    --default: #FFF1D9;
-    --default-foreground: var(--foreground);
+   --default: #FFF1D9;
+   --default-foreground: var(--foreground);
 
-    --muted: #A98E78;
+   --muted: #A98E78;
 
-    /* ===================================================
+   /* ===================================================
        Accent（火15%）
     ==================================================== */
 
-    --accent: #FF944D;
-    --accent-foreground: #FFFFFF;
+   --accent: #FF944D;
+   --accent-foreground: #FFFFFF;
 
-    --focus: #FF944D;
-    --link: #E04242;
+   --focus: #FF944D;
+   --link: #E04242;
 
-    /* ===================================================
+   /* ===================================================
        Form
     ==================================================== */
 
-    --field-background: #FFFDF8;
-    --field-foreground: #6D4C39;
-    --field-placeholder: #BFA48D;
-    --field-border: #D6B999;
+   --field-background: #FFFDF8;
+   --field-foreground: #6D4C39;
+   --field-placeholder: #BFA48D;
+   --field-border: #D6B999;
 
-    /* ===================================================
+   /* ===================================================
        Status
     ==================================================== */
 
-    --success: #68A884;
-    --success-foreground: #FFFFFF;
+   --success: #68A884;
+   --success-foreground: #FFFFFF;
 
-    --warning: #F4B942;
-    --warning-foreground: #6D4C39;
+   --warning: #F4B942;
+   --warning-foreground: #6D4C39;
 
-    --danger: #E04242;
-    --danger-foreground: #FFFFFF;
+   --danger: #E04242;
+   --danger-foreground: #FFFFFF;
 
-    /* ===================================================
+   /* ===================================================
        Components
     ==================================================== */
 
-    --segment: #FFF4E3;
-    --segment-foreground: #6D4C39;
+   --segment: #FFF4E3;
+   --segment-foreground: #6D4C39;
 
-    --border: #D6B999;
-    --separator: #EADCC7;
+   --border: #D6B999;
+   --separator: #EADCC7;
 
-    /* ===================================================
+   /* ===================================================
        Scrollbar（木色）
     ==================================================== */
 
-    --scrollbar-thumb: #9FD8B9;
-    --scrollbar-track: transparent;
-    --scrollbar-width: thin;
-    --scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-    --scrollbar: var(--scrollbar-thumb);
+   --scrollbar-thumb: #9FD8B9;
+   --scrollbar-track: transparent;
+   --scrollbar-width: thin;
+   --scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+   --scrollbar: var(--scrollbar-thumb);
 
-    /* ===================================================
+   /* ===================================================
        Shadow（暖色阴影）
     ==================================================== */
 
-    --surface-shadow:
-        0 3px 8px rgba(153,110,53,.08),
-        0 1px 3px rgba(153,110,53,.06);
+   --surface-shadow: 0 3px 8px rgba(153, 110, 53, .08),
+   0 1px 3px rgba(153, 110, 53, .06);
 
-    --overlay-shadow:
-        0 10px 30px rgba(130,95,45,.12);
+   --overlay-shadow: 0 10px 30px rgba(130, 95, 45, .12);
 
-    --field-shadow:
-        0 2px 6px rgba(130,95,45,.08);
+   --field-shadow: 0 2px 6px rgba(130, 95, 45, .08);
 
-    /* ===================================================
+   /* ===================================================
        Motion
     ==================================================== */
 
-    --skeleton-animation: shimmer;
+   --skeleton-animation: shimmer;
 
-    --tooltip-delay: 1500ms;
-    --tooltip-close-delay: 500ms;
+   --tooltip-delay: 1500ms;
+   --tooltip-close-delay: 500ms;
 }

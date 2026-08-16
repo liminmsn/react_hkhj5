@@ -1,9 +1,9 @@
-import { Button, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, TextField, toast, Toast } from "@heroui/react";
+import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, TextField, toast, Toast } from "@heroui/react";
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 import { net_model_user_forgotPassword, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
 import getFormData from "../../utils/getFormData";
 import { useUserInfoStore } from "../../store";
-import { Mail, PartyPopper, Rocket } from "lucide-react";
+import { IdCard, Mail, PartyPopper, Phone, Rocket, Smartphone } from "lucide-react";
 import { isEmail } from "../../utils/verifys";
 
 type SubmitParameter = React.FormEvent<HTMLFormElement>;
@@ -314,15 +314,169 @@ function LoginRegisterLayout() {
     </div>
 }
 
+
+function UserInfo() {
+    const { info } = useUserInfoStore();
+
+    return <div className="w-full h-screen p-3 pb-16 flex gap-1.5">
+        <div className="h-full flex flex-col gap-y-1.5 w-1/3">
+            <Card className="inline-block">
+                <div className="flex gap-x-1.5">
+                    <img
+                        className="w-24 h-24 pointer-events-none aspect-square rounded-2xl object-cover select-none"
+                        loading="lazy"
+                        src={`/api/api${info?.avatar}`}
+                    />
+                    <div className="flex flex-col">
+                        <Card.Title className="select-all">
+                            {info?.nickname}
+                        </Card.Title>
+                        <Card.Title className="flex items-center gap-x-1">
+                            <IdCard size={20} />
+                            <Label className="select-all">{info?.username}</Label>
+                        </Card.Title>
+                        <Card.Title className="flex items-center gap-x-1">
+                            <Mail size={20} />
+                            <Label className="select-all">{info?.email}</Label>
+                        </Card.Title>
+                        <Card.Title className="flex items-center gap-x-1">
+                            <Smartphone size={20} />
+                            <Label className="select-all">{info?.phone || "-"}</Label>
+                        </Card.Title>
+                    </div>
+                </div>
+            </Card>
+            <Card>
+                <div className="flex justify-between items-center">
+                    <Label>能量：9999{info?.energy}</Label>
+                    <Button size="sm" variant="primary">充值</Button>
+                </div>
+                <div>
+                    <Label>我的邀请码：</Label>
+                    <Label className="select-all">jiofw</Label>
+                </div>
+            </Card>
+            <Button className="w-full" variant="danger">退出登录</Button>
+        </div>
+        <div className="w-full grid grid-cols-2 grid-rows-2 gap-1.5">
+            <Card className="p-0 gap-y-0">
+                <Card.Header className="p-3 pb-0">
+                    <Card.Title>能量流水明细</Card.Title>
+                </Card.Header>
+                <Card.Content className="overflow-y-auto">
+                    <ListBox aria-label="用户" selectionMode="single" className="px-0">
+                        <ListBox.Item id="1" textValue="Bob">
+                            <Avatar size="sm">
+                                <Avatar.Image
+                                    alt="Bob"
+                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg"
+                                />
+                                <Avatar.Fallback>B</Avatar.Fallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                                <Label>Bob</Label>
+                                <Description>bob@heroui.com</Description>
+                            </div>
+                            <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item id="2" textValue="Fred">
+                            <Avatar size="sm">
+                                <Avatar.Image
+                                    alt="Fred"
+                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/green.jpg"
+                                />
+                                <Avatar.Fallback>F</Avatar.Fallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                                <Label>Fred</Label>
+                                <Description>fred@heroui.com</Description>
+                            </div>
+                            <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item id="3" textValue="Martha">
+                            <Avatar size="sm">
+                                <Avatar.Image
+                                    alt="Martha"
+                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/purple.jpg"
+                                />
+                                <Avatar.Fallback>M</Avatar.Fallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                                <Label>Martha</Label>
+                                <Description>martha@heroui.com</Description>
+                            </div>
+                            <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                    </ListBox>
+                </Card.Content>
+            </Card>
+            <Card className="p-0 gap-y-0">
+                <Card.Header className="p-3 pb-0">
+                    <Card.Title>能量榜</Card.Title>
+                </Card.Header>
+                <Card.Content className="overflow-y-auto">
+                    <ListBox aria-label="用户" selectionMode="single" className="px-0">
+                        <ListBox.Item id="1" textValue="Bob">
+                            <Avatar size="sm">
+                                <Avatar.Image
+                                    alt="Bob"
+                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg"
+                                />
+                                <Avatar.Fallback>B</Avatar.Fallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                                <Label>Bob</Label>
+                                <Description>bob@heroui.com</Description>
+                            </div>
+                            <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item id="2" textValue="Fred">
+                            <Avatar size="sm">
+                                <Avatar.Image
+                                    alt="Fred"
+                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/green.jpg"
+                                />
+                                <Avatar.Fallback>F</Avatar.Fallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                                <Label>Fred</Label>
+                                <Description>fred@heroui.com</Description>
+                            </div>
+                            <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                        <ListBox.Item id="3" textValue="Martha">
+                            <Avatar size="sm">
+                                <Avatar.Image
+                                    alt="Martha"
+                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/purple.jpg"
+                                />
+                                <Avatar.Fallback>M</Avatar.Fallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                                <Label>Martha</Label>
+                                <Description>martha@heroui.com</Description>
+                            </div>
+                            <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                    </ListBox>
+                </Card.Content>
+            </Card>
+            <Card className="p-0 gap-y-0 col-span-2">
+                <Card.Header className="p-3 pb-0">
+                    <Card.Title>能量流水趋势</Card.Title>
+                </Card.Header>
+                <Card.Content className="overflow-y-auto">
+                    曲线图
+                </Card.Content>
+            </Card>
+        </div>
+    </div>
+}
 export default function () {
     const { info } = useUserInfoStore();
     if (!info) {
         return <LoginRegisterLayout />
     }
 
-    return <div className="h-full flex gap-2">
-        <div className="w-full">
-            User
-        </div>
-    </div>
+    return <UserInfo />
 }

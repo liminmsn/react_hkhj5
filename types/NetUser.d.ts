@@ -56,7 +56,7 @@ export declare global {
                     userId: number;
                     username: string;
                     nickname: string;
-                    avatar: null;
+                    avatar: string;
                     email: string;
                     phone: null;
                     status: number;
