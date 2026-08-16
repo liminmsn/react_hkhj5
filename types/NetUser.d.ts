@@ -33,6 +33,13 @@ export declare global {
                     captcha: string;
                     captchaId: string;
                 }
+                interface ForgotPassword {
+                    email: string;
+                    newPassword: string;
+                    confirmPassword: string;
+                    captcha: string;
+                    captchaId: string;
+                }
                 interface Captcha {
                     email: string;
                 }

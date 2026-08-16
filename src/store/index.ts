@@ -117,16 +117,19 @@ export const useWatchListStore = create<WatchListStoreType>(set => ({
 }));
 
 type UseUserInfoType = {
-    login: boolean;
     info: NetUser.Response.ModelUser.Login | null;
-    setLogin: (bol: boolean) => void;
+    saveInfo: (info: NetUser.Response.ModelUser.Login) => void;
 }
-export const useUserInfo = create<UseUserInfoType>(set => ({
-    login: false,
-    info: null,
-    setLogin(login: boolean) {
-        set(data => {
-            return { ...data, login }
-        })
+export const useUserInfoStore = create<UseUserInfoType>(set => ({
+    info: (function () {
+        const info_ = localStorage.getItem('info');
+        if (info_) {
+            return JSON.parse(info_);
+        }
+        return null
+    })(),
+    saveInfo(info: NetUser.Response.ModelUser.Login) {
+        localStorage.setItem('info', JSON.stringify(info));
+        set(data => ({ ...data, info }));
     }
 }));

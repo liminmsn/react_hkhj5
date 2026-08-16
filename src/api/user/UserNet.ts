@@ -2,6 +2,7 @@ export const Api = {
     login: "/api/auth/login",
     register: "/api/auth/register",
     sendCaptcha: "/api/auth/send-captcha",
+    forgotPassword: "/api/auth/forgot-password",
 }
 
 const baseUrl: string = "/api";
