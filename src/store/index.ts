@@ -119,17 +119,24 @@ export const useWatchListStore = create<WatchListStoreType>(set => ({
 type UseUserInfoType = {
     info: NetUser.Response.ModelUser.Login | null;
     saveInfo: (info: NetUser.Response.ModelUser.Login) => void;
+    outLogin: () => void;
 }
+
+const useUserInfoStore_INFO = 'info';
 export const useUserInfoStore = create<UseUserInfoType>(set => ({
     info: (function () {
-        const info_ = localStorage.getItem('info');
+        const info_ = localStorage.getItem(useUserInfoStore_INFO);
         if (info_) {
             return JSON.parse(info_);
         }
         return null
     })(),
     saveInfo(info: NetUser.Response.ModelUser.Login) {
-        localStorage.setItem('info', JSON.stringify(info));
+        localStorage.setItem(useUserInfoStore_INFO, JSON.stringify(info));
         set(data => ({ ...data, info }));
-    }
+    },
+    outLogin() {
+        localStorage.removeItem(useUserInfoStore_INFO);
+        set(data => ({ ...data, info: null }));
+    },
 }));

@@ -3,6 +3,7 @@ export const Api = {
     register: "/api/auth/register",
     sendCaptcha: "/api/auth/send-captcha",
     forgotPassword: "/api/auth/forgot-password",
+    priceList: "/api/price/list"
 }
 
 const baseUrl: string = "/api";
@@ -12,7 +13,7 @@ export default class {
     private method: "GET" | "POST" = "GET";
     private header = {
         "Content-Type": "application/json"
-    };
+    } as any;
 
     constructor(url: string) {
         this.url = (baseUrl + url) || "";
@@ -26,7 +27,16 @@ export default class {
         }).then(async (onf) => onf.blob());
         callFun(res);
     }
-
+    CarryToken() {
+        const info = localStorage.getItem('info');
+        if (info) {
+            const d = JSON.parse(info) as NetUser.Response.ModelUser.Login;
+            this.header["Authorization"] = d.token;
+        } else {
+            alert("请先登录!");
+        }
+        return this;
+    }
     setHeader(header: any) {
         this.header = header;
         return this;

@@ -1,10 +1,11 @@
-import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, TextField, toast, Toast } from "@heroui/react";
+import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, TextField, toast, Toast } from "@heroui/react";
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 import { net_model_user_forgotPassword, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
 import getFormData from "../../utils/getFormData";
 import { useUserInfoStore } from "../../store";
-import { IdCard, Mail, PartyPopper, Phone, Rocket, Smartphone } from "lucide-react";
+import { IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
 import { isEmail } from "../../utils/verifys";
+import { model_price_list } from "../../api/user/model/modelPrice";
 
 type SubmitParameter = React.FormEvent<HTMLFormElement>;
 type LoginRegisterForgotRef = {
@@ -314,9 +315,66 @@ function LoginRegisterLayout() {
     </div>
 }
 
+function TopUp() {
+    const [select, setSelect] = useState<NetUser.Response.ModelPrice.ListItem>()
+    const [list, setList] = useState<NetUser.Response.ModelPrice.ListList>();
+    useEffect(() => {
+        model_price_list((res) => {
+            setList(res.data);
+        })
+    }, [])
+
+    return <Modal>
+        <Button size="sm" variant="primary">充值</Button>
+        <Modal.Backdrop>
+            <Modal.Container>
+                <Modal.Dialog className="w-8/12">
+                    <Modal.CloseTrigger />
+                    <Modal.Header className="flex-row items-center">
+                        <Modal.Icon className="bg-default text-foreground">
+                            <Rocket className="size-5" />
+                        </Modal.Icon>
+                        <Modal.Heading>能量充值</Modal.Heading>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {!list && <LoaderIcon />}
+                        {list && <div className="grid grid-cols-3 gap-1.5">
+                            {list.map(item => {
+                                return <Card key={item.productCode}
+                                    className={`gap-0 cursor-pointer active:scale-95 ${select == item ? "bg-accent" : ""}`}
+                                    onClickCapture={() => setSelect(item)}>
+                                    <Card.Header>
+                                        <Label className={item == select ? "text-white" : "text-accent"}>{item.productName}</Label>
+                                    </Card.Header>
+                                    <Card.Content className="flex-row">
+                                        <Label className="font-bold">{item.price}</Label>
+                                        {
+                                            item.price != item.originalPrice &&
+                                            <span className="text-nowrap">/<del>原价{item.originalPrice}</del></span>
+                                        }
+                                        <Label>{item.currency}</Label>
+                                    </Card.Content>
+                                    <Card.Footer className="mt-1">
+                                        <span className="scale-90">{item.description}</span>
+                                    </Card.Footer>
+                                </Card>
+                            })}
+                        </div>}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button className="w-full" slot="close">
+                            继续
+                        </Button>
+                    </Modal.Footer>
+                </Modal.Dialog>
+            </Modal.Container>
+        </Modal.Backdrop>
+    </Modal >
+}
+
 
 function UserInfo() {
-    const { info } = useUserInfoStore();
+    const { info, outLogin } = useUserInfoStore();
 
     return <div className="w-full h-screen p-3 pb-16 flex gap-1.5">
         <div className="h-full flex flex-col gap-y-1.5 w-1/3">
@@ -348,15 +406,15 @@ function UserInfo() {
             </Card>
             <Card>
                 <div className="flex justify-between items-center">
-                    <Label>能量：9999{info?.energy}</Label>
-                    <Button size="sm" variant="primary">充值</Button>
+                    <Label>能量：{info?.energy}</Label>
+                    <TopUp />
                 </div>
                 <div>
                     <Label>我的邀请码：</Label>
                     <Label className="select-all">jiofw</Label>
                 </div>
             </Card>
-            <Button className="w-full" variant="danger">退出登录</Button>
+            <Button className="w-full" variant="danger" onClick={outLogin}>退出登录</Button>
         </div>
         <div className="w-full grid grid-cols-2 grid-rows-2 gap-1.5">
             <Card className="p-0 gap-y-0">

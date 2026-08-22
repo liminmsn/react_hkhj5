@@ -50,8 +50,18 @@ export declare global {
                 expireSeconds: number;
                 captchaId: string;
             };
+            namespace ModelPrice {
+                type ListList = ListItem[];
+                interface ListItem {
+                    productCode: string;
+                    productName: string;
+                    price: number;
+                    originalPrice: number;
+                    description: string;
+                    currency: string;
+                }
+            }
             namespace ModelUser {
-
                 interface Login {
                     userId: number;
                     username: string;
