@@ -3,7 +3,8 @@ export const Api = {
     register: "/api/auth/register",
     sendCaptcha: "/api/auth/send-captcha",
     forgotPassword: "/api/auth/forgot-password",
-    priceList: "/api/price/list"
+    priceList: "/api/price/list",
+    energyRanking: "/api/energy/ranking",
 }
 
 const baseUrl: string = "/api";
@@ -41,11 +42,9 @@ export default class {
         this.header = header;
         return this;
     }
-
     get() {
         return this.send.bind(this);
     }
-
     post(body?: NetUser.BodyType) {
         this.method = "POST";
         this.body = body;

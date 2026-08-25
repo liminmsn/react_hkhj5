@@ -6,6 +6,7 @@ import { useUserInfoStore } from "../../store";
 import { IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
 import { isEmail } from "../../utils/verifys";
 import { model_price_list } from "../../api/user/model/modelPrice";
+import { model_energy_ranking } from "../../api/user/model/modelEnergy";
 
 type SubmitParameter = React.FormEvent<HTMLFormElement>;
 type LoginRegisterForgotRef = {
@@ -315,7 +316,7 @@ function LoginRegisterLayout() {
     </div>
 }
 
-function TopUp() {
+function UserInfoTopUp() {
     const [select, setSelect] = useState<NetUser.Response.ModelPrice.ListItem>()
     const [list, setList] = useState<NetUser.Response.ModelPrice.ListList>();
     useEffect(() => {
@@ -371,7 +372,48 @@ function TopUp() {
         </Modal.Backdrop>
     </Modal >
 }
+function UserInfoRankingCard() {
+    const [list, setList] = useState<NetUser.Response.ModelEnergy.RankingList>();
+    useEffect(() => {
+        model_energy_ranking(10, (res) => {
+            if (res.code == 200) {
+                setList(res.data);
+            }
+        })
+    }, []);
 
+    return <Card className="p-0 gap-y-0">
+        <Card.Header className="p-3 pb-0">
+            <Card.Title>能量榜</Card.Title>
+        </Card.Header>
+        <Card.Content className="overflow-y-auto">
+            <ListBox aria-label="用户" selectionMode="single" className="px-0">
+                {
+                    list &&
+                    list.map((item, idx) => {
+                        return <ListBox.Item id={item.userId} textValue={item.username}>
+                            <div className="bg-accent/20 rounded-md h-8 w-8 text-center">
+                                <Label className="text-xl">{idx + 1}</Label>
+                            </div>
+                            <Avatar size="sm">
+                                <Avatar.Image
+                                    alt="Bob"
+                                    src={`/api/api${item.avatar}`}
+                                />
+                                <Avatar.Fallback>{item.username}</Avatar.Fallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                                <Label>{item.nickname}</Label>
+                                <Description>能量值{item.energy}</Description>
+                            </div>
+                            <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                    })
+                }
+            </ListBox>
+        </Card.Content>
+    </Card>
+}
 
 function UserInfo() {
     const { info, outLogin } = useUserInfoStore();
@@ -406,8 +448,8 @@ function UserInfo() {
             </Card>
             <Card>
                 <div className="flex justify-between items-center">
-                    <Label>能量：{info?.energy}</Label>
-                    <TopUp />
+                    <Label>我的能量：{info?.energy}</Label>
+                    <UserInfoTopUp />
                 </div>
                 <div>
                     <Label>我的邀请码：</Label>
@@ -468,57 +510,7 @@ function UserInfo() {
                     </ListBox>
                 </Card.Content>
             </Card>
-            <Card className="p-0 gap-y-0">
-                <Card.Header className="p-3 pb-0">
-                    <Card.Title>能量榜</Card.Title>
-                </Card.Header>
-                <Card.Content className="overflow-y-auto">
-                    <ListBox aria-label="用户" selectionMode="single" className="px-0">
-                        <ListBox.Item id="1" textValue="Bob">
-                            <Avatar size="sm">
-                                <Avatar.Image
-                                    alt="Bob"
-                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg"
-                                />
-                                <Avatar.Fallback>B</Avatar.Fallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <Label>Bob</Label>
-                                <Description>bob@heroui.com</Description>
-                            </div>
-                            <ListBox.ItemIndicator />
-                        </ListBox.Item>
-                        <ListBox.Item id="2" textValue="Fred">
-                            <Avatar size="sm">
-                                <Avatar.Image
-                                    alt="Fred"
-                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/green.jpg"
-                                />
-                                <Avatar.Fallback>F</Avatar.Fallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <Label>Fred</Label>
-                                <Description>fred@heroui.com</Description>
-                            </div>
-                            <ListBox.ItemIndicator />
-                        </ListBox.Item>
-                        <ListBox.Item id="3" textValue="Martha">
-                            <Avatar size="sm">
-                                <Avatar.Image
-                                    alt="Martha"
-                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/purple.jpg"
-                                />
-                                <Avatar.Fallback>M</Avatar.Fallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <Label>Martha</Label>
-                                <Description>martha@heroui.com</Description>
-                            </div>
-                            <ListBox.ItemIndicator />
-                        </ListBox.Item>
-                    </ListBox>
-                </Card.Content>
-            </Card>
+            <UserInfoRankingCard />
             <Card className="p-0 gap-y-0 col-span-2">
                 <Card.Header className="p-3 pb-0">
                     <Card.Title>能量流水趋势</Card.Title>

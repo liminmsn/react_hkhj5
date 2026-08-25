@@ -77,6 +77,17 @@ export declare global {
                     loginTime: string;
                 }
             }
+            namespace ModelEnergy {
+                type RankingList = {
+                    userId: number;
+                    username: string;
+                    nickname: string;
+                    avatar: string;
+                    energy: number;
+                    totalEarned: number;
+                    totalUsed: number;
+                }[]
+            }
         }
     }
 }
