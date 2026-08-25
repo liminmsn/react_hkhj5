@@ -78,7 +78,7 @@ export declare global {
                 }
             }
             namespace ModelEnergy {
-                type RankingList = {
+                type Ranking = {
                     userId: number;
                     username: string;
                     nickname: string;
@@ -86,7 +86,19 @@ export declare global {
                     energy: number;
                     totalEarned: number;
                     totalUsed: number;
-                }[]
+                }
+                type FlowingWater = {
+                    amount: number;
+                    balanceAfter: number;
+                    balanceBefore: number;
+                    changeType: number;
+                    createTime: string;
+                    description: string;
+                    id: number;
+                    sourceId: string;
+                    sourceType: number;
+                    userId: number;
+                }
             }
         }
     }

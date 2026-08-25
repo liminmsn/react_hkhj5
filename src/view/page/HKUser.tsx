@@ -1,12 +1,14 @@
-import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, TextField, toast, Toast } from "@heroui/react";
-import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
+import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, TextField, toast, Toast } from "@heroui/react";
 import { net_model_user_forgotPassword, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
-import getFormData from "../../utils/getFormData";
-import { useUserInfoStore } from "../../store";
+import { model_energy_flowingWater, model_energy_ranking } from "../../api/user/model/modelEnergy";
 import { IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
-import { isEmail } from "../../utils/verifys";
+import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 import { model_price_list } from "../../api/user/model/modelPrice";
-import { model_energy_ranking } from "../../api/user/model/modelEnergy";
+import getFormData from "../../utils/getFormData";
+import { isEmail } from "../../utils/verifys";
+import { ResponsiveBump } from '@nivo/bump'
+import dayjs from "dayjs";
+import { useUserInfoFlowingWater, useUserInfoStore } from "../../store";
 
 type SubmitParameter = React.FormEvent<HTMLFormElement>;
 type LoginRegisterForgotRef = {
@@ -372,8 +374,63 @@ function UserInfoTopUp() {
         </Modal.Backdrop>
     </Modal >
 }
+
+function UserInfoFlowingWaterCard() {
+    const [list, setList] = useState<NetUser.Response.ModelEnergy.FlowingWater[]>();
+    const { save } = useUserInfoFlowingWater();
+    useEffect(() => {
+        model_energy_flowingWater(1, 10, (res) => {
+            if (res.code == 200) {
+                console.log(res);
+                save(res.data);
+                setList(res.data);
+            }
+        })
+    }, [save]);
+
+    return <Card className="col-span-4 pr-1">
+        <Card.Header className="p-0 pb-0">
+            <Label>流水记录</Label>
+        </Card.Header>
+        <Card.Content className="overflow-y-auto">
+            <Table className="p-0">
+                <Table.ScrollContainer>
+                    <Table.Content aria-label="Team members">
+                        <Table.Header>
+                            <Table.Column className="px-0">#</Table.Column>
+                            <Table.Column >时间</Table.Column>
+                            <Table.Column >支出/收入</Table.Column>
+                            <Table.Column >变动前能量</Table.Column>
+                            <Table.Column >能量</Table.Column>
+                            <Table.Column >备注</Table.Column>
+                        </Table.Header>
+                        <Table.Body>
+                            {
+                                list?.map((item, idx) => {
+                                    return <Table.Row key={item.id}>
+                                        <Table.Cell className="pl-0">{idx + 1}</Table.Cell>
+                                        <Table.Cell>{dayjs(item.createTime).format('YYYY年MM月DD日 HH:mm:ss')}</Table.Cell>
+                                        {
+                                            item.changeType == 1 ?
+                                                <Table.Cell className="text-success">+{item.balanceAfter - item.balanceBefore}</Table.Cell> :
+                                                <Table.Cell className="text-danger">{item.balanceAfter - item.balanceBefore}</Table.Cell>
+                                        }
+                                        <Table.Cell>{item.balanceBefore}</Table.Cell>
+                                        <Table.Cell>{item.balanceAfter}</Table.Cell>
+                                        <Table.Cell>{item.description}</Table.Cell>
+                                    </Table.Row>
+                                })
+                            }
+                        </Table.Body>
+                    </Table.Content>
+                </Table.ScrollContainer>
+            </Table>
+        </Card.Content>
+    </Card>
+}
+
 function UserInfoRankingCard() {
-    const [list, setList] = useState<NetUser.Response.ModelEnergy.RankingList>();
+    const [list, setList] = useState<NetUser.Response.ModelEnergy.Ranking[]>();
     useEffect(() => {
         model_energy_ranking(10, (res) => {
             if (res.code == 200) {
@@ -382,16 +439,16 @@ function UserInfoRankingCard() {
         })
     }, []);
 
-    return <Card className="p-0 gap-y-0">
-        <Card.Header className="p-3 pb-0">
-            <Card.Title>能量榜</Card.Title>
+    return <Card className="col-span-2">
+        <Card.Header className="pb-0">
+            <Card.Title>排行榜</Card.Title>
         </Card.Header>
-        <Card.Content className="overflow-y-auto">
-            <ListBox aria-label="用户" selectionMode="single" className="px-0">
+        <Card.Content>
+            <ListBox aria-label="用户" selectionMode="none" className="px-0">
                 {
                     list &&
                     list.map((item, idx) => {
-                        return <ListBox.Item id={item.userId} textValue={item.username}>
+                        return <ListBox.Item key={idx} id={item.userId} textValue={item.username}>
                             <div className="bg-accent/20 rounded-md h-8 w-8 text-center">
                                 <Label className="text-xl">{idx + 1}</Label>
                             </div>
@@ -404,7 +461,7 @@ function UserInfoRankingCard() {
                             </Avatar>
                             <div className="flex flex-col">
                                 <Label>{item.nickname}</Label>
-                                <Description>能量值{item.energy}</Description>
+                                <Description>能量{item.energy}</Description>
                             </div>
                             <ListBox.ItemIndicator />
                         </ListBox.Item>
@@ -413,6 +470,77 @@ function UserInfoRankingCard() {
             </ListBox>
         </Card.Content>
     </Card>
+}
+
+function UserInfoChat() {
+    return <ResponsiveBump /* or Bump for fixed dimensions */
+        data={[
+            {
+                "id": "Serie 1",
+                "data": [
+                    {
+                        "x": "2000",
+                        "y": 3
+                    },
+                    {
+                        "x": "2001",
+                        "y": 7
+                    },
+                    {
+                        "x": "2002",
+                        "y": 3
+                    },
+                    {
+                        "x": "2003",
+                        "y": 3
+                    },
+                    {
+                        "x": "2004",
+                        "y": 7
+                    }
+                ]
+            },
+            {
+                "id": "Serie 2",
+                "data": [
+                    {
+                        "x": "2000",
+                        "y": 9
+                    },
+                    {
+                        "x": "2001",
+                        "y": 2
+                    },
+                    {
+                        "x": "2002",
+                        "y": 8
+                    },
+                    {
+                        "x": "2003",
+                        "y": 5
+                    },
+                    {
+                        "x": "2004",
+                        "y": 9
+                    }
+                ]
+            }
+        ]}
+        colors={{ scheme: 'spectral' }}
+        lineWidth={3}
+        activeLineWidth={6}
+        inactiveLineWidth={3}
+        inactiveOpacity={0.15}
+        pointSize={10}
+        activePointSize={16}
+        inactivePointSize={0}
+        pointColor={{ theme: 'background' }}
+        pointBorderWidth={3}
+        activePointBorderWidth={3}
+        pointBorderColor={{ from: 'serie.color' }}
+        axisLeft={{ legend: '支出/收入', legendOffset: -40 }}
+        margin={{ top: 40, right: 100, bottom: 40, left: 60 }}
+    />
 }
 
 function UserInfo() {
@@ -458,65 +586,15 @@ function UserInfo() {
             </Card>
             <Button className="w-full" variant="danger" onClick={outLogin}>退出登录</Button>
         </div>
-        <div className="w-full grid grid-cols-2 grid-rows-2 gap-1.5">
-            <Card className="p-0 gap-y-0">
-                <Card.Header className="p-3 pb-0">
-                    <Card.Title>能量流水明细</Card.Title>
-                </Card.Header>
-                <Card.Content className="overflow-y-auto">
-                    <ListBox aria-label="用户" selectionMode="single" className="px-0">
-                        <ListBox.Item id="1" textValue="Bob">
-                            <Avatar size="sm">
-                                <Avatar.Image
-                                    alt="Bob"
-                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg"
-                                />
-                                <Avatar.Fallback>B</Avatar.Fallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <Label>Bob</Label>
-                                <Description>bob@heroui.com</Description>
-                            </div>
-                            <ListBox.ItemIndicator />
-                        </ListBox.Item>
-                        <ListBox.Item id="2" textValue="Fred">
-                            <Avatar size="sm">
-                                <Avatar.Image
-                                    alt="Fred"
-                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/green.jpg"
-                                />
-                                <Avatar.Fallback>F</Avatar.Fallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <Label>Fred</Label>
-                                <Description>fred@heroui.com</Description>
-                            </div>
-                            <ListBox.ItemIndicator />
-                        </ListBox.Item>
-                        <ListBox.Item id="3" textValue="Martha">
-                            <Avatar size="sm">
-                                <Avatar.Image
-                                    alt="Martha"
-                                    src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/purple.jpg"
-                                />
-                                <Avatar.Fallback>M</Avatar.Fallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <Label>Martha</Label>
-                                <Description>martha@heroui.com</Description>
-                            </div>
-                            <ListBox.ItemIndicator />
-                        </ListBox.Item>
-                    </ListBox>
-                </Card.Content>
-            </Card>
+        <div className="w-full grid grid-cols-6 grid-rows-2 gap-1.5">
             <UserInfoRankingCard />
-            <Card className="p-0 gap-y-0 col-span-2">
+            <UserInfoFlowingWaterCard />
+            <Card className="p-0 gap-y-0 col-span-6">
                 <Card.Header className="p-3 pb-0">
-                    <Card.Title>能量流水趋势</Card.Title>
+                    <Card.Title>流水记录趋势图</Card.Title>
                 </Card.Header>
                 <Card.Content className="overflow-y-auto">
-                    曲线图
+                    <UserInfoChat />
                 </Card.Content>
             </Card>
         </div>

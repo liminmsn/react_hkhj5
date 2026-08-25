@@ -45,6 +45,13 @@ interface WatchListStoreType {
     clear: () => void;
 }
 
+type UseUserInfoType = {
+    info: NetUser.Response.ModelUser.Login | null;
+    saveInfo: (info: NetUser.Response.ModelUser.Login) => void;
+    outLogin: () => void;
+}
+
+
 export const useLayoutStore = create<LayoutStoreType>((set) => ({
     selectedKey: "HKUser",
     setSelectedKey: (key) => {
@@ -97,8 +104,9 @@ export const usePlayListStore = create<PlayListStoreType>((set) => ({
 }));
 
 // 追剧列表
+const useWatchListStore_LIST = 'watch_list';
 export const useWatchListStore = create<WatchListStoreType>(set => ({
-    list: JSON.parse(localStorage.getItem('watch_list')!) || [],
+    list: JSON.parse(localStorage.getItem(useWatchListStore_LIST)!) || [],
     add_remove(item) {
         let list_data = [];
         set(data => {
@@ -107,7 +115,7 @@ export const useWatchListStore = create<WatchListStoreType>(set => ({
                 return { list: list_data }
             }
             list_data = [...data.list, item];
-            localStorage.setItem('watch_list', JSON.stringify(list_data));
+            localStorage.setItem(useWatchListStore_LIST, JSON.stringify(list_data));
             return { list: list_data }
         })
     },
@@ -115,12 +123,6 @@ export const useWatchListStore = create<WatchListStoreType>(set => ({
         set({ list: [] })
     },
 }));
-
-type UseUserInfoType = {
-    info: NetUser.Response.ModelUser.Login | null;
-    saveInfo: (info: NetUser.Response.ModelUser.Login) => void;
-    outLogin: () => void;
-}
 
 const useUserInfoStore_INFO = 'info';
 export const useUserInfoStore = create<UseUserInfoType>(set => ({
@@ -140,3 +142,15 @@ export const useUserInfoStore = create<UseUserInfoType>(set => ({
         set(data => ({ ...data, info: null }));
     },
 }));
+
+
+type UserInfoFlowingWaterType = {
+    list: NetUser.Response.ModelEnergy.FlowingWater[] | null;
+    save: (list: NetUser.Response.ModelEnergy.FlowingWater[]) => void;
+}
+export const useUserInfoFlowingWater = create<UserInfoFlowingWaterType>(set => ({
+    list: [],
+    save(list) {
+        set(data => ({ ...data, list }))
+    },
+}))

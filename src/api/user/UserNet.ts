@@ -5,6 +5,7 @@ export const Api = {
     forgotPassword: "/api/auth/forgot-password",
     priceList: "/api/price/list",
     energyRanking: "/api/energy/ranking",
+    flowingWater: "/api/energy/flowing-water",
 }
 
 const baseUrl: string = "/api";
