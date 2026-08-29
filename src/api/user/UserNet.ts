@@ -6,6 +6,7 @@ export const Api = {
     priceList: "/api/price/list",
     energyRanking: "/api/energy/ranking",
     flowingWater: "/api/energy/flowing-water",
+    flowingWaterChat: "/api/energy/flowing-water-chat",
 }
 
 const baseUrl: string = "/api";
@@ -43,6 +44,11 @@ export default class {
         this.header = header;
         return this;
     }
+    setBody(body: NetUser.BodyType) {
+        this.body = body;
+        return this;
+    }
+
     get() {
         return this.send.bind(this);
     }

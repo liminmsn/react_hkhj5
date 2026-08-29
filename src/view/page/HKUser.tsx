@@ -1,14 +1,15 @@
-import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, TextField, toast, Toast } from "@heroui/react";
+import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, Tag, TagGroup, TextField, toast, Toast, type Key } from "@heroui/react";
 import { net_model_user_forgotPassword, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
-import { model_energy_flowingWater, model_energy_ranking } from "../../api/user/model/modelEnergy";
+import { useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
 import { IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
-import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
-import { model_price_list } from "../../api/user/model/modelPrice";
-import getFormData from "../../utils/getFormData";
-import { isEmail } from "../../utils/verifys";
-import { ResponsiveBump } from '@nivo/bump'
-import dayjs from "dayjs";
+import { model_energy_flowingChat, model_energy_flowingWater, model_energy_ranking } from "../../api/user/model/modelEnergy";
 import { useUserInfoFlowingWater, useUserInfoStore } from "../../store";
+import { model_price_list } from "../../api/user/model/modelPrice";
+import { ResponsiveBump } from '@nivo/bump'
+import { isEmail } from "../../utils/verifys";
+import HKComLoding from "../../components/HKComLoding";
+import getFormData from "../../utils/getFormData";
+import dayjs from "dayjs";
 
 type SubmitParameter = React.FormEvent<HTMLFormElement>;
 type LoginRegisterForgotRef = {
@@ -381,7 +382,6 @@ function UserInfoFlowingWaterCard() {
     useEffect(() => {
         model_energy_flowingWater(1, 10, (res) => {
             if (res.code == 200) {
-                console.log(res);
                 save(res.data);
                 setList(res.data);
             }
@@ -393,38 +393,40 @@ function UserInfoFlowingWaterCard() {
             <Label>流水记录</Label>
         </Card.Header>
         <Card.Content className="overflow-y-auto">
-            <Table className="p-0">
-                <Table.ScrollContainer>
-                    <Table.Content aria-label="Team members">
-                        <Table.Header>
-                            <Table.Column className="px-0">#</Table.Column>
-                            <Table.Column >时间</Table.Column>
-                            <Table.Column >支出/收入</Table.Column>
-                            <Table.Column >变动前能量</Table.Column>
-                            <Table.Column >能量</Table.Column>
-                            <Table.Column >备注</Table.Column>
-                        </Table.Header>
-                        <Table.Body>
-                            {
-                                list?.map((item, idx) => {
-                                    return <Table.Row key={item.id}>
-                                        <Table.Cell className="pl-0">{idx + 1}</Table.Cell>
-                                        <Table.Cell>{dayjs(item.createTime).format('YYYY年MM月DD日 HH:mm:ss')}</Table.Cell>
-                                        {
-                                            item.changeType == 1 ?
-                                                <Table.Cell className="text-success">+{item.balanceAfter - item.balanceBefore}</Table.Cell> :
-                                                <Table.Cell className="text-danger">{item.balanceAfter - item.balanceBefore}</Table.Cell>
-                                        }
-                                        <Table.Cell>{item.balanceBefore}</Table.Cell>
-                                        <Table.Cell>{item.balanceAfter}</Table.Cell>
-                                        <Table.Cell>{item.description}</Table.Cell>
-                                    </Table.Row>
-                                })
-                            }
-                        </Table.Body>
-                    </Table.Content>
-                </Table.ScrollContainer>
-            </Table>
+            {!list ? <HKComLoding /> :
+                <Table className="p-0">
+                    <Table.ScrollContainer>
+                        <Table.Content aria-label="Team members">
+                            <Table.Header>
+                                <Table.Column className="px-0">#</Table.Column>
+                                <Table.Column >时间</Table.Column>
+                                <Table.Column >支出/收入</Table.Column>
+                                <Table.Column >变动前能量</Table.Column>
+                                <Table.Column >能量</Table.Column>
+                                <Table.Column >备注</Table.Column>
+                            </Table.Header>
+                            <Table.Body>
+                                {
+                                    list.map((item, idx) => {
+                                        return <Table.Row key={item.id}>
+                                            <Table.Cell className="pl-0">{idx + 1}</Table.Cell>
+                                            <Table.Cell>{dayjs(item.createTime).format('YYYY年MM月DD日 HH:mm:ss')}</Table.Cell>
+                                            {
+                                                item.changeType == 1 ?
+                                                    <Table.Cell className="text-success">+{item.balanceAfter - item.balanceBefore}</Table.Cell> :
+                                                    <Table.Cell className="text-danger">{item.balanceAfter - item.balanceBefore}</Table.Cell>
+                                            }
+                                            <Table.Cell>{item.balanceBefore}</Table.Cell>
+                                            <Table.Cell>{item.balanceAfter}</Table.Cell>
+                                            <Table.Cell>{item.description}</Table.Cell>
+                                        </Table.Row>
+                                    })
+                                }
+                            </Table.Body>
+                        </Table.Content>
+                    </Table.ScrollContainer>
+                </Table>
+            }
         </Card.Content>
     </Card>
 }
@@ -434,7 +436,9 @@ function UserInfoRankingCard() {
     useEffect(() => {
         model_energy_ranking(10, (res) => {
             if (res.code == 200) {
-                setList(res.data);
+                setTimeout(() => {
+                    setList(res.data);
+                }, 500);
             }
         })
     }, []);
@@ -444,103 +448,137 @@ function UserInfoRankingCard() {
             <Card.Title>排行榜</Card.Title>
         </Card.Header>
         <Card.Content>
-            <ListBox aria-label="用户" selectionMode="none" className="px-0">
-                {
-                    list &&
-                    list.map((item, idx) => {
-                        return <ListBox.Item key={idx} id={item.userId} textValue={item.username}>
-                            <div className="bg-accent/20 rounded-md h-8 w-8 text-center">
-                                <Label className="text-xl">{idx + 1}</Label>
-                            </div>
-                            <Avatar size="sm">
-                                <Avatar.Image
-                                    alt="Bob"
-                                    src={`/api/api${item.avatar}`}
-                                />
-                                <Avatar.Fallback>{item.username}</Avatar.Fallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <Label>{item.nickname}</Label>
-                                <Description>能量{item.energy}</Description>
-                            </div>
-                            <ListBox.ItemIndicator />
-                        </ListBox.Item>
-                    })
-                }
-            </ListBox>
+            {!list ? <HKComLoding /> :
+                <ListBox aria-label="用户" selectionMode="none" className="px-0">
+                    {
+                        list.map((item, idx) => {
+                            return <ListBox.Item key={idx} id={item.userId} textValue={item.username}>
+                                <div className="bg-accent/20 rounded-md h-8 w-8 text-center">
+                                    <Label className="text-xl">{idx + 1}</Label>
+                                </div>
+                                <Avatar size="sm">
+                                    <Avatar.Image
+                                        alt="Bob"
+                                        src={`/api/api${item.avatar}`}
+                                    />
+                                    <Avatar.Fallback>{item.username}</Avatar.Fallback>
+                                </Avatar>
+                                <div className="flex flex-col">
+                                    <Label>{item.nickname}</Label>
+                                    <Description>能量{item.energy}</Description>
+                                </div>
+                                <ListBox.ItemIndicator />
+                            </ListBox.Item>
+                        })
+                    }
+                </ListBox>
+            }
         </Card.Content>
     </Card>
 }
 
+function ChatView({ list }: { list?: NetUser.Response.ModelEnergy.FlowingWater[], children?: ReactNode }) {
+    const energy = useMemo(() => {
+        if (!list) return [];
+        return list.map(item => ({
+            x: dayjs(item.createTime).format("YYYY年MM月DD日 HH:mm:ss"),
+            y: Number(item.amount)
+        }));
+    }, [list]);
+
+    if (list && list.length > 0) {
+        return (
+            <div className="h-full overflow-x-auto overflow-y-hidden whitespace-nowrap">
+                <div className="h-full" style={{ minWidth: Math.max(energy.length * 150, 600) }}>
+                    <ResponsiveBump
+                        data={[
+                            { id: "收/支", data: energy }
+                        ]}
+                        colors={['var(--accent)']}
+                        activeLineWidth={6}
+                        lineWidth={3}
+                        inactiveLineWidth={3}
+                        inactiveOpacity={0.5}
+                        inactivePointSize={0}
+                        pointSize={10}
+                        activePointSize={20}
+                        activePointBorderWidth={3}
+                        pointColor={{ theme: 'background' }}
+                        pointBorderColor={{ from: 'serie.color' }}
+                        pointBorderWidth={3}
+                        axisTop={null}
+                        axisLeft={{ legend: '能量收支曲线', legendOffset: -40 }}
+                        margin={{ top: 10, right: 60, bottom: 40, left: 60 }}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    return <div className="p-3">
+        <Label>暂无查询到数据!</Label>
+    </div>
+}
+
 function UserInfoChat() {
-    return <ResponsiveBump /* or Bump for fixed dimensions */
-        data={[
-            {
-                "id": "Serie 1",
-                "data": [
-                    {
-                        "x": "2000",
-                        "y": 3
-                    },
-                    {
-                        "x": "2001",
-                        "y": 7
-                    },
-                    {
-                        "x": "2002",
-                        "y": 3
-                    },
-                    {
-                        "x": "2003",
-                        "y": 3
-                    },
-                    {
-                        "x": "2004",
-                        "y": 7
-                    }
-                ]
-            },
-            {
-                "id": "Serie 2",
-                "data": [
-                    {
-                        "x": "2000",
-                        "y": 9
-                    },
-                    {
-                        "x": "2001",
-                        "y": 2
-                    },
-                    {
-                        "x": "2002",
-                        "y": 8
-                    },
-                    {
-                        "x": "2003",
-                        "y": 5
-                    },
-                    {
-                        "x": "2004",
-                        "y": 9
-                    }
-                ]
-            }
-        ]}
-        colors={{ scheme: 'spectral' }}
-        lineWidth={3}
-        activeLineWidth={6}
-        inactiveLineWidth={3}
-        inactiveOpacity={0.15}
-        pointSize={10}
-        activePointSize={16}
-        inactivePointSize={0}
-        pointColor={{ theme: 'background' }}
-        pointBorderWidth={3}
-        activePointBorderWidth={3}
-        pointBorderColor={{ from: 'serie.color' }}
-        axisLeft={{ legend: '支出/收入', legendOffset: -40 }}
-        margin={{ top: 40, right: 100, bottom: 40, left: 60 }}
-    />
+    function getParameter(key: 'three' | 'seven' | 'year') {
+        const now = dayjs();
+        const times = {
+            three: [
+                now.subtract(3, 'day').format("YYYY-MM-DD HH:mm:ss"),
+                now.format("YYYY-MM-DD HH:mm:ss")
+            ],
+            seven: [
+                now.subtract(7, 'day').format("YYYY-MM-DD HH:mm:ss"),
+                now.format("YYYY-MM-DD HH:mm:ss")
+            ],
+            year: [
+                now.subtract(1, 'year').format("YYYY-MM-DD HH:mm:ss"),
+                now.format("YYYY-MM-DD HH:mm:ss")
+            ]
+        };
+
+
+        return {
+            startTime: times[key][0],
+            endTime: times[key][1],
+            offset: 1,
+            size: 100
+        };
+    }
+
+    const [list, setList] = useState<NetUser.Response.ModelEnergy.FlowingWater[]>();
+    const [selected, setSelected] = useState<Iterable<Key>>(new Set(["year"]));
+    useEffect(() => {
+        const key = Array.from(selected)[0] as any;
+        if (key) {
+            const param = getParameter(key);
+            model_energy_flowingChat(param, (res) => {
+                if (res.code == 200) {
+                    setList(res.data);
+                    console.log(res.data);
+                }
+            });
+        }
+    }, [selected]);
+
+    return <Card className="p-0 gap-y-0 col-span-6">
+        <Card.Header className="p-3 pb-0 flex-row overflow-hidden">
+            <Card.Title>流水趋势</Card.Title>
+            <TagGroup className="ml-3" aria-label="Tags" selectionMode="single"
+                defaultSelectedKeys={selected}
+                onSelectionChange={setSelected}>
+                <TagGroup.List>
+                    <Tag id="three">近三天</Tag>
+                    <Tag id="seven">近七周</Tag>
+                    <Tag id="year">近一年</Tag>
+                </TagGroup.List>
+            </TagGroup>
+        </Card.Header>
+        <Card.Content>
+            {!list ? <HKComLoding /> : <ChatView list={list} />}
+        </Card.Content>
+    </Card>
 }
 
 function UserInfo() {
@@ -589,14 +627,7 @@ function UserInfo() {
         <div className="w-full grid grid-cols-6 grid-rows-2 gap-1.5">
             <UserInfoRankingCard />
             <UserInfoFlowingWaterCard />
-            <Card className="p-0 gap-y-0 col-span-6">
-                <Card.Header className="p-3 pb-0">
-                    <Card.Title>流水记录趋势图</Card.Title>
-                </Card.Header>
-                <Card.Content className="overflow-y-auto">
-                    <UserInfoChat />
-                </Card.Content>
-            </Card>
+            <UserInfoChat />
         </div>
     </div>
 }
