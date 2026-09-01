@@ -112,6 +112,7 @@ export const useWatchListStore = create<WatchListStoreType>(set => ({
         set(data => {
             if (data.list.filter(item_ => item_.head.imgUrl === item.head.imgUrl).length > 0) {
                 list_data = data.list.filter(i => i.head.imgUrl !== item.head.imgUrl)
+                localStorage.setItem(useWatchListStore_LIST, JSON.stringify(list_data));
                 return { list: list_data }
             }
             list_data = [...data.list, item];
