@@ -5,7 +5,7 @@ import HkLoding from "../components/HkLoding";
 import type { AnalysisHomeObjItemTypeListItem } from "../api/analysis/analysis_home";
 import { useEffect } from "react";
 import { setUrlVar } from "../utils/setStyleVar";
-import { Avatar, Button, Card, Chip, Description, Label, ListBox, Tag, TagGroup, Toast, toast } from "@heroui/react";
+import { Avatar, Button, Card, Chip, Description, Label, ListBox, Tag, TagGroup, Toast } from "@heroui/react";
 import { ArrowLeft, TagIcon, Star } from "lucide-react";
 import HKImg from "../components/HKImg";
 import { useDetailStore, usePlayListStore, useWatchListStore } from "../store";
@@ -38,7 +38,6 @@ export default function () {
         <div className="text-right mb-2">
             <Button
                 onClick={() => {
-                    toast.success("操作已完成")
                     add_remove({ head: detail.head, main: detail.main, url: state.url })
                 }}
                 variant={`${list.filter(item => item.head.imgUrl === detail.head.imgUrl).length > 0 ? 'danger' : 'secondary'}`}
