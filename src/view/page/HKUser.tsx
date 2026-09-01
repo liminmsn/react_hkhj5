@@ -27,6 +27,8 @@ function Login({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
                 if (res.code == 200) {
                     toast(<Label>登录成功！</Label>)
                     saveInfo(res.data);
+                } else {
+                    toast(<div>{res.message}</div>, { variant: "danger" })
                 }
             });
         }
@@ -100,8 +102,9 @@ function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
         net_model_user_sendCaptcha({ email }, res => {
             setemailCode(false);
             toast(<Label>{res.message}</Label>);
+            console.log(res)
             if (res.code == 200) {
-                setCaptchaId(res.data.captchaId);
+                setCaptchaId(res.data.captchaID);
             }
         });
     }
@@ -162,6 +165,7 @@ function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
                     </TextField>
                     <TextField className="mb-1" isRequired name="email" type="email">
                         <Label>邮箱</Label>
+                        {captchaId}
                         <div className="flex">
                             <Input placeholder="abc@qq.com" className="flex-1 mr-1" onChange={onEmailChange} />
                             <Button isDisabled={emailCode} onClick={getVerify}>
@@ -220,7 +224,7 @@ function ForgotPassword({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
             setemailCode(false);
             toast(<Label>{res.message}</Label>);
             if (res.code == 200) {
-                localStorage.setItem('captchaId', res.data.captchaId);
+                localStorage.setItem('captchaId', res.data.captchaID);
             }
         });
     }

@@ -48,7 +48,7 @@ export declare global {
         namespace Response {
             interface Captcha {
                 expireSeconds: number;
-                captchaId: string;
+                captchaID: string;
             };
             namespace ModelPrice {
                 type ListList = ListItem[];
