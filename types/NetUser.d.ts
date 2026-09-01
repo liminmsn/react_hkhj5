@@ -44,6 +44,13 @@ export declare global {
                     email: string;
                 }
             }
+            namespace ModelPrice {
+                interface SpayRequest {
+                    productName: string; //商品描述
+                    type: "alipay" | "wxpay"; //alipay、wxpay
+                    price: string;
+                }
+            }
         }
         namespace Response {
             interface Captcha {
@@ -60,6 +67,17 @@ export declare global {
                     description: string;
                     currency: string;
                 }
+                interface SpayResponse {
+                    code: string;
+                    msg: string;
+                    O_id: string;
+                    trade_no: string;
+                    payurl: string;
+                    payurl2: string;
+                    qrcode: string;
+                    img: string;
+                    expire_time: string;
+                }
             }
             namespace ModelUser {
                 interface Login {
@@ -75,6 +93,7 @@ export declare global {
                     expiresAt: string;
                     energy: number;
                     loginTime: string;
+                    invitationCode: string;
                 }
             }
             namespace ModelEnergy {

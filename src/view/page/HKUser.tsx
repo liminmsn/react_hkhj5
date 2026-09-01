@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, Tag, TagGroup, TextField, toast, Toast, type Key } from "@heroui/react";
+import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, Tabs, Tag, TagGroup, TextField, toast, Toast, type Key } from "@heroui/react";
 import { net_model_user_forgotPassword, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
 import { useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
 import { IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
@@ -10,6 +10,7 @@ import { isEmail } from "../../utils/verifys";
 import HKComLoding from "../../components/HKComLoding";
 import getFormData from "../../utils/getFormData";
 import dayjs from "dayjs";
+import { model_spay_init_pay } from "../../api/user/model/modelSpay";
 
 type SubmitParameter = React.FormEvent<HTMLFormElement>;
 type LoginRegisterForgotRef = {
@@ -165,7 +166,6 @@ function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
                     </TextField>
                     <TextField className="mb-1" isRequired name="email" type="email">
                         <Label>邮箱</Label>
-                        {captchaId}
                         <div className="flex">
                             <Input placeholder="abc@qq.com" className="flex-1 mr-1" onChange={onEmailChange} />
                             <Button isDisabled={emailCode} onClick={getVerify}>
@@ -332,6 +332,20 @@ function UserInfoTopUp() {
         })
     }, [])
 
+
+    const [type, setPayType] = useState<"alipay" | "wxpay">("alipay")
+    function init_pay() {
+        if (select) {
+            model_spay_init_pay({
+                productName: select.productName,
+                price: select.price.toFixed(2),
+                type: type
+            }, (res) => {
+                console.log(res);
+            });
+        }
+    }
+
     return <Modal>
         <Button size="sm" variant="primary">充值</Button>
         <Modal.Backdrop>
@@ -346,31 +360,49 @@ function UserInfoTopUp() {
                     </Modal.Header>
                     <Modal.Body>
                         {!list && <LoaderIcon />}
-                        {list && <div className="grid grid-cols-3 gap-1.5">
-                            {list.map(item => {
-                                return <Card key={item.productCode}
-                                    className={`gap-0 cursor-pointer active:scale-95 ${select == item ? "bg-accent" : ""}`}
-                                    onClickCapture={() => setSelect(item)}>
-                                    <Card.Header>
-                                        <Label className={item == select ? "text-white" : "text-accent"}>{item.productName}</Label>
-                                    </Card.Header>
-                                    <Card.Content className="flex-row">
-                                        <Label className="font-bold">{item.price}</Label>
-                                        {
-                                            item.price != item.originalPrice &&
-                                            <span className="text-nowrap">/<del>原价{item.originalPrice}</del></span>
-                                        }
-                                        <Label>{item.currency}</Label>
-                                    </Card.Content>
-                                    <Card.Footer className="mt-1">
-                                        <span className="scale-90">{item.description}</span>
-                                    </Card.Footer>
-                                </Card>
-                            })}
-                        </div>}
+                        {list &&
+                            <div>
+                                <div className="grid grid-cols-3 gap-1.5">
+                                    {list.map(item => {
+                                        return <Card key={item.productCode}
+                                            className={`gap-0 cursor-pointer active:scale-95 ${select == item ? "bg-accent" : ""}`}
+                                            onClickCapture={() => setSelect(item)}>
+                                            <Card.Header>
+                                                <Label className={item == select ? "text-white" : "text-accent"}>{item.productName}</Label>
+                                            </Card.Header>
+                                            <Card.Content className="flex-row">
+                                                <Label className="font-bold">{item.price}</Label>
+                                                {
+                                                    item.price != item.originalPrice &&
+                                                    <span className="text-nowrap">/<del>原价{item.originalPrice}</del></span>
+                                                }
+                                                <Label>{item.currency}</Label>
+                                            </Card.Content>
+                                            <Card.Footer className="mt-1">
+                                                <span className={item == select ? "text-white" : "scale-90"}>{item.description}</span>
+                                            </Card.Footer>
+                                        </Card>
+                                    })}
+                                </div>
+                                <Tabs  className="pt-5" defaultSelectedKey={type} onSelectionChange={(key) => setPayType(key as any)}>
+                                    <Tabs.ListContainer>
+                                        <Tabs.List aria-label="选项">
+                                            <Tabs.Tab id="alipay">
+                                                支付宝
+                                                <Tabs.Indicator />
+                                            </Tabs.Tab>
+                                            <Tabs.Tab id="wxpay">
+                                                微信
+                                                <Tabs.Indicator />
+                                            </Tabs.Tab>
+                                        </Tabs.List>
+                                    </Tabs.ListContainer>
+                                </Tabs>
+                            </div>
+                        }
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button className="w-full" slot="close">
+                    <Modal.Footer className="mt-1.5">
+                        <Button className="w-full" onClick={init_pay}>
                             继续
                         </Button>
                     </Modal.Footer>
@@ -384,7 +416,7 @@ function UserInfoFlowingWaterCard() {
     const [list, setList] = useState<NetUser.Response.ModelEnergy.FlowingWater[]>();
     const { save } = useUserInfoFlowingWater();
     useEffect(() => {
-        model_energy_flowingWater(1, 10, (res) => {
+        model_energy_flowingWater(1, 30, (res) => {
             if (res.code == 200) {
                 save(res.data);
                 setList(res.data);
@@ -402,10 +434,10 @@ function UserInfoFlowingWaterCard() {
                     <Table.ScrollContainer>
                         <Table.Content aria-label="Team members">
                             <Table.Header>
-                                <Table.Column className="px-0">#</Table.Column>
+                                <Table.Column isRowHeader className="px-0">#</Table.Column>
                                 <Table.Column >时间</Table.Column>
                                 <Table.Column >支出/收入</Table.Column>
-                                <Table.Column >变动前能量</Table.Column>
+                                <Table.Column >变动前</Table.Column>
                                 <Table.Column >能量</Table.Column>
                                 <Table.Column >备注</Table.Column>
                             </Table.Header>
@@ -414,7 +446,7 @@ function UserInfoFlowingWaterCard() {
                                     list.map((item, idx) => {
                                         return <Table.Row key={item.id}>
                                             <Table.Cell className="pl-0">{idx + 1}</Table.Cell>
-                                            <Table.Cell>{dayjs(item.createTime).format('YYYY年MM月DD日 HH:mm:ss')}</Table.Cell>
+                                            <Table.Cell className="text-nowrap">{dayjs(item.createTime).format('YYYY年MM月DD日 HH:mm:ss')}</Table.Cell>
                                             {
                                                 item.changeType == 1 ?
                                                     <Table.Cell className="text-success">+{item.balanceAfter - item.balanceBefore}</Table.Cell> :
@@ -560,7 +592,7 @@ function UserInfoChat() {
             model_energy_flowingChat(param, (res) => {
                 if (res.code == 200) {
                     setList(res.data);
-                    console.log(res.data);
+                    // console.log(res.data);
                 }
             });
         }
@@ -623,7 +655,7 @@ function UserInfo() {
                 </div>
                 <div>
                     <Label>我的邀请码：</Label>
-                    <Label className="select-all">jiofw</Label>
+                    <Label className="select-all">{info?.invitationCode}</Label>
                 </div>
             </Card>
             <Button className="w-full" variant="danger" onClick={outLogin}>退出登录</Button>
