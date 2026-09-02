@@ -702,7 +702,7 @@ function UserInfo() {
                 <Form className="">
                     <Input className="w-full" placeholder="使用别人给我的邀请码" required />
                     <div className="h-1.5"></div>
-                    <Button className="w-full" type="submit">使用</Button>
+                    <Button className="w-full" type="submit">使用邀请码</Button>
                 </Form>
             </Card>
             <Card>
