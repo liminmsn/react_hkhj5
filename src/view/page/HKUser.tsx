@@ -1,7 +1,7 @@
 import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, Tabs, Tag, TagGroup, TextField, toast, Toast, type Key } from "@heroui/react";
 import { net_model_user_forgotPassword, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
 import { useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
-import { CircleDollarSign, IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
+import { IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
 import { model_energy_flowingChat, model_energy_flowingWater, model_energy_ranking } from "../../api/user/model/modelEnergy";
 import { useUserInfoFlowingWater, useUserInfoStore } from "../../store";
 import { model_price_list } from "../../api/user/model/modelPrice";
