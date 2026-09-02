@@ -1,7 +1,7 @@
 import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, Tabs, Tag, TagGroup, TextField, toast, Toast, type Key } from "@heroui/react";
 import { net_model_user_forgotPassword, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
 import { useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
-import { IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
+import { CircleDollarSign, IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
 import { model_energy_flowingChat, model_energy_flowingWater, model_energy_ranking } from "../../api/user/model/modelEnergy";
 import { useUserInfoFlowingWater, useUserInfoStore } from "../../store";
 import { model_price_list } from "../../api/user/model/modelPrice";
@@ -334,6 +334,7 @@ function UserInfoTopUp() {
 
 
     const [type, setPayType] = useState<"alipay" | "wxpay">("alipay")
+    const [spay, setSpay] = useState<NetUser.Response.ModelPrice.SpayResponse>()
     function init_pay() {
         if (select) {
             model_spay_init_pay({
@@ -341,6 +342,11 @@ function UserInfoTopUp() {
                 price: select.price.toFixed(2),
                 type: type
             }, (res) => {
+                if (res.code == 200) {
+                    setSpay(res.data);
+                } else {
+                    toast(res.message, { variant: "danger" })
+                }
                 console.log(res);
             });
         }
@@ -360,7 +366,7 @@ function UserInfoTopUp() {
                     </Modal.Header>
                     <Modal.Body>
                         {!list && <LoaderIcon />}
-                        {list &&
+                        {(list) &&
                             <div>
                                 <div className="grid grid-cols-3 gap-1.5">
                                     {list.map(item => {
@@ -384,15 +390,17 @@ function UserInfoTopUp() {
                                         </Card>
                                     })}
                                 </div>
-                                <Tabs  className="pt-5" defaultSelectedKey={type} onSelectionChange={(key) => setPayType(key as any)}>
+                                <Tabs className="pt-5" defaultSelectedKey={type} onSelectionChange={(key) => setPayType(key as any)}>
                                     <Tabs.ListContainer>
                                         <Tabs.List aria-label="选项">
                                             <Tabs.Tab id="alipay">
                                                 支付宝
+                                                <img className="ml-1" width={20} src={`/asset/zfb.png`} />
                                                 <Tabs.Indicator />
                                             </Tabs.Tab>
                                             <Tabs.Tab id="wxpay">
                                                 微信
+                                                <img className="ml-1" width={20} src={`/asset/wx.svg`} />
                                                 <Tabs.Indicator />
                                             </Tabs.Tab>
                                         </Tabs.List>
@@ -402,9 +410,41 @@ function UserInfoTopUp() {
                         }
                     </Modal.Body>
                     <Modal.Footer className="mt-1.5">
-                        <Button className="w-full" onClick={init_pay}>
-                            继续
-                        </Button>
+                        <Modal>
+                            <Button className="w-full" onClick={init_pay}>继续</Button>
+                            <Modal.Backdrop>
+                                <Modal.Container>
+                                    <Modal.Dialog className="w-8/12">
+                                        <Modal.CloseTrigger />
+                                        <Modal.Header className="flex-row items-center">
+                                            {/* <Modal.Icon className="bg-default text-foreground">
+                                                <CircleDollarSign className="size-5" />
+                                            </Modal.Icon> */}
+                                            <img width={40} src={`/asset/${type == "alipay" ? "zfb.png" : "wx.svg"}`} />
+                                            <Modal.Heading><div className="font-bold">{type == "alipay" ? "支付宝" : "微信"}</div>扫码支付</Modal.Heading>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            {
+                                                select ?
+                                                    !spay ? <HKComLoding /> :
+                                                        <div className="flex gap-3.5">
+                                                            <img src={spay.img} className="w-30 border-2 border-accent rounded-sm" />
+                                                            <div className="flex flex-col gap-y-1.5">
+                                                                <Label>订单创建状态：{spay.msg}</Label>
+                                                                <Label>订单编号：{spay.trade_no}</Label>
+                                                                <Label className="text-black/20">已经支付完成？</Label>
+                                                                <Button variant="primary">查询支付状态</Button>
+                                                            </div>
+                                                        </div> :
+                                                    <div>
+                                                        <Label>至少择一个能量套餐选项</Label>
+                                                    </div>
+                                            }
+                                        </Modal.Body>
+                                    </Modal.Dialog>
+                                </Modal.Container>
+                            </Modal.Backdrop>
+                        </Modal >
                     </Modal.Footer>
                 </Modal.Dialog>
             </Modal.Container>
@@ -658,7 +698,16 @@ function UserInfo() {
                     <Label className="select-all">{info?.invitationCode}</Label>
                 </div>
             </Card>
-            <Button className="w-full" variant="danger" onClick={outLogin}>退出登录</Button>
+            <Card>
+                <Form className="">
+                    <Input className="w-full" placeholder="使用别人给我的邀请码" required />
+                    <div className="h-1.5"></div>
+                    <Button className="w-full" type="submit">使用</Button>
+                </Form>
+            </Card>
+            <Card>
+                <Button className="w-full" variant="danger" onClick={outLogin}>退出登录</Button>
+            </Card>
         </div>
         <div className="w-full grid grid-cols-6 grid-rows-2 gap-1.5">
             <UserInfoRankingCard />

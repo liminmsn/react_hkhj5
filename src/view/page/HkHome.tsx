@@ -1,14 +1,14 @@
 import analysis_home, { type AnalysisHomeObjItemType } from "../../api/analysis/analysis_home"
-import { Label } from "@heroui/react"
-import Analysis from "../../api/Analysis"
+import analysis_search_tags from "../../api/analysis/analysis_search_tags"
+import { useHkHomeStore, useHKSearchTagsStore } from "../../store"
+import { setUrlVar } from "../../utils/setStyleVar"
+import HKSearch from "../../components/HKSearch"
 import HkLoding from "../../components/HkLoding"
 import HKCard from "../../components/HKCard"
-import { setUrlVar } from "../../utils/setStyleVar"
-import { useHkHomeStore, useHKSearchTagsStore } from "../../store"
-import { useEffect } from "react"
-import HKSearch from "../../components/HKSearch"
-import analysis_search_tags from "../../api/analysis/analysis_search_tags"
 import HKSide from "../../components/HKSide"
+import Analysis from "../../api/Analysis"
+import { Label } from "@heroui/react"
+import { useEffect } from "react"
 
 export default function () {
     const { setTags } = useHKSearchTagsStore();
