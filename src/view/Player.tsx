@@ -8,7 +8,7 @@ import { Button, Card, Label, Tag, TagGroup } from "@heroui/react";
 import type { AnalysisDetailObjPlayListType, AnalysisDetailObjType } from "../api/analysis/analysis_detail";
 import { X, List } from "lucide-react";
 import Hls from "hls.js";
-import GlobalWebViewEbent from "../event/GlobalWebViewEbent";
+import GlobalWebViewEbent from "../event/GlobalWebViewEvent";
 import HKPlayList from "../components/HKPlayList";
 import { Plyr } from 'plyr-react';
 

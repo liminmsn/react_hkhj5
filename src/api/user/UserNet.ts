@@ -1,3 +1,5 @@
+import { GlobalWindowEvent } from "../../event/GlobalWindowEvent";
+
 export const Api = {
     login: "/api/auth/login",
     register: "/api/auth/register",
@@ -28,23 +30,32 @@ export default class {
             headers: this.header,
             method: this.method,
             body: this.body
-        }).then(async (onf) => onf.blob());
-        callFun(res);
+        })
+
+        switch (res.status) {
+            case 401: //token过期或者未登录
+                GlobalWindowEvent.emit("no_login", await res.json());
+                break;
+            default:
+                callFun(await res.blob());
+                break;
+        }
     }
+
     CarryToken() {
         const info = localStorage.getItem('info');
         if (info) {
             const d = JSON.parse(info) as NetUser.Response.ModelUser.Login;
             this.header["Authorization"] = d.token;
-        } else {
-            alert("请先登录!");
         }
         return this;
     }
+
     setHeader(header: any) {
         this.header = header;
         return this;
     }
+
     setBody(body: NetUser.BodyType) {
         this.body = body;
         return this;
@@ -53,6 +64,7 @@ export default class {
     get() {
         return this.send.bind(this);
     }
+
     post(body?: NetUser.BodyType) {
         this.method = "POST";
         this.body = body;

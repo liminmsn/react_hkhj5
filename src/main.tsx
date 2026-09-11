@@ -4,7 +4,7 @@ import { ThemeProvider } from 'next-themes'
 import { RouterProvider } from 'react-router'
 import router from './router'
 import './global.css'
-import GlobalWebViewEbent from './event/GlobalWebViewEbent'
+import GlobalWebViewEbent from './event/GlobalWebViewEvent'
 
 GlobalWebViewEbent.start()
 createRoot(document.getElementById('root')!).render(

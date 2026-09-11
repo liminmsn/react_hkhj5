@@ -46,8 +46,10 @@ interface WatchListStoreType {
 }
 
 type UseUserInfoType = {
+    login_state: number;
     info: NetUser.Response.ModelUser.Login | null;
     saveInfo: (info: NetUser.Response.ModelUser.Login) => void;
+    saveLoginState: (state: number) => void;
     outLogin: () => void;
 }
 
@@ -126,7 +128,15 @@ export const useWatchListStore = create<WatchListStoreType>(set => ({
 }));
 
 const useUserInfoStore_INFO = 'info';
+const useUserInfoStore_LOGIN_STATE = 'login_state';
 export const useUserInfoStore = create<UseUserInfoType>(set => ({
+    login_state: (function () {
+        const info_ = localStorage.getItem(useUserInfoStore_INFO);
+        if (info_) {
+            return 1;
+        }
+        return 0
+    })(),
     info: (function () {
         const info_ = localStorage.getItem(useUserInfoStore_INFO);
         if (info_) {
@@ -134,6 +144,10 @@ export const useUserInfoStore = create<UseUserInfoType>(set => ({
         }
         return null
     })(),
+    saveLoginState(state) {
+        localStorage.setItem(useUserInfoStore_LOGIN_STATE, String(state));
+        set(data => ({ ...data, login_state: state }));
+    },
     saveInfo(info: NetUser.Response.ModelUser.Login) {
         localStorage.setItem(useUserInfoStore_INFO, JSON.stringify(info));
         set(data => ({ ...data, info }));

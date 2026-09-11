@@ -16,8 +16,9 @@ type SubmitParameter = React.FormEvent<HTMLFormElement>;
 type LoginRegisterForgotRef = {
     onsubmit: (e: SubmitParameter) => void;
 }
+//登录
 function Login({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
-    const { saveInfo } = useUserInfoStore();
+    const { saveInfo, saveLoginState, login_state } = useUserInfoStore();
 
     // 暴露给父组件
     useImperativeHandle(ref, () => ({
@@ -26,8 +27,8 @@ function Login({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
             net_model_user_login(data as any, (res) => {
                 console.log(res);
                 if (res.code == 200) {
-                    toast(<Label>登录成功！</Label>)
                     saveInfo(res.data);
+                    saveLoginState(1);
                 } else {
                     toast(<div>{res.message}</div>, { variant: "danger" })
                 }
@@ -39,6 +40,12 @@ function Login({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
         <Toast.Provider placement="top" />
         <Fieldset.Legend>能量系统</Fieldset.Legend>
         <Description>小小能量温暖的连接你我他</Description>
+        {
+            login_state == -1 &&
+            <div className='bg-danger text-center py-1'>
+                <Label className='text-white'>登录状态过期重新登录</Label>
+            </div>
+        }
         <FieldGroup>
             <TextField
                 className="mb-1"
@@ -71,7 +78,7 @@ function Login({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
         </Fieldset.Actions>
     </Fieldset>
 }
-
+//注册用户
 function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
 
     const [regSuccess, setRegSuccess] = useState(false);
@@ -191,7 +198,7 @@ function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
         }
     </Fieldset >
 }
-
+//修改密码
 function ForgotPassword({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
     const [regSuccess, setRegSuccess] = useState(false);
 

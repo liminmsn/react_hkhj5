@@ -1,4 +1,4 @@
-import GlobalWebViewEbent from "../event/GlobalWebViewEbent";
+import GlobalWebViewEbent from "../event/GlobalWebViewEvent";
 
 export default class Net {
     private callback: CallbackType = () => { };

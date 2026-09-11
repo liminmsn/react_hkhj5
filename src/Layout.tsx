@@ -1,25 +1,28 @@
 import { Label, Tabs } from '@heroui/react';
 import HkHome from './view/page/HkHome';
-import { useCateGoryStore, useLayoutStore } from './store';
+import { useCateGoryStore, useLayoutStore, useUserInfoStore } from './store';
 import HKCategory from './view/page/HKCategory';
 import { useState } from 'react';
 import HKWatchList from './view/page/HKWatchList';
 import HKUser from './view/page/HKUser';
 import HKMap from './view/page/HKMap';
 import { Blocks, CircleUserRound, FolderHeart, House, Map } from 'lucide-react';
+import { GlobalWindowEvent } from './event/GlobalWindowEvent';
+
+
 export default function () {
     const selectedKey = useLayoutStore().selectedKey;
     const setSelectedKey = useLayoutStore().setSelectedKey;
-    const { setUrl } = useCateGoryStore();
     const [scrollTop, setScrollTop] = useState(0);
+    const { setUrl } = useCateGoryStore();
 
     const tabs = [
         {
-            title: 
-            <>
-                <House />
-                {/* 首页 */}
-            </>,
+            title:
+                <>
+                    <House />
+                    {/* 首页 */}
+                </>,
             id: 'HkHome',
             component: HkHome
         },
@@ -55,7 +58,15 @@ export default function () {
             id: 'HKUser',
             component: HKUser
         },
-    ]
+    ];
+
+
+    const { outLogin, saveLoginState } = useUserInfoStore();
+    GlobalWindowEvent.on("no_login", (data) => {
+        console.log(data);
+        saveLoginState(-1);
+        outLogin();
+    });
 
     return <Tabs className="h-screen shadow-md" selectedKey={selectedKey}
         onSelectionChange={(key) => {
@@ -66,7 +77,7 @@ export default function () {
         }}>
         <Tabs.ListContainer className='fixed left-0 right-0 bottom-4 z-500'>
             <div className={`w-75 mx-auto`}>
-                <Tabs.List aria-label="Options" className={`backdrop-blur-md bg-foreground/20 transition-all transition-delay-300 ${scrollTop > 300 ? 'translate-y-20 scale-0 pointer-events-none' : ''}`}>
+                <Tabs.List aria-label="Options" className={`backdrop-blur-md bg-foreground/20 transition-all transition-delay-300 ${scrollTop > 300 ? 'translate-y-15 pointer-events-none' : ''}`}>
                     {
                         tabs.map(item => {
                             return <Tabs.Tab id={item.id} key={item.id}>
