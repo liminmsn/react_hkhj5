@@ -376,15 +376,19 @@ function UserInfoTopUp() {
                         {(list) &&
                             <div>
                                 <div className="grid grid-cols-3 gap-1.5">
-                                    {list.map(item => {
+                                    {list.map((item, idx) => {
                                         return <Card key={item.productCode}
-                                            className={`gap-0 cursor-pointer active:scale-95 ${select == item ? "bg-accent" : ""}`}
+                                            className={`gap-0 cursor-pointer ${select == item ? "bg-accent" : ""}`}
                                             onClickCapture={() => setSelect(item)}>
-                                            <Card.Header>
+                                            <Card.Header className="text-center">
+                                                {
+                                                    idx < 3 && idx > 0 &&
+                                                    <div className="bg-red-500 text-white rounded-sm mb-1">推荐</div>
+                                                }
                                                 <Label className={item == select ? "text-white" : "text-accent"}>{item.productName}</Label>
                                             </Card.Header>
-                                            <Card.Content className="flex-row">
-                                                <Label className="font-bold">{item.price}</Label>
+                                            <Card.Content className="flex-row my-1 justify-center">
+                                                <Label className="text-red-500 font-bold text-xl">{item.price}</Label>
                                                 {
                                                     item.price != item.originalPrice &&
                                                     <span className="text-nowrap">/<del>原价{item.originalPrice}</del></span>
