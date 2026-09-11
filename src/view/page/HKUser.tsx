@@ -707,12 +707,17 @@ function UserInfo() {
                 <div>
                     <Label>我的邀请码：</Label>
                     <Label className="select-all">{info?.invitationCode}</Label>
+                    <div>
+                        <Description>
+                            邀请好友加入好看韩剧5<br />使用此邀请码你即可得300能量
+                        </Description>
+                    </div>
                 </div>
             </Card>
             <Card>
                 <Form className="">
                     <Input className="w-full" placeholder="使用别人给我的邀请码" required />
-                    <div className="h-1.5"></div>
+                    <div className="h-2.5"></div>
                     <Button className="w-full" type="submit">使用邀请码</Button>
                 </Form>
             </Card>
