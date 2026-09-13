@@ -1,16 +1,16 @@
 import "plyr-react/plyr.css";
-import type { PlyrPropsType } from "../components/HKPlayer";
-import { useEffect, useRef } from "react";
-import type { APITypes } from "plyr-react";
-import { useLocation, useNavigate } from "react-router";
-import type { SourceInfo } from "plyr";
-import { Button, Card, Label, Tag, TagGroup } from "@heroui/react";
 import type { AnalysisDetailObjPlayListType, AnalysisDetailObjType } from "../api/analysis/analysis_detail";
-import { X, List } from "lucide-react";
-import Hls from "hls.js";
+import { Button, Card, Label, Tag, TagGroup } from "@heroui/react";
 import GlobalWebViewEbent from "../event/GlobalWebViewEvent";
+import type { PlyrPropsType } from "../components/HKPlayer";
+import { useLocation, useNavigate } from "react-router";
 import HKPlayList from "../components/HKPlayList";
+import type { APITypes } from "plyr-react";
+import { useEffect, useRef } from "react";
+import { X, List } from "lucide-react";
+import type { SourceInfo } from "plyr";
 import { Plyr } from 'plyr-react';
+import Hls from "hls.js";
 
 export type PlayerInfoType = {
     m3u8url: string;

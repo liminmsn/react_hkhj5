@@ -521,11 +521,9 @@ function UserInfoFlowingWaterCard() {
 function UserInfoRankingCard() {
     const [list, setList] = useState<NetUser.Response.ModelEnergy.Ranking[]>();
     useEffect(() => {
-        model_energy_ranking(10, (res) => {
+        model_energy_ranking(20, (res) => {
             if (res.code == 200) {
-                setTimeout(() => {
-                    setList(res.data);
-                }, 500);
+                setList(res.data);
             }
         })
     }, []);
@@ -534,29 +532,33 @@ function UserInfoRankingCard() {
         <Card.Header className="pb-0">
             <Card.Title>排行榜</Card.Title>
         </Card.Header>
-        <Card.Content>
+        <Card.Content className="overflow-y-auto">
             {!list ? <HKComLoding /> :
                 <ListBox aria-label="用户" selectionMode="none" className="px-0">
                     {
-                        list.map((item, idx) => {
-                            return <ListBox.Item key={idx} id={item.userId} textValue={item.username}>
-                                <div className="bg-accent/20 rounded-md h-8 w-8 text-center">
-                                    <Label className="text-xl">{idx + 1}</Label>
-                                </div>
-                                <Avatar size="sm">
-                                    <Avatar.Image
-                                        alt="Bob"
-                                        src={`/api/api${item.avatar}`}
-                                    />
-                                    <Avatar.Fallback>{item.username}</Avatar.Fallback>
-                                </Avatar>
-                                <div className="flex flex-col">
-                                    <Label>{item.nickname}</Label>
-                                    <Description>能量{item.energy}</Description>
-                                </div>
-                                <ListBox.ItemIndicator />
+                        list.length > 0 ?
+                            list.map((item, idx) => {
+                                return <ListBox.Item key={idx} id={item.userId} textValue={item.username}>
+                                    <div className="bg-accent/20 rounded-md h-8 w-8 text-center">
+                                        <Label className="text-xl">{idx + 1}</Label>
+                                    </div>
+                                    <Avatar size="sm">
+                                        <Avatar.Image
+                                            alt="Bob"
+                                            src={`/api/api${item.avatar}`}
+                                        />
+                                        <Avatar.Fallback>{item.username}</Avatar.Fallback>
+                                    </Avatar>
+                                    <div className="flex flex-col">
+                                        <Label>{item.nickname}</Label>
+                                        <Description>能量{item.energy}</Description>
+                                    </div>
+                                    <ListBox.ItemIndicator />
+                                </ListBox.Item>
+                            }) :
+                            <ListBox.Item>
+                                <Label>暂无查询到数据!</Label>
                             </ListBox.Item>
-                        })
                     }
                 </ListBox>
             }
@@ -700,7 +702,7 @@ function UserInfo() {
                 </div>
             </Card>
             <Card>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-end">
                     <Label>我的能量：{info?.energy}</Label>
                     <UserInfoTopUp />
                 </div>
@@ -709,7 +711,7 @@ function UserInfo() {
                     <Label className="select-all">{info?.invitationCode}</Label>
                     <div>
                         <Description>
-                            邀请好友加入好看韩剧5<br />使用此邀请码你即可得300能量
+                            邀请好友加入好看韩剧5，使用此邀请码你即可得300能量，每一个被邀请人只能使用1次。
                         </Description>
                     </div>
                 </div>
@@ -718,12 +720,33 @@ function UserInfo() {
                 <Form className="">
                     <Input className="w-full" placeholder="使用别人给我的邀请码" required />
                     <div className="h-2.5"></div>
-                    <Button className="w-full" type="submit">使用邀请码</Button>
+                    <Modal>
+                        <Button className="w-full">使用邀请码</Button>
+                        <Modal.Backdrop>
+                            <Modal.Container>
+                                <Modal.Dialog className="w-8/12">
+                                    <Modal.CloseTrigger />
+                                    <Modal.Header className="flex-row items-center">
+                                        <Modal.Icon className="bg-default text-foreground">
+                                            <Rocket className="size-5" />
+                                        </Modal.Icon>
+                                        <Label>邀请码可用状态</Label>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        特色特色特
+                                    </Modal.Body>
+                                    <Modal.Footer className="mt-1.5">
+                                        <Button>使用邀请码</Button>
+                                    </Modal.Footer>
+                                </Modal.Dialog>
+                            </Modal.Container>
+                        </Modal.Backdrop>
+                    </Modal >
                 </Form>
             </Card>
-            <Card>
-                <Button className="w-full" variant="danger" onClick={outLogin}>退出登录</Button>
-            </Card>
+            <Button className="w-full" variant="danger-soft" onClick={outLogin}>退出登录</Button>
+            {/* <Card>
+            </Card> */}
         </div>
         <div className="w-full grid grid-cols-6 grid-rows-2 gap-1.5">
             <UserInfoRankingCard />
