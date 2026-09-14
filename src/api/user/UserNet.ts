@@ -10,6 +10,8 @@ export const Api = {
     energyRanking: "/api/energy/ranking",
     flowingWater: "/api/energy/flowing-water",
     flowingWaterChat: "/api/energy/flowing-water-chat",
+    inviteActivate: "/api/invite/activate",
+    inviteInfo: "/api/invite/info",
 }
 
 const baseUrl: string = "/api";

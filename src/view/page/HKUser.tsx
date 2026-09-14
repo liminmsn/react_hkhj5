@@ -11,6 +11,7 @@ import HKComLoding from "../../components/HKComLoding";
 import getFormData from "../../utils/getFormData";
 import dayjs from "dayjs";
 import { model_spay_init_pay } from "../../api/user/model/modelSpay";
+import { model_invite_activate } from "../../api/user/model/modelActivate";
 
 type SubmitParameter = React.FormEvent<HTMLFormElement>;
 type LoginRegisterForgotRef = {
@@ -482,36 +483,42 @@ function UserInfoFlowingWaterCard() {
         <Card.Content className="overflow-y-auto">
             {!list ? <HKComLoding /> :
                 <Table className="p-0">
-                    <Table.ScrollContainer>
-                        <Table.Content aria-label="Team members">
-                            <Table.Header>
-                                <Table.Column isRowHeader className="px-0">#</Table.Column>
-                                <Table.Column >时间</Table.Column>
-                                <Table.Column >支出/收入</Table.Column>
-                                <Table.Column >变动前</Table.Column>
-                                <Table.Column >能量</Table.Column>
-                                <Table.Column >备注</Table.Column>
-                            </Table.Header>
-                            <Table.Body>
-                                {
-                                    list.map((item, idx) => {
-                                        return <Table.Row key={item.id}>
-                                            <Table.Cell className="pl-0">{idx + 1}</Table.Cell>
-                                            <Table.Cell className="text-nowrap">{dayjs(item.createTime).format('YYYY年MM月DD日 HH:mm:ss')}</Table.Cell>
-                                            {
-                                                item.changeType == 1 ?
-                                                    <Table.Cell className="text-success">+{item.balanceAfter - item.balanceBefore}</Table.Cell> :
-                                                    <Table.Cell className="text-danger">{item.balanceAfter - item.balanceBefore}</Table.Cell>
-                                            }
-                                            <Table.Cell>{item.balanceBefore}</Table.Cell>
-                                            <Table.Cell>{item.balanceAfter}</Table.Cell>
-                                            <Table.Cell>{item.description}</Table.Cell>
-                                        </Table.Row>
-                                    })
-                                }
-                            </Table.Body>
-                        </Table.Content>
-                    </Table.ScrollContainer>
+                    {
+                        list.length > 0 ?
+                            <Table.ScrollContainer>
+                                <Table.Content aria-label="Team members">
+                                    <Table.Header>
+                                        <Table.Column isRowHeader className="px-0">#</Table.Column>
+                                        <Table.Column >时间</Table.Column>
+                                        <Table.Column >支出/收入</Table.Column>
+                                        <Table.Column >变动前</Table.Column>
+                                        <Table.Column >能量</Table.Column>
+                                        <Table.Column >备注</Table.Column>
+                                    </Table.Header>
+                                    <Table.Body>
+                                        {
+                                            list.map((item, idx) => {
+                                                return <Table.Row key={item.id}>
+                                                    <Table.Cell className="pl-0">{idx + 1}</Table.Cell>
+                                                    <Table.Cell className="text-nowrap">{dayjs(item.createTime).format('YYYY年MM月DD日 HH:mm:ss')}</Table.Cell>
+                                                    {
+                                                        item.changeType == 1 ?
+                                                            <Table.Cell className="text-success">+{item.balanceAfter - item.balanceBefore}</Table.Cell> :
+                                                            <Table.Cell className="text-danger">{item.balanceAfter - item.balanceBefore}</Table.Cell>
+                                                    }
+                                                    <Table.Cell>{item.balanceBefore}</Table.Cell>
+                                                    <Table.Cell>{item.balanceAfter}</Table.Cell>
+                                                    <Table.Cell>{item.description}</Table.Cell>
+                                                </Table.Row>
+                                            })
+                                        }
+                                    </Table.Body>
+                                </Table.Content>
+                            </Table.ScrollContainer> :
+                            <div>
+                                <Label>暂时没有流水记录噢！</Label>
+                            </div>
+                    }
                 </Table>
             }
         </Card.Content>
@@ -670,6 +677,47 @@ function UserInfoChat() {
     </Card>
 }
 
+//使用邀请码
+function UserInvite() {
+    async function subMit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        const formdata = new FormData(e.target as HTMLFormElement);
+        const invite_code = formdata.get("invite_code") as string;
+        model_invite_activate(invite_code, (res) => {
+            toast(res.message, { timeout: 1000, variant: `${res.code == 200 ? "success" : "danger"}` });
+        });
+    }
+
+    return <Card>
+        <Modal>
+            <Button className="w-full">使用朋友的邀请码</Button>
+            <Modal.Backdrop>
+                <Modal.Container>
+                    <Modal.Dialog className="w-8/12">
+                        <Toast.Provider placement="top" />
+                        <Form onSubmit={subMit}>
+                            <Modal.CloseTrigger />
+                            <Modal.Header className="flex-row items-center">
+                                <Modal.Icon className="bg-default text-foreground">
+                                    <Rocket className="size-5" />
+                                </Modal.Icon>
+                                <Label>使用朋友的邀请码</Label>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Input name="invite_code" className="w-full" placeholder="邀请码" required />
+                                <div className="h-2.5"></div>
+                            </Modal.Body>
+                            <Modal.Footer className="mt-1.5">
+                                <Button type="submit">使用</Button>
+                            </Modal.Footer>
+                        </Form>
+                    </Modal.Dialog>
+                </Modal.Container>
+            </Modal.Backdrop>
+        </Modal >
+    </Card>
+}
+
 function UserInfo() {
     const { info, outLogin } = useUserInfoStore();
 
@@ -716,34 +764,7 @@ function UserInfo() {
                     </div>
                 </div>
             </Card>
-            <Card>
-                <Form className="">
-                    <Input className="w-full" placeholder="使用别人给我的邀请码" required />
-                    <div className="h-2.5"></div>
-                    <Modal>
-                        <Button className="w-full">使用邀请码</Button>
-                        <Modal.Backdrop>
-                            <Modal.Container>
-                                <Modal.Dialog className="w-8/12">
-                                    <Modal.CloseTrigger />
-                                    <Modal.Header className="flex-row items-center">
-                                        <Modal.Icon className="bg-default text-foreground">
-                                            <Rocket className="size-5" />
-                                        </Modal.Icon>
-                                        <Label>邀请码可用状态</Label>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        特色特色特
-                                    </Modal.Body>
-                                    <Modal.Footer className="mt-1.5">
-                                        <Button>使用邀请码</Button>
-                                    </Modal.Footer>
-                                </Modal.Dialog>
-                            </Modal.Container>
-                        </Modal.Backdrop>
-                    </Modal >
-                </Form>
-            </Card>
+            <UserInvite />
             <Button className="w-full" variant="danger-soft" onClick={outLogin}>退出登录</Button>
             {/* <Card>
             </Card> */}

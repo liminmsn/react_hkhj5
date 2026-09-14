@@ -57,6 +57,19 @@ export declare global {
                 expireSeconds: number;
                 captchaID: string;
             };
+            namespace ModelInvite {
+                interface Info {
+                    id: number;
+                    inviteCode: string;
+                    inviterId: number;
+                    inviteeId: number;
+                    usedAt: string;        // LocalDateTime 通常序列化为 ISO 字符串
+                    channel: string | null; // 数据库允许为 NULL
+                    createTime: string;
+                    updateTime: string;
+                }
+            }
+
             namespace ModelPrice {
                 type ListList = ListItem[];
                 interface ListItem {
