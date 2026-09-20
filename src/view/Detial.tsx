@@ -52,7 +52,7 @@ export default function () {
             </Button>
         </div>
         <div className="flex max-h-140 gap-2">
-            <Card className="flex-1 flex-row backdrop-blur-sm shadow-sm mt-2">
+            <Card className="flex-1 flex-row backdrop-blur-sm shadow-sm">
                 <div className="flex-1">
                     <Label className="text-3xl">{detail.head.title}</Label>
                     <TagGroup aria-label="Tags" selectionMode="none" className="mt-1">

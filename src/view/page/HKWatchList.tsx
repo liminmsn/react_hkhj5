@@ -13,7 +13,7 @@ export default function () {
         return <HKEmpty />
     }
     return <div className="px-3">
-        <Switch className="flex-row-reverse" onChange={(isSelectd) => setEdit(isSelectd)}>
+        <Switch className="flex-row-reverse my-1" onChange={(isSelectd) => setEdit(isSelectd)}>
             <Switch.Content>
                 <Label>编辑</Label>
                 <Switch.Control>
