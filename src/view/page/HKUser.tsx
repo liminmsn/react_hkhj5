@@ -1,5 +1,5 @@
 import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, Tabs, Tag, TagGroup, TextField, toast, Toast, type Key } from "@heroui/react";
-import { net_model_user_forgotPassword, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
+import { net_model_user_forgotPassword, net_model_user_info, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
 import { useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
 import { IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
 import { model_energy_flowingChat, model_energy_flowingWater, model_energy_ranking } from "../../api/user/model/modelEnergy";
@@ -468,7 +468,7 @@ function UserInfoFlowingWaterCard() {
     const [list, setList] = useState<NetUser.Response.ModelEnergy.FlowingWater[]>();
     const { save } = useUserInfoFlowingWater();
     useEffect(() => {
-        model_energy_flowingWater(1, 30, (res) => {
+        model_energy_flowingWater(0, 30, (res) => {
             if (res.code == 200) {
                 save(res.data);
                 setList(res.data);
@@ -638,7 +638,7 @@ function UserInfoChat() {
         return {
             startTime: times[key][0],
             endTime: times[key][1],
-            offset: 1,
+            offset: 0,
             size: 100
         };
     }
@@ -719,7 +719,15 @@ function UserInvite() {
 }
 
 function UserInfo() {
-    const { info, outLogin } = useUserInfoStore();
+    const { info, outLogin, saveInfo } = useUserInfoStore();
+
+    useEffect(() => {
+        net_model_user_info((res) => {
+            if (res.code == 200) {
+                saveInfo({ ...res.data, token: info!.token })
+            }
+        });
+    }, [])
 
     return <div className="w-full h-screen p-3 pb-16 flex gap-1.5">
         <div className="h-full flex flex-col gap-y-1.5 w-1/3">
@@ -776,6 +784,7 @@ function UserInfo() {
         </div>
     </div>
 }
+
 export default function () {
     const { info } = useUserInfoStore();
     if (!info) {

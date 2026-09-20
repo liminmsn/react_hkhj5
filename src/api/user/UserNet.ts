@@ -1,17 +1,18 @@
 import { GlobalWindowEvent } from "../../event/GlobalWindowEvent";
 
 export const Api = {
-    login: "/api/auth/login",
-    register: "/api/auth/register",
-    sendCaptcha: "/api/auth/send-captcha",
-    forgotPassword: "/api/auth/forgot-password",
-    priceList: "/api/price/list",
-    initPay: "/api/spay/init_pay",
-    energyRanking: "/api/energy/ranking",
-    flowingWater: "/api/energy/flowing-water",
-    flowingWaterChat: "/api/energy/flowing-water-chat",
-    inviteActivate: "/api/invite/activate",
-    inviteInfo: "/api/invite/info",
+    login:                                      "/api/auth/login",
+    register:                                   "/api/auth/register",
+    sendCaptcha:                                "/api/auth/send-captcha",
+    forgotPassword:                             "/api/auth/forgot-password",
+    userinfo:                                   "/api/user/info",
+    priceList:                                  "/api/price/list",
+    initPay:                                    "/api/spay/init_pay",
+    energyRanking:                              "/api/energy/ranking",
+    flowingWater:                               "/api/energy/flowing-water",
+    flowingWaterChat:                           "/api/energy/flowing-water-chat",
+    inviteActivate:                             "/api/invite/activate",
+    inviteInfo:                                 "/api/invite/info",
 }
 
 const baseUrl: string = "/api";

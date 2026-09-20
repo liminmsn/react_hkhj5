@@ -10,22 +10,23 @@ export default function ({ panelStyle, gridCols, playList, detail, replace, onCl
     const navigate = useNavigate();
     const { play_select_ctegory, play_select_item, select } = usePlayListStore();
 
-    function Play(item: PlayItem) {
+    async function Play(item: PlayItem) {
         if (onClick) {
             onClick(item)
             return;
         }
-
-        getPlayerUrl(item.url, (m3u8_url) => navigate("/player", {
-            preventScrollReset: true,
-            viewTransition: true,
-            replace,
-            state: {
-                m3u8url: m3u8_url,
-                detail,
-                playList
-            }
-        }))
+        setTimeout(() => {
+            getPlayerUrl(item.url, (m3u8_url) => navigate("/player", {
+                preventScrollReset: true,
+                viewTransition: true,
+                replace,
+                state: {
+                    m3u8url: m3u8_url,
+                    detail,
+                    playList
+                }
+            }))
+        }, 500);
     }
     return <div className="flex-1 max-h-full">
         <div className="my-2">

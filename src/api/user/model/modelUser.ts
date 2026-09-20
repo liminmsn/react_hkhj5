@@ -18,6 +18,7 @@ export function net_model_user_register(parameter: NetUser.Parameter.ModelUser.L
 export function net_model_user_forgotPassword(parameter: NetUser.Parameter.ModelUser.ForgotPassword, callFun: (data: NetUser.ResType<string>) => void) {
     new UserNet(Api.forgotPassword).post(JSON.stringify(parameter))(async data => callFun(await UserNet.utils.toJson(data)));
 }
-export function net_model_user_info() {
-    // new UserNet
+/**获取用户信息 */
+export function net_model_user_info(callFun: (data: NetUser.ResType<NetUser.Response.ModelUser.Login>) => void) {
+    new UserNet(Api.userinfo).CarryToken().get()(async data => callFun(await UserNet.utils.toJson(data)));
 }
