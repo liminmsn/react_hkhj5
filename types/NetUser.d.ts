@@ -47,6 +47,7 @@ export declare global {
             namespace ModelPrice {
                 interface SpayRequest {
                     productName: string; //商品描述
+                    productCode: string;
                     type: "alipay" | "wxpay"; //alipay、wxpay
                     price: string;
                 }

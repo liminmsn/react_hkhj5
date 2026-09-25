@@ -79,7 +79,8 @@ export declare global {
 
     interface WebView2EventData {
         id: string;
-        data: any;
+        type: string;
+        value: any;
     }
 
     interface WebView2Event {

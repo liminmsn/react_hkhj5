@@ -37,47 +37,49 @@ function Login({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
         }
     }));
 
-    return <Fieldset className="gap-y-3">
-        <Toast.Provider placement="top" />
-        <Fieldset.Legend>能量系统</Fieldset.Legend>
-        <Description>小小能量温暖的连接你我他</Description>
-        {
-            login_state == -1 &&
-            <div className='bg-danger text-center py-1'>
-                <Label className='text-white'>登录状态过期重新登录</Label>
-            </div>
-        }
-        <FieldGroup>
-            <TextField
-                className="mb-1"
-                isRequired
-                name="username"
-                validate={(value) => {
-                    if (value.length < 3) {
-                        return "用户名不能小于3位";
-                    }
-                    return null;
-                }}
-            >
-                <Label>用户名</Label>
-                <Input placeholder="用户名长度在3-20个字符之间" />
-                <FieldError />
-            </TextField>
-            <TextField className="mb-1" isRequired name="password" type="password">
-                <Label>密码</Label>
-                <Input placeholder="密码长度在6-20个字符之间" />
-                <FieldError />
-            </TextField>
-        </FieldGroup>
-        <Fieldset.Actions>
-            <Button type="submit">
-                用户登陆
-            </Button>
-            <Button type="reset" variant="secondary">
-                清空
-            </Button>
-        </Fieldset.Actions>
-    </Fieldset>
+    return <div className="mt-10">
+        <Fieldset className="gap-y-3">
+            <Toast.Provider placement="top" />
+            <Fieldset.Legend>能量系统</Fieldset.Legend>
+            <Description>小小能量温暖的连接你我他</Description>
+            {
+                login_state == -1 &&
+                <div className='bg-danger text-center py-1'>
+                    <Label className='text-white'>登录状态过期重新登录</Label>
+                </div>
+            }
+            <FieldGroup>
+                <TextField
+                    className="mb-1"
+                    isRequired
+                    name="username"
+                    validate={(value) => {
+                        if (value.length < 3) {
+                            return "用户名不能小于3位";
+                        }
+                        return null;
+                    }}
+                >
+                    <Label>用户名</Label>
+                    <Input placeholder="用户名长度在3-20个字符之间" />
+                    <FieldError />
+                </TextField>
+                <TextField className="mb-1" isRequired name="password" type="password">
+                    <Label>密码</Label>
+                    <Input placeholder="密码长度在6-20个字符之间" />
+                    <FieldError />
+                </TextField>
+            </FieldGroup>
+            <Fieldset.Actions>
+                <Button type="submit">
+                    用户登陆
+                </Button>
+                <Button type="reset" variant="secondary">
+                    清空
+                </Button>
+            </Fieldset.Actions>
+        </Fieldset>
+    </div>
 }
 //注册用户
 function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
@@ -240,55 +242,59 @@ function ForgotPassword({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
     useEffect(() => { }, [regSuccess])
 
     if (regSuccess) {
-        return <FieldGroup>
-            <div className="flex flex-col justify-center items-center gap-3.5 pt-9">
-                <div className="bg-success p-2 rounded-[50rem] inline-block">
-                    <PartyPopper className="text-white" size={20} />
+        return <div className="mt-10">
+            <FieldGroup>
+                <div className="flex flex-col justify-center items-center gap-3.5 pt-9">
+                    <div className="bg-success p-2 rounded-[50rem] inline-block">
+                        <PartyPopper className="text-white" size={20} />
+                    </div>
+                    <Label className="text-xl">太棒啦，密码修改成功！</Label>
                 </div>
-                <Label className="text-xl">太棒啦，密码修改成功！</Label>
-            </div>
-        </FieldGroup>
+            </FieldGroup>
+        </div>
     }
 
-    return <Fieldset className="gap-y-3">
-        <Toast.Provider placement="top" />
-        <Fieldset.Legend>能量系统</Fieldset.Legend>
-        <Description>小小能量温暖的连接你我他</Description>
-        <FieldGroup>
-            <TextField className="mb-1" isRequired name="email" type="email">
-                <Label>邮箱</Label>
-                <div className="flex">
-                    <Input placeholder="abc@qq.com" className="flex-1 mr-1" onChange={onEmailChange} />
-                    <Button isDisabled={emailCode} onClick={getVerify}>
-                        <Mail />
-                        发送验证码
-                    </Button>
-                </div>
-                <FieldError />
-            </TextField>
-            <TextField className="mb-1" isRequired name="captcha" type="text">
-                <Label>验证码</Label>
-                <Input placeholder="6位数字组成" />
-                <FieldError />
-            </TextField>
-            <TextField className="mb-1" isRequired name="newPassword" type="password">
-                <Label>密码</Label>
-                <Input placeholder="密码长度在6-20个字符之间" />
-                <FieldError />
-            </TextField>
-            <TextField className="mb-1" isRequired name="confirmPassword" type="password">
-                <Label>确认密码</Label>
-                <Input placeholder="密码长度在6-20个字符之间" />
-                <FieldError />
-            </TextField>
-        </FieldGroup>
-        <Fieldset.Actions>
-            <Button type="submit">
-                <Rocket />
-                提交修改
-            </Button>
-        </Fieldset.Actions>
-    </Fieldset>
+    return <div className="mt-10">
+        <Fieldset className="gap-y-3">
+            <Toast.Provider placement="top" />
+            <Fieldset.Legend>能量系统</Fieldset.Legend>
+            <Description>小小能量温暖的连接你我他</Description>
+            <FieldGroup>
+                <TextField className="mb-1" isRequired name="email" type="email">
+                    <Label>邮箱</Label>
+                    <div className="flex">
+                        <Input placeholder="abc@qq.com" className="flex-1 mr-1" onChange={onEmailChange} />
+                        <Button isDisabled={emailCode} onClick={getVerify}>
+                            <Mail />
+                            发送验证码
+                        </Button>
+                    </div>
+                    <FieldError />
+                </TextField>
+                <TextField className="mb-1" isRequired name="captcha" type="text">
+                    <Label>验证码</Label>
+                    <Input placeholder="6位数字组成" />
+                    <FieldError />
+                </TextField>
+                <TextField className="mb-1" isRequired name="newPassword" type="password">
+                    <Label>密码</Label>
+                    <Input placeholder="密码长度在6-20个字符之间" />
+                    <FieldError />
+                </TextField>
+                <TextField className="mb-1" isRequired name="confirmPassword" type="password">
+                    <Label>确认密码</Label>
+                    <Input placeholder="密码长度在6-20个字符之间" />
+                    <FieldError />
+                </TextField>
+            </FieldGroup>
+            <Fieldset.Actions>
+                <Button type="submit">
+                    <Rocket />
+                    提交修改
+                </Button>
+            </Fieldset.Actions>
+        </Fieldset>
+    </div>
 }
 
 function LoginRegisterLayout() {
@@ -347,6 +353,7 @@ function UserInfoTopUp() {
         if (select) {
             model_spay_init_pay({
                 productName: select.productName,
+                productCode: select.productCode,
                 price: select.price.toFixed(2),
                 type: type
             }, (res) => {
@@ -773,9 +780,9 @@ function UserInfo() {
                 </div>
             </Card>
             <UserInvite />
-            <Button className="w-full" variant="danger-soft" onClick={outLogin}>退出登录</Button>
-            {/* <Card>
-            </Card> */}
+            <Card>
+                <Button className="w-full" variant="danger-soft" onClick={outLogin}>退出登录</Button>
+            </Card>
         </div>
         <div className="w-full grid grid-cols-6 grid-rows-2 gap-1.5">
             <UserInfoRankingCard />

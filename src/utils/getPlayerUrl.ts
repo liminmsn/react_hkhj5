@@ -23,14 +23,15 @@ async function aesDecrypt(encryptedText: string, key: string) {
 export default function (url: string, call: (url: string) => void) {
     GlobalWebViewEbent.send({
         id: crypto.randomUUID(),
-        data: {
-            type: 'cpr',
-            query: {
-                url: `${import.meta.env['VITE_URL']}/u/u1.php?ud=${url}`,
-                head: {},
-                body: {},
-                method: "GET",
-            }
+        type: "http",
+        value: {
+            url: `${import.meta.env['VITE_URL']}/u/u1.php?ud=${url}`,
+            body: null,
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "Accept": "application/json"
+            },
+            method: "GET",
         }
     }, (async (res: ResObj) => {
         if (res.status == 200) {

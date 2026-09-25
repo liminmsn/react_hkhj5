@@ -31,17 +31,17 @@ export default class Net {
     }
 
     private request(method: HttpMethod) {
+        const data = {
+            url: this.url,
+            body: this.body,
+            headers: this.header,
+            method,
+        }
+        if(!this.body) delete data.body;
         GlobalWebViewEbent.send({
             id: this.id,
-            data: {
-                type: 'cpr',
-                query: {
-                    url: this.url,
-                    head: this.header,
-                    body: this.body,
-                    method,
-                }
-            }
+            type: 'http',
+            value: data
         }, this.requestEnd.bind(this));
     }
 }

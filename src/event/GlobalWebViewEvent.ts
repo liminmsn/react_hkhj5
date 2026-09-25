@@ -5,12 +5,12 @@ export default class GlobalWebViewEbent {
         console.log('初始化全局webview事件');
         window.chrome.webview.addEventListener("message", (event) => {
             const { data } = event;
-            // console.log(event);
+            console.log(event);
 
             if (data) {
                 const callBackFun = this.listenerArr.get(data.id);
                 if (callBackFun) {
-                    callBackFun(data.data);
+                    callBackFun(data.value);
                     //使用完删除掉
                     this.listenerArr.delete(data.id);
                 }
