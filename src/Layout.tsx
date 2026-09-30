@@ -5,8 +5,8 @@ import HKCategory from './view/page/HKCategory';
 import { useState } from 'react';
 import HKWatchList from './view/page/HKWatchList';
 import HKUser from './view/page/HKUser';
-import HKMap from './view/page/HKMap';
-import { Blocks, CircleUserRound, FolderHeart, House, Map } from 'lucide-react';
+// import HKMap from './view/page/HKMap';
+import { Blocks, CircleUserRound, FolderHeart, House } from 'lucide-react';
 import { GlobalWindowEvent } from './event/GlobalWindowEvent';
 
 
@@ -42,14 +42,14 @@ export default function () {
             id: 'HKWatchList',
             component: HKWatchList
         },
-        {
-            title: <>
-                <Map />
-                {/* 地图 */}
-            </>,
-            id: 'HKMap',
-            component: HKMap
-        },
+        // {
+        //     title: <>
+        //         <Map />
+        //         {/* 地图 */}
+        //     </>,
+        //     id: 'HKMap',
+        //     component: HKMap
+        // },
         {
             title: <>
                 <CircleUserRound />
@@ -76,7 +76,7 @@ export default function () {
             setSelectedKey(key);
         }}>
         <Tabs.ListContainer className='fixed left-0 right-0 bottom-4 z-500'>
-            <div className={`w-75 mx-auto`}>
+            <div className={`w-65 mx-auto`}>
                 <Tabs.List aria-label="Options" className={`backdrop-blur-md bg-foreground/20 transition-all transition-delay-300 ${scrollTop > 300 ? 'translate-y-15 pointer-events-none' : ''}`}>
                     {
                         tabs.map(item => {

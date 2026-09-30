@@ -6,8 +6,7 @@ export default class Net {
     private url = '';
     private body: any = null;
     private header: any = {
-        "Content-Type": "application/json; charset=utf-8",
-        "Accept": "application/json"
+        "Accept-Charset": "utf-8"
     };
 
     protected init(id: string, url: string, callback: CallbackType) {
@@ -26,6 +25,11 @@ export default class Net {
         this.request("POST");
     }
 
+    setHeader(obj: any) {
+        this.body = obj;
+        return this;
+    }
+
     private requestEnd(data: { status: number, body: string }) {
         this.callback(data.status, data.body);
     }
@@ -37,7 +41,7 @@ export default class Net {
             headers: this.header,
             method,
         }
-        if(!this.body) delete data.body;
+        if (!this.body) delete data.body;
         GlobalWebViewEbent.send({
             id: this.id,
             type: 'http',

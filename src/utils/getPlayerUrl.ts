@@ -26,7 +26,6 @@ export default function (url: string, call: (url: string) => void) {
         type: "http",
         value: {
             url: `${import.meta.env['VITE_URL']}/u/u1.php?ud=${url}`,
-            body: null,
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
                 "Accept": "application/json"

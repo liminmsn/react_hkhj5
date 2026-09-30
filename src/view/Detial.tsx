@@ -5,7 +5,7 @@ import HkLoding from "../components/HkLoding";
 import type { AnalysisHomeObjItemTypeListItem } from "../api/analysis/analysis_home";
 import { useEffect } from "react";
 import { setUrlVar } from "../utils/setStyleVar";
-import { Avatar, Button, Card, Chip, Description, Label, ListBox, Tag, TagGroup, Toast } from "@heroui/react";
+import { Button, Card, Chip, Description, Label, ListBox, Tag, TagGroup, Toast } from "@heroui/react";
 import { ArrowLeft, TagIcon, Star } from "lucide-react";
 import HKImg from "../components/HKImg";
 import { useDetailStore, usePlayListStore, useWatchListStore } from "../store";
@@ -71,10 +71,10 @@ export default function () {
                         <ListBox aria-label="影视信息" selectionMode="none">
                             {
                                 detail.main.map((item, idx) => {
-                                    return <ListBox.Item key={idx} id={idx} textValue={item.title}>
-                                        <Avatar size="sm">
+                                    return <ListBox.Item className="px-0" key={idx} id={idx} textValue={item.title}>
+                                        {/* <Avatar size="sm">
                                             <Avatar.Fallback>{idx + 1}</Avatar.Fallback>
-                                        </Avatar>
+                                        </Avatar> */}
                                         <div className="flex flex-col">
                                             <Label>{item.title}</Label>
                                             {

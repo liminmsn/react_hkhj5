@@ -92,11 +92,9 @@ export default function () {
                 btnFull.onclick = () => {
                     GlobalWebViewEbent.sendOnce({
                         id: crypto.randomUUID(),
-                        data: {
-                            type: "win",
-                            data: {
-                                type: "toggleFullscreen"
-                            }
+                        type: "client",
+                        value: {
+                            type: "ToggleFullscreen"
                         }
                     });
                 };
@@ -157,11 +155,10 @@ export default function () {
                     <X className="cursor-pointer active:scale-90" size={28} onClick={() => {
                         GlobalWebViewEbent.sendOnce({
                             id: crypto.randomUUID(),
-                            data: { type: 'win', data: { type: 'Reset' } }
+                            type: 'client',
+                            value: { type: 'ExitFullscreen' }
                         })
-                        setTimeout(() => {
-                            navigate(-1)
-                        }, 100);
+                        setTimeout(() => navigate(-1), 100);
                     }} />
                 </div>
             </div>

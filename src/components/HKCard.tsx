@@ -31,8 +31,6 @@ export default function ({ item }: { item: AnalysisHomeObjItemTypeListItem; }) {
                     overflow-hidden
                     p-0
                     bg-surface
-                    border
-                    border-border
                     shadow-sm
                     transition-all
                     duration-300

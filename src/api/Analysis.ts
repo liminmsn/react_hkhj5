@@ -15,6 +15,6 @@ export default class Analysis<T> extends Net {
                 // console.log('请求成功[dom]:', dom);
             }
             // Net.bridge.requestFinished.disconnect(call);
-        })
+        });
     }
 }

@@ -5,7 +5,7 @@ const tdt_map = new TDTMap();
 export default function () {
 
     useEffect(() => {
-        tdt_map.init("mapDiv", 12);
+        tdt_map.init("mapDiv", 15);
 
         return function () {
             tdt_map.destory();

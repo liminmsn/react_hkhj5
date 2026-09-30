@@ -1,68 +1,31 @@
-import { Avatar, Button, Input, Label, ListBox } from "@heroui/react";
-import { Flame, Search } from "lucide-react";
+import { Button, Form, Input, Label } from "@heroui/react";
+import { Search } from "lucide-react";
 import HKModal from "./HKModal";
-import { useDetailStore, useHKSearchTagsStore, type HKSearchTagsStoreTypeTag } from "../store";
-import getColor from "../utils/getColor";
 import { useNavigate } from "react-router";
 
 export default function () {
     const navigate = useNavigate();
-    const { setDetail } = useDetailStore();
-    const { tags } = useHKSearchTagsStore();
 
-
-    function openDetail(tag: HKSearchTagsStoreTypeTag) {
-        setDetail(null)
-        navigate("/detail", { state: tag })
+    function search(formData: FormData) {
+        navigate("/search", {
+            state: {
+                search: formData.get("search")
+            }
+        });
     }
 
-    return <HKModal
-        btn={
-            <Button variant="primary">
-                <Search size={40} />
-                搜索
-            </Button>
-        }
-        head={
-            <div className="pl-2">
-                <div className="flex items-center mb-2">
-                    <Label className="text-2xl">搜索韩剧</Label>
-                </div>
-                <Input className="w-full bg-field-hover" placeholder="输入要搜索的片名" />
+    return <HKModal btn={<Button variant="primary"><Search size={40} />搜索</Button>}>
+        <Form action={search}>
+            <div className="flex items-center mb-2">
+                <Label className="text-2xl">搜索韩剧</Label>
             </div>
-        }
-        footer={
-            <Button variant="primary">
-                <Search size={40} />
-                搜索
-            </Button>
-        }
-    >
-        {
-            tags.length > 0 &&
-            <>
-                <Label className="text-sm pl-2">大家都在搜这些影片</Label>
-                <div className="max-h-100 overflow-auto mt-1">
-                    <ListBox aria-label="Tags" selectionMode="none">
-                        {
-                            tags.map((item, idx) => {
-                                return <ListBox.Item key={idx} id={idx} textValue={item.tag}>
-                                    <Avatar size="sm">
-                                        <Avatar.Fallback className={`${getColor(idx)} text-xl`}>{idx + 1}</Avatar.Fallback>
-                                    </Avatar>
-                                    <div className="flex items-center" onClick={() => openDetail(item)}>
-                                        <Label className="text mr-2">{item.tag}</Label>
-                                        {
-                                            idx < 3 && <Flame size={20} color="orange" />
-                                        }
-                                    </div>
-                                    <ListBox.ItemIndicator />
-                                </ListBox.Item>
-                            })
-                        }
-                    </ListBox>
-                </div>
-            </>
-        }
+            <Input className="w-full bg-field-hover" name="search" required placeholder="输入片名" />
+            <div className="mt-3 text-right">
+                <Button variant="primary" type="submit">
+                    <Search size={40} />
+                    搜索
+                </Button>
+            </div>
+        </Form>
     </HKModal>
 }
