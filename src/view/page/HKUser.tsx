@@ -452,7 +452,7 @@ function UserInfoTopUp() {
                                                                 <Label>订单创建状态：{spay.msg}</Label>
                                                                 <Label>订单编号：{spay.trade_no}</Label>
                                                                 <Label className="text-black/20">已经支付完成？</Label>
-                                                                <Button variant="primary">查询支付状态</Button>
+                                                                <Button variant="primary">刷新数据</Button>
                                                             </div>
                                                         </div> :
                                                     <div>
@@ -672,8 +672,8 @@ function UserInfoChat() {
                 defaultSelectedKeys={selected}
                 onSelectionChange={setSelected}>
                 <TagGroup.List>
-                    <Tag id="three">近三天</Tag>
-                    <Tag id="seven">近七周</Tag>
+                    {/* <Tag id="three">近三天</Tag> */}
+                    <Tag id="seven">近七天</Tag>
                     <Tag id="year">近一年</Tag>
                 </TagGroup.List>
             </TagGroup>
@@ -734,7 +734,7 @@ function UserInfo() {
                 saveInfo({ ...res.data, token: info!.token })
             }
         });
-    }, [])
+    })
 
     return <div className="w-full h-screen p-3 pb-16 flex gap-1.5">
         <div className="h-full flex flex-col gap-y-1.5 w-1/3">

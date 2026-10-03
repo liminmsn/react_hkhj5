@@ -4,7 +4,9 @@ export interface AnalysisDetailObjType {
     head: AnalysisDetailObjHeadType;
     main: AnalysisDetailObjMainType[];
     playList: AnalysisDetailObjPlayListType[];
-    list: AnalysisHomeObjItemTypeListItem[]
+    list: AnalysisHomeObjItemTypeListItem[];
+    comments: AnalysisDetailComment[];
+    comments_local: AnalysisDetailComment[];
 }
 
 export interface AnalysisDetailObjHeadType {
@@ -32,6 +34,13 @@ export interface AnalysisDetailObjPlayListType {
     }[]
 }
 
+export interface AnalysisDetailComment {
+    img: string;
+    name: string;
+    time: string;
+    label: string;
+}
+
 const analysis_detail_obj = {
     head: {
         title: '',
@@ -41,7 +50,9 @@ const analysis_detail_obj = {
     },
     main: [],
     playList: [],
-    list: []
+    list: [],
+    comments: [],
+    comments_local: []
 }
 
 export default function (document: Document) {
@@ -72,7 +83,7 @@ export default function (document: Document) {
             list: Array.from(item.querySelectorAll('a') || []).map(a => {
                 return {
                     name: a.textContent || '-',
-                    url: (String(a.getAttribute('onclick')).match(/bb_a\('([^']+)'/) as any)[1]|| '-'
+                    url: (String(a.getAttribute('onclick')).match(/bb_a\('([^']+)'/) as any)[1] || '-'
                 }
             })
         }
@@ -87,6 +98,27 @@ export default function (document: Document) {
             date: item.querySelector('.tu.lazyload')?.textContent || '-',
         }
     })
+
+    obj.comments = Array.from(document.querySelectorAll("#external-comments-container .ext-comment-item")).map(item => {
+        return {
+            img: item.querySelector(".comment-avatar")?.getAttribute("src") || "",
+            name: item.querySelector(".comment-header")?.children[0].textContent || "",
+            time: item.querySelector(".comment-header")?.children[1].textContent || "",
+            label: item.querySelector(".comment-text")?.textContent || ""
+        }
+    })
+    console.log(document.querySelector("#local-comments-container"));
+    
+    // obj.comments_local = Array.from(document.querySelectorAll("#external-comments-container .ext-comment-item")).map(item => {
+    //     console.log(item);
+        
+    //     return {
+    //         img: import.meta.env["VITE_URL"] + item.querySelector(".c-avatar")?.children[0].getAttribute("src") || "",
+    //         name: item.querySelector(".c-name")?.children[0].textContent || "",
+    //         time: item.querySelector(".c-time")?.children[1].textContent || "",
+    //         label: item.querySelector(".c-content")?.textContent || ""
+    //     }
+    // })
 
     return obj;
 }

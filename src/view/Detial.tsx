@@ -11,6 +11,7 @@ import HKImg from "../components/HKImg";
 import { useDetailStore, usePlayListStore, useWatchListStore } from "../store";
 import HKCard from "../components/HKCard";
 import HKPlayList from "../components/HKPlayList";
+import HKComment from "../components/HKComment";
 
 export default function () {
     const navigate = useNavigate();
@@ -104,9 +105,32 @@ export default function () {
                 <HKImg url={state.imgUrl || detail.head.imgUrl} />
             </Card>
         </div>
+        <div className="flex gap-x-1.5">
+            <div className="flex-1">
+                <div className="my-2 mt-6">
+                    <Label className='text-xl hk_title'>网友评论</Label>
+                </div>
+                {detail.comments.length > 0 && <HKComment comments={detail.comments} />}
+            </div>
+            {/* <div className="flex-1">
+                <div className="my-2 mt-6">
+                    <Label className='text-xl hk_title'>本站评论</Label>
+                </div>
+                {detail.comments_local.length}
+                {detail.comments_local.length > 0 && <HKComment comments={detail.comments_local} />}
+                <form className="flex flex-col gap-y-1.5">
+                    <TextArea
+                        required
+                        aria-label="评论框"
+                        className="h-32 w-full"
+                        placeholder="你的评论可以一针见血..."
+                    />
+                    <Button>发表评论</Button>
+                </form>
+            </div> */}
+        </div>
         {
-            detail.list.length > 0 &&
-            <>
+            detail.list.length > 0 && <>
                 <div className="my-2 mt-6">
                     <Label className='text-xl hk_title'>猜你喜欢</Label>
                 </div>
