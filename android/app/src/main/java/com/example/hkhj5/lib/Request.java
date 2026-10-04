@@ -1,4 +1,4 @@
-package com.example.hkhj5;
+package com.example.hkhj5.lib;
 
 import java.io.BufferedReader;
 import java.io.IOException;

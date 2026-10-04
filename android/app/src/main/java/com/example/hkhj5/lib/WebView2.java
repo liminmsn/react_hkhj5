@@ -1,4 +1,4 @@
-package com.example.hkhj5;
+package com.example.hkhj5.lib;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,10 +18,27 @@ public class WebView2 {
     WebView webView;
     Context context;
 
-    WebView2(WebView webView, Context context) {
+    public WebView2(WebView webView, Context context) {
         this.webView = webView;
         this.context = context;
         this.initWebview();
+    }
+
+    public void Destroy() {
+        this.webView.destroy();
+    }
+
+    private void sendToJs(String id, String type, Object value) {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("id", id);
+            json.put("type", type);
+            json.put("value", value);
+            String script = "window.__webviewReceive && window.__webviewReceive(" + JSONObject.quote(json.toString()) + ")";
+            webView.post(() -> webView.evaluateJavascript(script, null));
+        } catch (JSONException e) {
+            Toast.makeText(context, "消息格式错误: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -75,28 +92,10 @@ public class WebView2 {
                     break;
                 default:
                     Toast.makeText(context, "收到 JS 消息: " + type + " / " + value, Toast.LENGTH_SHORT).show();
-                    this.sendToJs(id, type, value);
                     break;
             }
         } catch (JSONException e) {
-            Toast.makeText(context, "消息格式错误: " + message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "web端JSON消息格式错误: " + message, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void sendToJs(String id, String type, Object value) {
-        try {
-            JSONObject json = new JSONObject();
-            json.put("id", id);
-            json.put("type", type);
-            json.put("value", value);
-            String script = "window.__webviewReceive && window.__webviewReceive(" + JSONObject.quote(json.toString()) + ")";
-            webView.post(() -> webView.evaluateJavascript(script, null));
-        } catch (JSONException e) {
-            Toast.makeText(context, "消息格式错误: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void Destroy() {
-        this.webView.destroy();
     }
 }

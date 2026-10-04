@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.hkhj5.lib.WebView2;
+
 public class MainActivity extends AppCompatActivity {
     private WebView2 webView2;
 
