@@ -56,20 +56,20 @@ public class WebView2 {
                     String body = req.optString("body");
                     JSONObject headers = req.optJSONObject("headers");
 
-                    var r = new Request(url, method);
-                    r.setHeaders(headers);
-                    r.setBody(body);
-                    r.send((response, code, errorMessage) -> {
-                        try {
-                            JSONObject re = new JSONObject();
-                            re.put("status", code);
-                            re.put("body", response);
-                            re.put("error", errorMessage);
-                            sendToJs(id, type, re);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    });
+                    new Request(url, method)
+                            .setHeaders(headers)
+                            .setBody(body)
+                            .send((response, code, errorMessage) -> {
+                                try {
+                                    JSONObject re = new JSONObject();
+                                    re.put("status", code);
+                                    re.put("body", response);
+                                    re.put("error", errorMessage);
+                                    sendToJs(id, type, re);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            });
                     break;
                 default:
                     Toast.makeText(context, "收到 JS 消息: " + type + " / " + value, Toast.LENGTH_SHORT).show();
