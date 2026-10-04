@@ -55,7 +55,7 @@ type UseUserInfoType = {
 
 
 export const useLayoutStore = create<LayoutStoreType>((set) => ({
-    selectedKey: "HkHome",
+    selectedKey: "HKUser",
     setSelectedKey: (key) => {
         set({ selectedKey: key })
     }

@@ -12,8 +12,8 @@ export default function () {
     if (list.length === 0) {
         return <HKEmpty />
     }
-    return <div className="px-3">
-        <Switch className="flex-row-reverse my-1" onChange={(isSelectd) => setEdit(isSelectd)}>
+    return <div className="px-3 pt-9">
+        <Switch className="flex-row-reverse my-3" onChange={(isSelectd) => setEdit(isSelectd)}>
             <Switch.Content>
                 <Label>编辑</Label>
                 <Switch.Control>
@@ -21,7 +21,7 @@ export default function () {
                 </Switch.Control>
             </Switch.Content>
         </Switch>
-        <div className="grid grid-cols-6 gap-x-2">
+        <div className="grid grid-cols-2 gap-x-2">
             {
                 list.map((item) => {
                     return <div key={item.url}>

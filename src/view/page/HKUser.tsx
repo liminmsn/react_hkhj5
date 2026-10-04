@@ -1,11 +1,10 @@
-import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, Tabs, Tag, TagGroup, TextField, toast, Toast, type Key } from "@heroui/react";
+import { Avatar, Button, Card, Description, FieldError, FieldGroup, Fieldset, Form, Input, Label, ListBox, Modal, Table, Tabs, TextField, toast, Toast } from "@heroui/react";
 import { net_model_user_forgotPassword, net_model_user_info, net_model_user_login, net_model_user_register, net_model_user_sendCaptcha } from "../../api/user/model/modelUser";
-import { useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
+import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 import { IdCard, LoaderIcon, Mail, PartyPopper, Rocket, Smartphone } from "lucide-react";
-import { model_energy_flowingChat, model_energy_flowingWater, model_energy_ranking } from "../../api/user/model/modelEnergy";
+import { model_energy_flowingWater, model_energy_ranking } from "../../api/user/model/modelEnergy";
 import { useUserInfoFlowingWater, useUserInfoStore } from "../../store";
 import { model_price_list } from "../../api/user/model/modelPrice";
-import { ResponsiveBump } from '@nivo/bump'
 import { isEmail } from "../../utils/verifys";
 import HKComLoding from "../../components/HKComLoding";
 import getFormData from "../../utils/getFormData";
@@ -121,85 +120,87 @@ function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
     }
 
     useEffect(() => { }, [regSuccess, email]);
-    return <Fieldset className="gap-y-3">
-        <Toast.Provider placement="top" />
-        <Fieldset.Legend>能量系统注册用户</Fieldset.Legend>
-        <Description>完善以下信息</Description>
-        {
-            regSuccess && <FieldGroup>
-                <div className="flex flex-col justify-center items-center gap-3.5 pt-9">
-                    <div className="bg-success p-2 rounded-[50rem] inline-block">
-                        <PartyPopper className="text-white" size={20} />
-                    </div>
-                    <Label className="text-xl">太棒啦，用户注册成功！</Label>
-                </div>
-            </FieldGroup>
-        }
-        {
-            !regSuccess &&
-            <>
-                <FieldGroup>
-                    <TextField
-                        className="mb-1"
-                        isRequired
-                        name="username"
-                        validate={(value) => {
-                            if (value.length < 3) {
-                                return "用户名长度在3-20个字符之间";
-                            }
-                            return null;
-                        }}
-                    >
-                        <Label>用户名</Label>
-                        <Input placeholder="用户名（必填，3-20位）" />
-                        <FieldError />
-                    </TextField>
-                    <TextField className="mb-1" isRequired name="password" type="password">
-                        <Label>密码</Label>
-                        <Input placeholder="密码长度在6-20个字符之间" />
-                        <FieldError />
-                    </TextField>
-                    <TextField className="mb-1" isRequired name="confirmPassword" type="password">
-                        <Label>确认密码</Label>
-                        <Input placeholder="密码长度在6-20个字符之间" />
-                        <FieldError />
-                    </TextField>
-                    <TextField className="mb-1" isRequired name="nickname" type="text">
-                        <Label>昵称</Label>
-                        <Input placeholder="昵称不能超过50个字符" />
-                        <FieldError />
-                    </TextField>
-                    <TextField className="mb-1" name="phone" type="text">
-                        <Label>手机号(可选)</Label>
-                        <Input placeholder="手机号必须是11位数字" />
-                        <FieldError />
-                    </TextField>
-                    <TextField className="mb-1" isRequired name="email" type="email">
-                        <Label>邮箱</Label>
-                        <div className="flex">
-                            <Input placeholder="abc@qq.com" className="flex-1 mr-1" onChange={onEmailChange} />
-                            <Button isDisabled={emailCode} onClick={getVerify}>
-                                <Mail />
-                                发送验证码
-                            </Button>
+    return <div className="pt-10">
+        <Fieldset className="gap-y-3">
+            <Toast.Provider placement="top" />
+            <Fieldset.Legend>能量系统注册用户</Fieldset.Legend>
+            <Description>完善以下信息</Description>
+            {
+                regSuccess && <FieldGroup>
+                    <div className="flex flex-col justify-center items-center gap-3.5 pt-9">
+                        <div className="bg-success p-2 rounded-[50rem] inline-block">
+                            <PartyPopper className="text-white" size={20} />
                         </div>
-                        <FieldError />
-                    </TextField>
-                    <TextField className="mb-1" isRequired name="captcha" type="text">
-                        <Label>验证码</Label>
-                        <Input placeholder="6位数字组成" />
-                        <FieldError />
-                    </TextField>
+                        <Label className="text-xl">太棒啦，用户注册成功！</Label>
+                    </div>
                 </FieldGroup>
-                <Fieldset.Actions>
-                    <Button type="submit">
-                        <Rocket />
-                        提交注册
-                    </Button>
-                </Fieldset.Actions>
-            </>
-        }
-    </Fieldset >
+            }
+            {
+                !regSuccess &&
+                <>
+                    <FieldGroup>
+                        <TextField
+                            className="mb-1"
+                            isRequired
+                            name="username"
+                            validate={(value) => {
+                                if (value.length < 3) {
+                                    return "用户名长度在3-20个字符之间";
+                                }
+                                return null;
+                            }}
+                        >
+                            <Label>用户名</Label>
+                            <Input placeholder="用户名（必填，3-20位）" />
+                            <FieldError />
+                        </TextField>
+                        <TextField className="mb-1" isRequired name="password" type="password">
+                            <Label>密码</Label>
+                            <Input placeholder="密码长度在6-20个字符之间" />
+                            <FieldError />
+                        </TextField>
+                        <TextField className="mb-1" isRequired name="confirmPassword" type="password">
+                            <Label>确认密码</Label>
+                            <Input placeholder="密码长度在6-20个字符之间" />
+                            <FieldError />
+                        </TextField>
+                        <TextField className="mb-1" isRequired name="nickname" type="text">
+                            <Label>昵称</Label>
+                            <Input placeholder="昵称不能超过50个字符" />
+                            <FieldError />
+                        </TextField>
+                        <TextField className="mb-1" name="phone" type="text">
+                            <Label>手机号(可选)</Label>
+                            <Input placeholder="手机号必须是11位数字" />
+                            <FieldError />
+                        </TextField>
+                        <TextField className="mb-1" isRequired name="email" type="email">
+                            <Label>邮箱</Label>
+                            <div className="flex">
+                                <Input placeholder="abc@qq.com" className="flex-1 mr-1" onChange={onEmailChange} />
+                                <Button isDisabled={emailCode} onClick={getVerify}>
+                                    <Mail />
+                                    发送验证码
+                                </Button>
+                            </div>
+                            <FieldError />
+                        </TextField>
+                        <TextField className="mb-1" isRequired name="captcha" type="text">
+                            <Label>验证码</Label>
+                            <Input placeholder="6位数字组成" />
+                            <FieldError />
+                        </TextField>
+                    </FieldGroup>
+                    <Fieldset.Actions>
+                        <Button type="submit">
+                            <Rocket />
+                            提交注册
+                        </Button>
+                    </Fieldset.Actions>
+                </>
+            }
+        </Fieldset >
+    </div>
 }
 //修改密码
 function ForgotPassword({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
@@ -305,7 +306,7 @@ function LoginRegisterLayout() {
 
     const [idx, setIdx] = useState(0);
 
-    return <div className="mx-auto w-2/6">
+    return <div className="mx-auto px-7">
         <Form onSubmit={(e) => {
             const onSubmit = [loginRef, registerRef, forgotRef][idx].current?.onsubmit;
             if (onSubmit) {
@@ -370,8 +371,8 @@ function UserInfoTopUp() {
     return <Modal>
         <Button size="sm" variant="primary">充值</Button>
         <Modal.Backdrop>
-            <Modal.Container>
-                <Modal.Dialog className="w-8/12">
+            <Modal.Container placement="center">
+                <Modal.Dialog>
                     <Modal.CloseTrigger />
                     <Modal.Header className="flex-row items-center">
                         <Modal.Icon className="bg-default text-foreground">
@@ -432,8 +433,8 @@ function UserInfoTopUp() {
                         <Modal>
                             <Button className="w-full" onClick={init_pay}>继续</Button>
                             <Modal.Backdrop>
-                                <Modal.Container>
-                                    <Modal.Dialog className="w-8/12">
+                                <Modal.Container placement="center">
+                                    <Modal.Dialog >
                                         <Modal.CloseTrigger />
                                         <Modal.Header className="flex-row items-center">
                                             {/* <Modal.Icon className="bg-default text-foreground">
@@ -497,10 +498,10 @@ function UserInfoFlowingWaterCard() {
                                     <Table.Header>
                                         <Table.Column isRowHeader className="px-0">#</Table.Column>
                                         <Table.Column >时间</Table.Column>
-                                        <Table.Column >支出/收入</Table.Column>
-                                        <Table.Column >变动前</Table.Column>
-                                        <Table.Column >能量</Table.Column>
-                                        <Table.Column >备注</Table.Column>
+                                        <Table.Column className="text-nowrap">支出/收入</Table.Column>
+                                        <Table.Column className="text-nowrap">变动前</Table.Column>
+                                        <Table.Column className="text-nowrap">能量</Table.Column>
+                                        <Table.Column>备注</Table.Column>
                                     </Table.Header>
                                     <Table.Body>
                                         {
@@ -515,7 +516,7 @@ function UserInfoFlowingWaterCard() {
                                                     }
                                                     <Table.Cell>{item.balanceBefore}</Table.Cell>
                                                     <Table.Cell>{item.balanceAfter}</Table.Cell>
-                                                    <Table.Cell>{item.description}</Table.Cell>
+                                                    <Table.Cell className="text-nowrap">{item.description}</Table.Cell>
                                                 </Table.Row>
                                             })
                                         }
@@ -580,109 +581,109 @@ function UserInfoRankingCard() {
     </Card>
 }
 
-function ChatView({ list }: { list?: NetUser.Response.ModelEnergy.FlowingWater[], children?: ReactNode }) {
-    const energy = useMemo(() => {
-        if (!list) return [];
-        return list.map(item => ({
-            x: dayjs(item.createTime).format("YYYY年MM月DD日 HH:mm:ss"),
-            y: Number(item.amount)
-        }));
-    }, [list]);
+// function ChatView({ list }: { list?: NetUser.Response.ModelEnergy.FlowingWater[], children?: ReactNode }) {
+//     const energy = useMemo(() => {
+//         if (!list) return [];
+//         return list.map(item => ({
+//             x: dayjs(item.createTime).format("YYYY年MM月DD日 HH:mm:ss"),
+//             y: Number(item.amount)
+//         }));
+//     }, [list]);
 
-    if (list && list.length > 0) {
-        return (
-            <div className="h-full overflow-x-auto overflow-y-hidden whitespace-nowrap">
-                <div className="h-full" style={{ minWidth: Math.max(energy.length * 150, 600) }}>
-                    <ResponsiveBump
-                        data={[
-                            { id: "收/支", data: energy }
-                        ]}
-                        colors={['var(--accent)']}
-                        activeLineWidth={6}
-                        lineWidth={3}
-                        inactiveLineWidth={3}
-                        inactiveOpacity={0.5}
-                        inactivePointSize={0}
-                        pointSize={10}
-                        activePointSize={20}
-                        activePointBorderWidth={3}
-                        pointColor={{ theme: 'background' }}
-                        pointBorderColor={{ from: 'serie.color' }}
-                        pointBorderWidth={3}
-                        axisTop={null}
-                        axisLeft={{ legend: '能量收支曲线', legendOffset: -40 }}
-                        margin={{ top: 10, right: 60, bottom: 40, left: 60 }}
-                    />
-                </div>
-            </div>
-        );
-    }
+//     if (list && list.length > 0) {
+//         return (
+//             <div className="h-full overflow-x-auto overflow-y-hidden whitespace-nowrap">
+//                 <div className="h-full" style={{ minWidth: Math.max(energy.length * 150, 600) }}>
+//                     <ResponsiveBump
+//                         data={[
+//                             { id: "收/支", data: energy }
+//                         ]}
+//                         colors={['var(--accent)']}
+//                         activeLineWidth={6}
+//                         lineWidth={3}
+//                         inactiveLineWidth={3}
+//                         inactiveOpacity={0.5}
+//                         inactivePointSize={0}
+//                         pointSize={10}
+//                         activePointSize={20}
+//                         activePointBorderWidth={3}
+//                         pointColor={{ theme: 'background' }}
+//                         pointBorderColor={{ from: 'serie.color' }}
+//                         pointBorderWidth={3}
+//                         axisTop={null}
+//                         axisLeft={{ legend: '能量收支曲线', legendOffset: -40 }}
+//                         margin={{ top: 10, right: 60, bottom: 40, left: 60 }}
+//                     />
+//                 </div>
+//             </div>
+//         );
+//     }
 
-    return <div className="p-3">
-        <Label>暂无查询到数据!</Label>
-    </div>
-}
+//     return <div className="p-3">
+//         <Label>暂无查询到数据!</Label>
+//     </div>
+// }
 
-function UserInfoChat() {
-    function getParameter(key: 'three' | 'seven' | 'year') {
-        const now = dayjs();
-        const times = {
-            three: [
-                now.subtract(3, 'day').format("YYYY-MM-DD HH:mm:ss"),
-                now.format("YYYY-MM-DD HH:mm:ss")
-            ],
-            seven: [
-                now.subtract(7, 'day').format("YYYY-MM-DD HH:mm:ss"),
-                now.format("YYYY-MM-DD HH:mm:ss")
-            ],
-            year: [
-                now.subtract(1, 'year').format("YYYY-MM-DD HH:mm:ss"),
-                now.format("YYYY-MM-DD HH:mm:ss")
-            ]
-        };
+// function UserInfoChat() {
+//     function getParameter(key: 'three' | 'seven' | 'year') {
+//         const now = dayjs();
+//         const times = {
+//             three: [
+//                 now.subtract(3, 'day').format("YYYY-MM-DD HH:mm:ss"),
+//                 now.format("YYYY-MM-DD HH:mm:ss")
+//             ],
+//             seven: [
+//                 now.subtract(7, 'day').format("YYYY-MM-DD HH:mm:ss"),
+//                 now.format("YYYY-MM-DD HH:mm:ss")
+//             ],
+//             year: [
+//                 now.subtract(1, 'year').format("YYYY-MM-DD HH:mm:ss"),
+//                 now.format("YYYY-MM-DD HH:mm:ss")
+//             ]
+//         };
 
 
-        return {
-            startTime: times[key][0],
-            endTime: times[key][1],
-            offset: 0,
-            size: 100
-        };
-    }
+//         return {
+//             startTime: times[key][0],
+//             endTime: times[key][1],
+//             offset: 0,
+//             size: 100
+//         };
+//     }
 
-    const [list, setList] = useState<NetUser.Response.ModelEnergy.FlowingWater[]>();
-    const [selected, setSelected] = useState<Iterable<Key>>(new Set(["year"]));
-    useEffect(() => {
-        const key = Array.from(selected)[0] as any;
-        if (key) {
-            const param = getParameter(key);
-            model_energy_flowingChat(param, (res) => {
-                if (res.code == 200) {
-                    setList(res.data);
-                    // console.log(res.data);
-                }
-            });
-        }
-    }, [selected]);
+//     const [list, setList] = useState<NetUser.Response.ModelEnergy.FlowingWater[]>();
+//     const [selected, setSelected] = useState<Iterable<Key>>(new Set(["year"]));
+//     useEffect(() => {
+//         const key = Array.from(selected)[0] as any;
+//         if (key) {
+//             const param = getParameter(key);
+//             model_energy_flowingChat(param, (res) => {
+//                 if (res.code == 200) {
+//                     setList(res.data);
+//                     // console.log(res.data);
+//                 }
+//             });
+//         }
+//     }, [selected]);
 
-    return <Card className="p-0 gap-y-0 col-span-6">
-        <Card.Header className="p-3 pb-0 flex-row overflow-hidden">
-            <Card.Title>流水趋势</Card.Title>
-            <TagGroup className="ml-3" aria-label="Tags" selectionMode="single"
-                defaultSelectedKeys={selected}
-                onSelectionChange={setSelected}>
-                <TagGroup.List>
-                    {/* <Tag id="three">近三天</Tag> */}
-                    <Tag id="seven">近七天</Tag>
-                    <Tag id="year">近一年</Tag>
-                </TagGroup.List>
-            </TagGroup>
-        </Card.Header>
-        <Card.Content>
-            {!list ? <HKComLoding /> : <ChatView list={list} />}
-        </Card.Content>
-    </Card>
-}
+//     return <Card className="p-0 gap-y-0 col-span-6">
+//         <Card.Header className="p-3 pb-0 flex-row overflow-hidden">
+//             <Card.Title>流水趋势</Card.Title>
+//             <TagGroup className="ml-3" aria-label="Tags" selectionMode="single"
+//                 defaultSelectedKeys={selected}
+//                 onSelectionChange={setSelected}>
+//                 <TagGroup.List>
+//                     {/* <Tag id="three">近三天</Tag> */}
+//                     <Tag id="seven">近七天</Tag>
+//                     <Tag id="year">近一年</Tag>
+//                 </TagGroup.List>
+//             </TagGroup>
+//         </Card.Header>
+//         <Card.Content>
+//             {!list ? <HKComLoding /> : <ChatView list={list} />}
+//         </Card.Content>
+//     </Card>
+// }
 
 //使用邀请码
 function UserInvite() {
@@ -699,9 +700,9 @@ function UserInvite() {
         <Modal>
             <Button className="w-full">使用朋友的邀请码</Button>
             <Modal.Backdrop>
-                <Modal.Container>
-                    <Modal.Dialog className="w-8/12">
-                        <Toast.Provider placement="top" />
+                <Modal.Container placement="center">
+                    <Modal.Dialog>
+                        <Toast.Provider placement="top start" />
                         <Form onSubmit={subMit}>
                             <Modal.CloseTrigger />
                             <Modal.Header className="flex-row items-center">
@@ -736,59 +737,57 @@ function UserInfo() {
         });
     })
 
-    return <div className="w-full h-screen p-3 pb-16 flex gap-1.5">
-        <div className="h-full flex flex-col gap-y-1.5 w-1/3">
-            <Card className="inline-block">
-                <div className="flex gap-x-1.5">
-                    <img
-                        className="w-24 h-24 pointer-events-none aspect-square rounded-2xl object-cover select-none"
-                        loading="lazy"
-                        src={`/api/api${info?.avatar}`}
-                    />
-                    <div className="flex flex-col">
-                        <Card.Title className="select-all">
-                            {info?.nickname}
-                        </Card.Title>
-                        <Card.Title className="flex items-center gap-x-1">
-                            <IdCard size={20} />
-                            <Label className="select-all">{info?.username}</Label>
-                        </Card.Title>
-                        <Card.Title className="flex items-center gap-x-1">
-                            <Mail size={20} />
-                            <Label className="select-all">{info?.email}</Label>
-                        </Card.Title>
-                        <Card.Title className="flex items-center gap-x-1">
-                            <Smartphone size={20} />
-                            <Label className="select-all">{info?.phone || "-"}</Label>
-                        </Card.Title>
-                    </div>
+    return <div className="w-full p-3 pt-12 pb-24 flex flex-col gap-y-1.5">
+        <Card className="">
+            <div className="flex gap-x-1.5">
+                <img
+                    className="w-24 h-24 pointer-events-none aspect-square rounded-2xl object-cover select-none"
+                    loading="lazy"
+                    src={`/api/api${info?.avatar}`}
+                />
+                <div className="flex flex-col">
+                    <Card.Title className="select-all">
+                        {info?.nickname}
+                    </Card.Title>
+                    <Card.Title className="flex items-center gap-x-1">
+                        <IdCard size={20} />
+                        <Label className="select-all">{info?.username}</Label>
+                    </Card.Title>
+                    <Card.Title className="flex items-center gap-x-1">
+                        <Mail size={20} />
+                        <Label className="select-all">{info?.email}</Label>
+                    </Card.Title>
+                    <Card.Title className="flex items-center gap-x-1">
+                        <Smartphone size={20} />
+                        <Label className="select-all">{info?.phone || "-"}</Label>
+                    </Card.Title>
                 </div>
-            </Card>
-            <Card>
-                <div className="flex justify-between items-end">
-                    <Label>我的能量：{info?.energy}</Label>
-                    <UserInfoTopUp />
-                </div>
+            </div>
+        </Card>
+        <UserInfoRankingCard />
+        <UserInfoFlowingWaterCard />
+        {/* <UserInfoChat /> */}
+        {/* <div className="h-100">
+            </div> */}
+        <Card>
+            <div className="flex justify-between items-end">
+                <Label>我的能量：{info?.energy}</Label>
+                <UserInfoTopUp />
+            </div>
+            <div>
+                <Label>我的邀请码：</Label>
+                <Label className="select-all">{info?.invitationCode}</Label>
                 <div>
-                    <Label>我的邀请码：</Label>
-                    <Label className="select-all">{info?.invitationCode}</Label>
-                    <div>
-                        <Description>
-                            邀请好友加入好看韩剧5，使用此邀请码你即可得300能量，每一个被邀请人只能使用1次。
-                        </Description>
-                    </div>
+                    <Description>
+                        邀请好友加入好看韩剧5，使用此邀请码你即可得300能量，每一个被邀请人只能使用1次。
+                    </Description>
                 </div>
-            </Card>
-            <UserInvite />
-            <Card>
-                <Button className="w-full" variant="danger-soft" onClick={outLogin}>退出登录</Button>
-            </Card>
-        </div>
-        <div className="w-full grid grid-cols-6 grid-rows-2 gap-1.5">
-            <UserInfoRankingCard />
-            <UserInfoFlowingWaterCard />
-            <UserInfoChat />
-        </div>
+            </div>
+        </Card>
+        <UserInvite />
+        <Card>
+            <Button className="w-full" variant="danger-soft" onClick={outLogin}>退出登录</Button>
+        </Card>
     </div>
 }
 

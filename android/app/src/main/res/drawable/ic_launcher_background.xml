@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <group android:scaleX="1.17"
+      android:scaleY="1.17"
+      android:translateX="-9.18"
+      android:translateY="-9.18">
+
+      <!--
+          暖橙色主背景
+          参考复古电视图标：
+          左上：浅橙
+          右下：深橙
+      -->
+      <path
+          android:pathData="M0,0H108V108H0Z">
+
+          <aapt:attr name="android:fillColor">
+              <gradient
+                  android:type="linear"
+                  android:startX="0"
+                  android:startY="0"
+                  android:endX="108"
+                  android:endY="108">
+
+                  <item
+                      android:offset="0"
+                      android:color="#FFD38A" />
+
+                  <item
+                      android:offset="0.28"
+                      android:color="#FFAE55" />
+
+                  <item
+                      android:offset="0.65"
+                      android:color="#F57A38" />
+
+                  <item
+                      android:offset="1"
+                      android:color="#D94C24" />
+
+              </gradient>
+          </aapt:attr>
+
+      </path>
+
+
+      <!-- 左上方柔和高光 -->
+      <path
+          android:fillColor="#33FFF1C7"
+          android:pathData="
+              M0,0
+              H108
+              V20
+              C82,13 57,10 35,14
+              C19,17 8,25 0,31
+              Z" />
+
+
+      <!-- 中央暖黄色光晕 -->
+      <path
+          android:fillColor="#22FFE6A3"
+          android:pathData="
+              M0,48
+              C18,31 39,25 58,28
+              C79,31 96,42 108,57
+              V83
+              C88,67 67,58 45,59
+              C27,60 12,67 0,76
+              Z" />
+
+
+      <!-- 底部轻微暗部 -->
+      <path
+          android:fillColor="#25000000"
+          android:pathData="
+              M0,86
+              C19,78 38,76 57,80
+              C76,84 93,94 108,102
+              V108
+              H0
+              Z" />
+
+
+      <!-- 左上角暖白色反光 -->
+      <path
+          android:fillColor="#18FFFFFF"
+          android:pathData="
+              M0,0
+              H43
+              C30,5 18,11 9,21
+              C5,25 2,29 0,33
+              Z" />
+
+
+      <!-- 右侧橙红色层次 -->
+      <path
+          android:fillColor="#18000000"
+          android:pathData="
+              M93,0
+              H108
+              V108
+              H94
+              C101,83 102,58 98,37
+              C97,22 95,10 93,0
+              Z" />
+
+  </group>
+</vector>

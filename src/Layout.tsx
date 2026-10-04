@@ -75,7 +75,7 @@ export default function () {
             }
             setSelectedKey(key);
         }}>
-        <Tabs.ListContainer className='fixed left-0 right-0 bottom-4 z-500'>
+        <Tabs.ListContainer className='fixed left-0 right-0 bottom-9 z-500'>
             <div className={`w-65 mx-auto`}>
                 <Tabs.List aria-label="Options" className={`backdrop-blur-md bg-foreground/20 transition-all transition-delay-300 ${scrollTop > 300 ? 'translate-y-15 pointer-events-none' : ''}`}>
                     {

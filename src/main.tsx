@@ -1,4 +1,4 @@
-// import { StrictMode } from 'react'
+import './polyfill';
 import { createRoot } from 'react-dom/client'
 import { ThemeProvider } from 'next-themes'
 import { RouterProvider } from 'react-router'
@@ -8,8 +8,6 @@ import GlobalWebViewEbent from './event/GlobalWebViewEvent'
 
 GlobalWebViewEbent.start()
 createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
-  // </StrictMode>
   <ThemeProvider
     defaultTheme="fortune"
     enableSystem

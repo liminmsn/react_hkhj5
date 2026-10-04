@@ -3,14 +3,14 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(({ mode }) => {
-  // 加载.env文件，第二个参数是.env文件所在目录，默认项目根目录
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
     plugins: [react(), tailwindcss()],
     server: {
-      host: '127.0.0.1',
+      host: '0.0.0.0',
       port: 5173,
+      strictPort: false,
       proxy: {
         "/api": {
           target: env.VITE_SERVICE_URL,
@@ -21,9 +21,8 @@ export default defineConfig(({ mode }) => {
     },
     base: "./",
     build: {
-      outDir: '../resources/web',
+      outDir: 'build',
       emptyOutDir: true,
-
       rollupOptions: {
         output: {
           entryFileNames: 'assets/[name].js',

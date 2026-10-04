@@ -25,7 +25,7 @@ export default function () {
         return <HkLoding />
     }
 
-    return <div className="px-3 pt-5">
+    return <div className="px-3 pt-14">
         <div className="bg_blur"></div>
         {/* <div className="text-center text-shadow-sm text-shadow-color-red">
             {data.category.info}
@@ -33,8 +33,8 @@ export default function () {
         <div>
             {
                 data.category.list.filter(item => item.label != '-').map((item, idx) => {
-                    return <div key={idx} className="flex items-center gap-x-7">
-                        <Label className="text-xl hk_title">{item.label}</Label>
+                    return <div key={idx} className="flex items-center justify-start gap-x-7">
+                        <Label className="text-xl hk_title text-nowrap">{item.label}</Label>
                         <div className="flex flex-wrap gap-1 mt-2 mb-4">
                             {
                                 item.list.map((item_, idx_) => {
@@ -48,7 +48,7 @@ export default function () {
                 })
             }
         </div>
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 gap-2">
             {data.list.map((item, idx) => {
                 return <HKCard key={idx} item={item} />
             })}
@@ -56,7 +56,7 @@ export default function () {
         <div className="flex justify-center gap-x-1 mt-6">
             {
                 data.pagination.map((item, idx) => {
-                    return <div onClick={() => ToggleCateGory(item.url)} key={idx} className={`px-4 py-1 rounded-2xl cursor-pointer ${item.select ? 'bg-accent' : 'active:scale-95 bg-field-border-hover'}`}>
+                    return <div onClick={() => ToggleCateGory(item.url)} key={idx} className={`px-3 py-1 rounded-2xl cursor-pointer ${item.select ? 'bg-accent' : 'active:scale-95 bg-field-border-hover'}`}>
                         <Label>{item.label}</Label>
                     </div>
                 })

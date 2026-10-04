@@ -26,8 +26,7 @@
     text-size-adjust: none;
 
     ::-webkit-scrollbar {
-        height: 8px;
-        width: 8px;
+        width: 5px;
     }
 
     ::-webkit-scrollbar-track {
@@ -38,6 +37,10 @@
         cursor: pointer;
         background: var(--color-accent);
     }
+}
+
+body{
+    background: var(--color-background);
 }
 
 img {

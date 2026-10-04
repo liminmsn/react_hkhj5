@@ -35,7 +35,7 @@ export default function () {
     }
 
     return <div className="pt-10 px-3 relative">
-        <div className="bg_blur"></div>
+        {/* <div className="bg_blur"></div> */}
         <div className="text-right mb-2">
             <Button
                 onClick={() => {
@@ -52,59 +52,55 @@ export default function () {
                 返回
             </Button>
         </div>
-        <div className="flex max-h-140 gap-2">
-            <Card className="flex-1 flex-row backdrop-blur-sm shadow-sm">
-                <div className="flex-1">
-                    <Label className="text-3xl">{detail.head.title}</Label>
-                    <TagGroup aria-label="Tags" selectionMode="none" className="mt-1">
-                        <TagGroup.List>
-                            {
-                                detail.head.tags.map((item, idx) => {
-                                    return <Tag id={idx} key={idx} textValue={item} className="text-accent bg-accent-soft">
-                                        <span>{item}</span>
-                                        <TagIcon />
-                                    </Tag>
-                                })
-                            }
-                        </TagGroup.List>
-                    </TagGroup>
-                    <div className="max-h-105 overflow-auto">
-                        <ListBox aria-label="影视信息" selectionMode="none">
-                            {
-                                detail.main.map((item, idx) => {
-                                    return <ListBox.Item className="px-0" key={idx} id={idx} textValue={item.title}>
-                                        {/* <Avatar size="sm">
-                                            <Avatar.Fallback>{idx + 1}</Avatar.Fallback>
-                                        </Avatar> */}
-                                        <div className="flex flex-col">
-                                            <Label>{item.title}</Label>
-                                            {
-                                                Array.isArray(item.item)
-                                                    ? <div className="pt-1 gap-1 flex flex-wrap">
-                                                        {
-                                                            item.item.map((item, idx) => <Chip key={idx} className="bg-accent-soft">
-                                                                {item.name}
-                                                            </Chip>)
-                                                        }
-                                                    </div>
-                                                    : <Description>{item.item}</Description>
-                                            }
-                                        </div>
-                                        <ListBox.ItemIndicator />
-                                    </ListBox.Item>
-                                })
-                            }
-                        </ListBox>
-                    </div>
-                </div>
-                <div className="flex-1">
-                    <HKPlayList gridCols="grid-cols-5" playList={detail.playList} detail={detail} />
-                </div>
-            </Card>
-            <Card className="w-90 p-0! overflow-clip shadow-sm">
+        <Card className="flex-1">
+            <Card className="w-full p-0! overflow-clip shadow-sm">
                 <HKImg url={state.imgUrl || detail.head.imgUrl} />
             </Card>
-        </div>
+            <div>
+                <Label className="text-3xl">{detail.head.title}</Label>
+                <TagGroup aria-label="Tags" selectionMode="none" className="mt-1">
+                    <TagGroup.List>
+                        {
+                            detail.head.tags.map((item, idx) => {
+                                return <Tag id={idx} key={idx} textValue={item} className="text-accent bg-accent-soft">
+                                    <span>{item}</span>
+                                    <TagIcon />
+                                </Tag>
+                            })
+                        }
+                    </TagGroup.List>
+                </TagGroup>
+            </div>
+            <div className="max-h-105 overflow-auto">
+                <ListBox aria-label="影视信息" selectionMode="none">
+                    {
+                        detail.main.map((item, idx) => {
+                            return <ListBox.Item className="px-0" key={idx} id={idx} textValue={item.title}>
+                                {/* <Avatar size="sm">
+                                            <Avatar.Fallback>{idx + 1}</Avatar.Fallback>
+                                        </Avatar> */}
+                                <div className="flex flex-col">
+                                    <Label>{item.title}</Label>
+                                    {
+                                        Array.isArray(item.item)
+                                            ? <div className="pt-1 gap-1 flex flex-wrap">
+                                                {
+                                                    item.item.map((item, idx) => <Chip key={idx} className="bg-accent-soft">
+                                                        {item.name}
+                                                    </Chip>)
+                                                }
+                                            </div>
+                                            : <Description>{item.item}</Description>
+                                    }
+                                </div>
+                                <ListBox.ItemIndicator />
+                            </ListBox.Item>
+                        })
+                    }
+                </ListBox>
+            </div>
+            <HKPlayList gridCols="grid-cols-5" playList={detail.playList} detail={detail} />
+        </Card>
         <div className="flex gap-x-1.5">
             <div className="flex-1">
                 <div className="my-2 mt-6">
@@ -134,7 +130,7 @@ export default function () {
                 <div className="my-2 mt-6">
                     <Label className='text-xl hk_title'>猜你喜欢</Label>
                 </div>
-                <div className='grid grid-cols-6 gap-2 mt'>
+                <div className='grid grid-cols-2 gap-2 mt'>
                     {
                         detail.list.map(item => <HKCard item={item} key={item.url} />)
                     }
