@@ -1,4 +1,5 @@
 import GlobalWebViewEbent from "../event/GlobalWebViewEvent";
+import CryptoJS from 'crypto-js';
 
 interface ResObj {
     body: string;
@@ -6,23 +7,43 @@ interface ResObj {
 }
 
 const newhan = "my-to-newhan-2025";
-async function aesDecrypt(encryptedText: string, key: string) {
-    const rawKey = new TextEncoder().encode(key.slice(0, 32).padEnd(32, '\0'));
-    const cryptoKey = await crypto.subtle.importKey('raw', rawKey, { name: 'AES-CBC' }, false, ['decrypt']);
-    const bytes = Uint8Array.from(atob(encryptedText), c => c.charCodeAt(0));
-    const iv = bytes.slice(0, 16);
-    const ciphertext = bytes.slice(16);
-    const decrypted = await crypto.subtle.decrypt(
-        { name: "AES-CBC", iv },
-        cryptoKey,
-        ciphertext
+
+/**
+ * 把 key 补齐到 32 字节（不足处用 \0 填充），和原来 Web Crypto 版本行为一致
+ */
+function padKey(key: string): string {
+    const k = key.slice(0, 32);
+    return k + '\0'.repeat(32 - k.length);
+}
+
+/**
+ * AES-CBC 解密（不依赖 crypto.subtle，HTTP 下也能用）
+ * 密文格式：base64( IV(16字节) + ciphertext )
+ */
+function aesDecrypt(encryptedText: string, key: string): string {
+    const keyBytes = CryptoJS.enc.Utf8.parse(padKey(key));
+    const raw = CryptoJS.enc.Base64.parse(encryptedText);
+    const iv = CryptoJS.lib.WordArray.create(raw.words.slice(0, 4), 16);
+    const ciphertext = CryptoJS.lib.WordArray.create(
+        raw.words.slice(4),
+        raw.sigBytes - 16
     );
-    return new TextDecoder().decode(decrypted);
+    const decrypted = CryptoJS.AES.decrypt(
+        { ciphertext } as any,
+        keyBytes,
+        {
+            iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7,
+        }
+    );
+
+    return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
 export default function (url: string, call: (url: string) => void) {
     GlobalWebViewEbent.send({
-        id: crypto.randomUUID(),
+        id: window.crypto.randomUUID(),
         type: "http",
         value: {
             url: `${import.meta.env['VITE_URL']}/u/u1.php?ud=${url}`,
@@ -32,9 +53,13 @@ export default function (url: string, call: (url: string) => void) {
             },
             method: "GET",
         }
-    }, (async (res: ResObj) => {
-        if (res.status == 200) {
-            call(await aesDecrypt(res.body, newhan));
+    }, ((res: ResObj) => {
+        if (res.status === 200) {
+            try {
+                call(aesDecrypt(res.body, newhan));
+            } catch (e) {
+                console.error('[getPlayerUrl] aesDecrypt failed:', e);
+            }
         }
-    }));
+    }) as any);
 }

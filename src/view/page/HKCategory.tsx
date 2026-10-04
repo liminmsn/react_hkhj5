@@ -53,15 +53,17 @@ export default function () {
                 return <HKCard key={idx} item={item} />
             })}
         </div>
-        <div className="flex justify-center gap-x-1 mt-6">
-            {
-                data.pagination.map((item, idx) => {
-                    return <div onClick={() => ToggleCateGory(item.url)} key={idx} className={`px-3 py-1 rounded-2xl cursor-pointer ${item.select ? 'bg-accent' : 'active:scale-95 bg-field-border-hover'}`}>
-                        <Label>{item.label}</Label>
-                    </div>
-                })
-            }
+        <div className="overflow-x-auto px-1.5 mt-5">
+            <div className="flex gap-1.5">
+                {
+                    data.pagination.map((item, idx) => {
+                        return <div onClick={() => ToggleCateGory(item.url)} key={idx} className={`px-3 py-1 rounded-2xl cursor-pointer ${item.select ? 'bg-accent' : 'active:scale-95 bg-field-border-hover'}`}>
+                            <Label className="text-nowrap">{item.label}</Label>
+                        </div>
+                    })
+                }
+            </div>
         </div>
-        <div className="h-15"></div>
+        <div className="h-25"></div>
     </div>
 }

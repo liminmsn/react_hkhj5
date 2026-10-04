@@ -25,7 +25,22 @@ public class WebView2 {
     }
 
     public void Destroy() {
-        this.webView.destroy();
+        if (webView != null) {
+            webView.stopLoading();
+            webView.loadUrl("about:blank");
+            webView.clearHistory();
+            webView.removeAllViews();
+            webView.destroy();
+            webView = null;
+        }
+    }
+
+    public boolean canGoBack() {
+        return webView != null && webView.canGoBack();
+    }
+
+    public void goBack() {
+        if (webView != null) webView.goBack();
     }
 
     private void sendToJs(String id, String type, Object value) {
@@ -60,8 +75,8 @@ public class WebView2 {
     private void handleJsMessage(String message) {
         try {
             JSONObject json = new JSONObject(message);
-            String id = json.optString("id");
             String type = json.optString("type");
+            String id = json.optString("id");
             Object value = json.opt("value");
 
             switch (type) {

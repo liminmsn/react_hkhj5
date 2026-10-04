@@ -55,38 +55,79 @@ public class Request {
             int code = -1;
             String err = null;
 
-            HttpURLConnection conn = null;
+            String curUrl = url;
+            String curMethod = method;
+            String curBody = body;
+            final int MAX_REDIRECTS = 5;
+
             try {
-                URL u = new URL(url);
-                conn = (HttpURLConnection) u.openConnection();
-                conn.setRequestMethod(method);
-                conn.setConnectTimeout(connectTimeout);
-                conn.setReadTimeout(readTimeout);
-                conn.setUseCaches(false);
-                conn.setInstanceFollowRedirects(true);
-                conn.setRequestProperty("Accept", "application/json, text/plain, */*");
-                for (Map.Entry<String, String> e : headers.entrySet()) {
-                    conn.setRequestProperty(e.getKey(), e.getValue());
-                }
-                if (body != null && !body.isEmpty() && !"GET".equals(method) && !"HEAD".equals(method)) {
-                    conn.setDoOutput(true);
-                    conn.setRequestProperty("Content-Type", contentType);
-                    byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
-                    conn.setFixedLengthStreamingMode(bytes.length);
-                    try (OutputStream os = conn.getOutputStream()) {
-                        os.write(bytes);
-                        os.flush();
+                for (int i = 0; i <= MAX_REDIRECTS; i++) {
+                    HttpURLConnection conn = null;
+                    try {
+                        conn = (HttpURLConnection) new URL(curUrl).openConnection();
+                        conn.setRequestMethod(curMethod);
+                        conn.setConnectTimeout(connectTimeout);
+                        conn.setReadTimeout(readTimeout);
+                        conn.setUseCaches(false);
+                        // 关键：关闭自动重定向，自己处理
+                        conn.setInstanceFollowRedirects(false);
+                        conn.setRequestProperty("Accept", "application/json, text/plain, */*");
+                        for (Map.Entry<String, String> e : headers.entrySet()) {
+                            conn.setRequestProperty(e.getKey(), e.getValue());
+                        }
+
+                        if (curBody != null && !curBody.isEmpty() && !"GET".equals(curMethod) && !"HEAD".equals(curMethod)) {
+                            conn.setDoOutput(true);
+                            conn.setRequestProperty("Content-Type", contentType);
+                            byte[] bytes = curBody.getBytes(StandardCharsets.UTF_8);
+                            conn.setFixedLengthStreamingMode(bytes.length);
+                            try (OutputStream os = conn.getOutputStream()) {
+                                os.write(bytes);
+                                os.flush();
+                            }
+                        }
+
+                        code = conn.getResponseCode();
+
+                        // ---------- 处理重定向 ----------
+                        if (code == 301 || code == 302 || code == 303 || code == 307 || code == 308) {
+
+                            String location = conn.getHeaderField("Location");
+                            if (location == null || location.isEmpty()) {
+                                // 没给 Location，当作普通响应读
+                                InputStream is = conn.getInputStream();
+                                if (is != null) respBody = readStream(is);
+                                break;
+                            }
+                            if (i == MAX_REDIRECTS) {
+                                err = "Too many redirects";
+                                break;
+                            }
+
+                            // 支持相对路径的 Location
+                            URL nextUrl = new URL(new URL(curUrl), location);
+                            curUrl = nextUrl.toString();
+
+                            // 303 一定改 GET；301/302 非 GET 也改 GET（浏览器行为）
+                            // 307/308 保持原方法和 body
+                            if (code == 303 || ((code == 301 || code == 302) && !"GET".equalsIgnoreCase(curMethod) && !"HEAD".equalsIgnoreCase(curMethod))) {
+                                curMethod = "GET";
+                                curBody = null;
+                            }
+                            continue;
+                        }
+
+                        // ---------- 普通响应 ----------
+                        InputStream is = (code >= 200 && code < 400) ? conn.getInputStream() : conn.getErrorStream();
+                        if (is != null) respBody = readStream(is);
+                        break;
+
+                    } finally {
+                        if (conn != null) conn.disconnect();
                     }
-                }
-                code = conn.getResponseCode();
-                InputStream is = (code >= 200 && code < 400) ? conn.getInputStream() : conn.getErrorStream();
-                if (is != null) {
-                    respBody = readStream(is);
                 }
             } catch (Exception e) {
                 err = e.getClass().getSimpleName() + ": " + e.getMessage();
-            } finally {
-                if (conn != null) conn.disconnect();
             }
 
             final String fResp = respBody;

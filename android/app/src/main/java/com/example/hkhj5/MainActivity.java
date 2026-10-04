@@ -3,8 +3,13 @@ package com.example.hkhj5;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.example.hkhj5.lib.MessageBox;
 import com.example.hkhj5.lib.WebView2;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,11 +21,25 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         this.webView2 = new WebView2(findViewById(R.id.webview), this);
+        // 拦截返回键：能回退就回退，不能回退才退出
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (webView2 != null && webView2.canGoBack()) {
+                    webView2.goBack();
+                } else {
+                    MessageBox.AlertDialog(MainActivity.this, "确定退出程序吗？", (dialog, which) -> {
+                        setEnabled(false);
+                        getOnBackPressedDispatcher().onBackPressed();
+                    });
+                }
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
-        webView2.Destroy();
+        this.webView2.Destroy();
         super.onDestroy();
     }
 }

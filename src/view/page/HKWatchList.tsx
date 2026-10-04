@@ -31,7 +31,7 @@ export default function () {
                                 <AlertDialog>
                                     <Button variant="danger" size="sm"><Trash />移除</Button>
                                     <AlertDialog.Backdrop>
-                                        <AlertDialog.Container>
+                                        <AlertDialog.Container placement="center">
                                             <AlertDialog.Dialog>
                                                 <AlertDialog.CloseTrigger />
                                                 <AlertDialog.Header>
@@ -62,5 +62,6 @@ export default function () {
                 })
             }
         </div>
+        <div className="h-25"></div>
     </div>
 }

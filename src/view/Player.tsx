@@ -138,7 +138,7 @@ export default function () {
 
     return <div className="flex w-screen h-screen">
         <div ref={playerControl} className="absolute pointer-events-none left-0 right-0 bottom-0 h-screen text-left p-4">
-            <div className="flex">
+            <div className="flex pt-3">
                 <div className="flex-1">
                     <Label className="text-3xl text-white hk_title">{state.detail.head.title}</Label>
                     <TagGroup aria-label="Tags" selectionMode="none" className="mt-1">
@@ -151,7 +151,7 @@ export default function () {
                         </TagGroup.List>
                     </TagGroup>
                 </div>
-                <div className="w-auto pointer-events-auto">
+                {/* <div className="w-auto pointer-events-auto">
                     <X className="cursor-pointer active:scale-90" size={28} onClick={() => {
                         GlobalWebViewEbent.sendOnce({
                             id: crypto.randomUUID(),
@@ -160,10 +160,10 @@ export default function () {
                         })
                         setTimeout(() => navigate(-1), 100);
                     }} />
-                </div>
+                </div> */}
             </div>
             <div className="">
-                <Card ref={playerListRef} className="pointer-events-auto block backdrop-blur-sm max-w-2/5 max-h-120 p-2! mt-2 shadow-lg">
+                <Card ref={playerListRef} className="pointer-events-auto block backdrop-blur-sm max-h-120 p-2! mt-2 shadow-lg">
                     <div className="flex">
                         <HKPlayList panelStyle="max-h-90" gridCols="grid-cols-6 max-h-9/12" detail={state.detail} playList={state.playList} replace />
                     </div>

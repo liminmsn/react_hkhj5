@@ -13,7 +13,7 @@ export default function ({ btn, children, head, footer }: HKModelType) {
         {btn}
         {/* <Button variant="secondary">打开模态框</Button> */}
         <Modal.Backdrop>
-            <Modal.Container>
+            <Modal.Container placement="center">
                 <Modal.Dialog>
                     <Modal.CloseTrigger />
                     <Modal.Header>

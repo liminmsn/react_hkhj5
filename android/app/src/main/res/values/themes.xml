@@ -1,9 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
     <style name="Base.Theme.Hkhj5" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- 主色 -->
+        <item name="colorPrimary">#E65100</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <!-- 弹窗背景 -->
+        <item name="colorSurface">#FFF8F0</item>
+        <item name="colorOnSurface">#3E2723</item>
+        <!-- 次要颜色 -->
+        <item name="colorSecondary">#8D6E63</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
     </style>
 
     <style name="Theme.Hkhj5" parent="Base.Theme.Hkhj5" />
+
 </resources>
