@@ -1,15 +1,18 @@
 package com.example.hkhj5;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.webkit.JavascriptInterface;
+import android.widget.Toast;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
+import android.webkit.JavascriptInterface;
+import android.annotation.SuppressLint;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 public class WebView2 {
     WebView webView;
@@ -45,6 +48,8 @@ public class WebView2 {
             Object value = json.opt("value");
 
             switch (type) {
+                case "client":
+                    break;
                 case "http":
                     JSONObject req = json.optJSONObject("value");
                     if (req == null) {
@@ -56,20 +61,17 @@ public class WebView2 {
                     String body = req.optString("body");
                     JSONObject headers = req.optJSONObject("headers");
 
-                    new Request(url, method)
-                            .setHeaders(headers)
-                            .setBody(body)
-                            .send((response, code, errorMessage) -> {
-                                try {
-                                    JSONObject re = new JSONObject();
-                                    re.put("status", code);
-                                    re.put("body", response);
-                                    re.put("error", errorMessage);
-                                    sendToJs(id, type, re);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            });
+                    new Request(url, method).setHeaders(headers).setBody(body).send((response, code, errorMessage) -> {
+                        try {
+                            JSONObject re = new JSONObject();
+                            re.put("status", code);
+                            re.put("body", response);
+                            re.put("error", errorMessage);
+                            sendToJs(id, type, re);
+                        } catch (JSONException e) {
+                            Log.d("http_json", Objects.requireNonNull(e.getMessage()));
+                        }
+                    });
                     break;
                 default:
                     Toast.makeText(context, "收到 JS 消息: " + type + " / " + value, Toast.LENGTH_SHORT).show();
@@ -88,9 +90,7 @@ public class WebView2 {
             json.put("type", type);
             json.put("value", value);
             String script = "window.__webviewReceive && window.__webviewReceive(" + JSONObject.quote(json.toString()) + ")";
-            webView.post(() -> {
-                webView.evaluateJavascript(script, null);
-            });
+            webView.post(() -> webView.evaluateJavascript(script, null));
         } catch (JSONException e) {
             Toast.makeText(context, "消息格式错误: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
