@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
     },
     base: "./",
     build: {
-      outDir: 'build',
+      outDir: 'android/app/src/main/res/WWW',
       emptyOutDir: true,
       rollupOptions: {
         output: {
