@@ -69,7 +69,7 @@ public class WebView2 {
                 ((Activity) context).runOnUiThread(() -> handleJsMessage(message));
             }
         }, "webview");
-        this.webView.loadUrl("http://192.168.0.100:5173");
+        this.webView.loadUrl("http://192.168.0.103:5173");
     }
 
     private void handleJsMessage(String message) {

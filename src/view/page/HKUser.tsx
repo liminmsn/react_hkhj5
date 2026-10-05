@@ -735,7 +735,7 @@ function UserInfo() {
                 saveInfo({ ...res.data, token: info!.token })
             }
         });
-    })
+    },[])
 
     return <div className="w-full p-3 pt-12 pb-24 flex flex-col gap-y-1.5">
         <Card className="">
@@ -776,6 +776,7 @@ function UserInfo() {
             </div>
             <div>
                 <Label>我的邀请码：</Label>
+                {/* {JSON.stringify(info)} */}
                 <Label className="select-all">{info?.invitationCode}</Label>
                 <div>
                     <Description>
