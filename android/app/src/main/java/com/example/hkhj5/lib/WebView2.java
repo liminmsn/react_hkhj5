@@ -3,11 +3,18 @@ package com.example.hkhj5.lib;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
+
+import androidx.webkit.WebViewAssetLoader;
+
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.JavascriptInterface;
 import android.annotation.SuppressLint;
 import android.util.Log;
+
+import com.example.hkhj5.config.EnvConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +28,7 @@ public class WebView2 {
     public WebView2(WebView webView, Context context) {
         this.webView = webView;
         this.context = context;
+        WebView.setWebContentsDebuggingEnabled(true);
         this.initWebview();
     }
 
@@ -61,7 +69,6 @@ public class WebView2 {
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);
         this.webView.getSettings().setDatabaseEnabled(true);
-        this.webView.setWebViewClient(new WebViewClient());
         this.webView.addJavascriptInterface(new Object() {
             @JavascriptInterface
             @SuppressWarnings("unused")
@@ -69,7 +76,26 @@ public class WebView2 {
                 ((Activity) context).runOnUiThread(() -> handleJsMessage(message));
             }
         }, "webview");
-        this.webView.loadUrl("http://192.168.0.103:5173");
+
+        if (EnvConfig.env == EnvConfig.Environment.DEV) {
+            this.webView.loadUrl("http://192.168.0.103:5174/");
+        }
+
+        if (EnvConfig.env == EnvConfig.Environment.RELEASE) {
+            final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder().addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(context)).build();
+            this.webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                    return assetLoader.shouldInterceptRequest(request.getUrl());
+                }
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    return false;
+                }
+            });
+            this.webView.loadUrl("https://appassets.androidplatform.net/assets/www/index.html");
+        }
     }
 
     private void handleJsMessage(String message) {

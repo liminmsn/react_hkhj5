@@ -3,14 +3,14 @@ import type { AnalysisDetailObjPlayListType, AnalysisDetailObjType } from "../ap
 import { Button, Card, Label, Tag, TagGroup } from "@heroui/react";
 import GlobalWebViewEbent from "../event/GlobalWebViewEvent";
 import type { PlyrPropsType } from "../components/HKPlayer";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import HKPlayList from "../components/HKPlayList";
 import type { APITypes } from "plyr-react";
 import { useEffect, useRef } from "react";
-import { X, List } from "lucide-react";
+import { List } from "lucide-react";
 import type { SourceInfo } from "plyr";
-import { Plyr } from 'plyr-react';
 import Hls from "hls.js";
+import HKPlayer from "../components/HKPlayer";
 
 export type PlayerInfoType = {
     m3u8url: string;
@@ -22,14 +22,7 @@ export type PlayerInfoType = {
 const plyrProps: PlyrPropsType = {
     source: {
         type: "video",
-        sources: [
-            {
-                src: "https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4",
-                type: "video/mp4",
-                size: 720,
-            },
-        ],
-        poster: "/poster.png",
+        sources: []
     },
     options: {
         controls: [
@@ -38,7 +31,7 @@ const plyrProps: PlyrPropsType = {
             "progress",
             "current-time",
             "mute",
-            "volume",
+            // "volume",
             "captions",
             "settings",
             // "pip",
@@ -49,7 +42,7 @@ const plyrProps: PlyrPropsType = {
 }
 
 export default function () {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const player = useRef<APITypes>(null);
     const { state } = useLocation() as { state: PlayerInfoType };
     const playerControl = useRef<HTMLDivElement>(null);
@@ -58,7 +51,7 @@ export default function () {
 
     const source: SourceInfo = {
         type: "video",
-        poster: "/poster.png",
+        poster: `${import.meta.env.BASE_URL}image/poster.png`,
         sources: [
             {
                 src: state.m3u8url,
@@ -76,32 +69,35 @@ export default function () {
     }
 
     useEffect(() => {
+        // 绑定播放器控件
+        const dom = document.querySelector(".plyr__controls");
+        if (dom && playerControl.current) {
+            dom.appendChild(playerControl.current);
+        }
+
+        const btnFull = document.querySelector(
+            "button[data-plyr='fullscreen']"
+        ) as HTMLButtonElement;
+
+        if (btnFull) {
+            btnFull.onclick = () => {
+                GlobalWebViewEbent.sendOnce({
+                    id: crypto.randomUUID(),
+                    type: "client",
+                    value: {
+                        type: "ToggleFullscreen"
+                    }
+                });
+            };
+        }
+
+
         setTimeout(() => {
             if (!player.current) return;
-            // 绑定播放器控件
-            const dom = document.querySelector(".plyr__controls");
-            if (dom && playerControl.current) {
-                dom.appendChild(playerControl.current);
-            }
-
-            const btnFull = document.querySelector(
-                "button[data-plyr='fullscreen']"
-            ) as HTMLButtonElement;
-
-            if (btnFull) {
-                btnFull.onclick = () => {
-                    GlobalWebViewEbent.sendOnce({
-                        id: crypto.randomUUID(),
-                        type: "client",
-                        value: {
-                            type: "ToggleFullscreen"
-                        }
-                    });
-                };
-            }
-
-
             const video = (player.current.plyr as any).media as HTMLVideoElement;
+            video.src = state.m3u8url;
+            video.load();
+
             const isHls = state.m3u8url.toLowerCase().includes(".m3u8");
             if (isHls) {
                 if (hlsRef.current) {
@@ -175,6 +171,6 @@ export default function () {
                 </div>
             </div>
         </div>
-        <Plyr ref={player} options={plyrProps.options} source={source} />
+        <HKPlayer options={plyrProps.options} source={source} />
     </div>
 }

@@ -19,9 +19,9 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    base: "./",
+    base: mode === 'production' ? '/assets/www/' : '/',
     build: {
-      outDir: 'android/app/src/main/res/WWW',
+      outDir: 'android/app/src/main/assets/www',
       emptyOutDir: true,
       rollupOptions: {
         output: {

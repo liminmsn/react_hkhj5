@@ -32,7 +32,7 @@ export default function () {
             <div className="bg_blur"></div>
             <div className="flex justify-between mt-6 z-2">
                 <div className="flex items-center">
-                    <img src="/logo.png" className="w-10 inline mr-2" />
+                    <img src={`${import.meta.env.BASE_URL}image/logo.png`} className="w-10 inline mr-2" />
                     <Label className="text-2xl">好看韩剧5</Label>
                 </div>
                 <HKSearch />
