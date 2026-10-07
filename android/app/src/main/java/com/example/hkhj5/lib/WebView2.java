@@ -12,7 +12,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.JavascriptInterface;
 import android.annotation.SuppressLint;
+
 import com.example.hkhj5.config.EnvConfig;
+import com.example.hkhj5.lib.handle.WebviewClientHandle;
 import com.example.hkhj5.lib.handle.WebviewHttpHandle;
 
 import org.json.JSONException;
@@ -104,7 +106,7 @@ public class WebView2 {
 
             switch (type) {
                 case "client":
-
+                    new WebviewClientHandle(json, this::sendToJs);
                     break;
                 case "http":
                     new WebviewHttpHandle(json, this::sendToJs);

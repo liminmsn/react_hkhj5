@@ -4,5 +4,5 @@ public class EnvConfig {
     public enum Environment {
         DEV, RELEASE
     }
-    public static Environment env = Environment.DEV;
+    public static Environment env = Environment.RELEASE;
 }

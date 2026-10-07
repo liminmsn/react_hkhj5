@@ -4,7 +4,8 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.util.Log;
 
-import com.example.hkhj5.lib.net.Request;
+import com.example.hkhj5.lib.Webview2SendToJs;
+import com.example.hkhj5.lib.util.Request;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,13 +13,7 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 public class WebviewHttpHandle {
-
-    @FunctionalInterface
-    public interface SendToJs {
-        void send(String id, String type, Object value);
-    }
-
-    public WebviewHttpHandle(JSONObject json, SendToJs callback) {
+    public WebviewHttpHandle(JSONObject json, Webview2SendToJs callback) {
         String type = json.optString("type");
         String id = json.optString("id");
         JSONObject req = json.optJSONObject("value");
