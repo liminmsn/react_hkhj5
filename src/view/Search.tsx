@@ -23,12 +23,15 @@ export default function Search() {
             new Analysis(crypto.randomUUID(), `${import.meta.env["VITE_URL"]}/search/`, analysis_search, res => {
                 if (res) {
                     setData(res)
-                    localStorage.setItem(search, JSON.stringify(res))
+                    // localStorage.setItem(search, JSON.stringify(res))
                 }
-            }).post({
-                show: "searchkey",
-                keyboard: search,
-            });
+            })
+                .setHeader({ "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" })
+                .setHeader({ "User-Agent": "Mozilla/5.0 (Android)" })
+                .post({
+                    show: "searchkey",
+                    keyboard: search,
+                });
         }
     }, [search]);
 
@@ -39,7 +42,7 @@ export default function Search() {
             },
         })
     }
-    return <div className="py-2 p-3">
+    return <div className="py-2 p-3 pt-13">
         <div className="mb-1 flex justify-between w-full">
             <Label className="text-xl">{search}：搜索结果</Label>
             <Button className="px-3 " variant="danger" onClick={() => navigate(-1)}>返回</Button>

@@ -12,14 +12,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.JavascriptInterface;
 import android.annotation.SuppressLint;
-import android.util.Log;
-
 import com.example.hkhj5.config.EnvConfig;
+import com.example.hkhj5.lib.handle.WebviewHttpHandle;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Objects;
 
 public class WebView2 {
     WebView webView;
@@ -78,7 +75,7 @@ public class WebView2 {
         }, "webview");
 
         if (EnvConfig.env == EnvConfig.Environment.DEV) {
-            this.webView.loadUrl("http://192.168.0.103:5174/");
+            this.webView.loadUrl("http://192.168.0.100:5173/");
         }
 
         if (EnvConfig.env == EnvConfig.Environment.RELEASE) {
@@ -102,34 +99,15 @@ public class WebView2 {
         try {
             JSONObject json = new JSONObject(message);
             String type = json.optString("type");
-            String id = json.optString("id");
             Object value = json.opt("value");
+//          String id = json.optString("id");
 
             switch (type) {
                 case "client":
+
                     break;
                 case "http":
-                    JSONObject req = json.optJSONObject("value");
-                    if (req == null) {
-                        Toast.makeText(context, "http 参数为空", Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-                    String url = req.optString("url");
-                    String method = req.optString("method");
-                    String body = req.optString("body");
-                    JSONObject headers = req.optJSONObject("headers");
-
-                    new Request(url, method).setHeaders(headers).setBody(body).send((response, code, errorMessage) -> {
-                        try {
-                            JSONObject re = new JSONObject();
-                            re.put("status", code);
-                            re.put("body", response);
-                            re.put("error", errorMessage);
-                            sendToJs(id, type, re);
-                        } catch (JSONException e) {
-                            Log.d("http_json", Objects.requireNonNull(e.getMessage()));
-                        }
-                    });
+                    new WebviewHttpHandle(json, this::sendToJs);
                     break;
                 default:
                     Toast.makeText(context, "收到 JS 消息: " + type + " / " + value, Toast.LENGTH_SHORT).show();
