@@ -60,15 +60,15 @@ export default function Search() {
                             <Table.Header>
                                 <Table.Column isRowHeader>#</Table.Column>
                                 <Table.Column>片名</Table.Column>
-                                <Table.Column>类型</Table.Column>
+                                <Table.Column className="text-nowrap">类型</Table.Column>
                                 <Table.Column>演员表</Table.Column>
                             </Table.Header>
                             <Table.Body>
                                 {data.body.map((item, idx) => {
                                     return <Table.Row key={item.url} className="cursor-pointer" onClickCapture={() => { openDetail(item.url) }}>
                                         <Table.Cell className="text-danger">{idx + 1}</Table.Cell>
-                                        <Table.Cell>{item.name}</Table.Cell>
-                                        <Table.Cell>{item.time}</Table.Cell>
+                                        <Table.Cell className="text-nowrap">{item.name}</Table.Cell>
+                                        <Table.Cell className="text-nowrap">{item.time}</Table.Cell>
                                         <Table.Cell>{item.actor}</Table.Cell>
                                     </Table.Row>
                                 })}
