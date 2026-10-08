@@ -128,6 +128,13 @@ export default function () {
         return () => {
             hlsRef.current?.destroy();
             hlsRef.current = null;
+            GlobalWebViewEbent.sendOnce({
+                id: crypto.randomUUID(),
+                type: "client",
+                value: {
+                    type: "ExitFullscreen"
+                }
+            });
         };
 
     }, [state.m3u8url]);

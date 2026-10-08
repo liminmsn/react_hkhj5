@@ -1,7 +1,6 @@
 package com.example.hkhj5.lib;
 
 import android.app.Activity;
-import android.content.Context;
 import android.widget.Toast;
 
 import androidx.webkit.WebViewAssetLoader;
@@ -22,9 +21,9 @@ import org.json.JSONObject;
 
 public class WebView2 {
     WebView webView;
-    Context context;
+    Activity context;
 
-    public WebView2(WebView webView, Context context) {
+    public WebView2(WebView webView, Activity context) {
         this.webView = webView;
         this.context = context;
         WebView.setWebContentsDebuggingEnabled(true);
@@ -72,7 +71,7 @@ public class WebView2 {
             @JavascriptInterface
             @SuppressWarnings("unused")
             public void onJsMessage(String message) {
-                ((Activity) context).runOnUiThread(() -> handleJsMessage(message));
+                context.runOnUiThread(() -> handleJsMessage(message));
             }
         }, "webview");
 
@@ -106,7 +105,7 @@ public class WebView2 {
 
             switch (type) {
                 case "client":
-                    new WebviewClientHandle(json, this::sendToJs);
+                    new WebviewClientHandle(json, this::sendToJs, this.context);
                     break;
                 case "http":
                     new WebviewHttpHandle(json, this::sendToJs);
