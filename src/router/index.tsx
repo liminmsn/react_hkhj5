@@ -3,6 +3,7 @@ import Layout from "../Layout";
 import Detial from "../view/Detial";
 import Player from "../view/Player";
 import Search from "../view/Search";
+import Spay from "../view/Spay";
 
 export default createHashRouter([
     {
@@ -20,5 +21,9 @@ export default createHashRouter([
     {
         path: "player",
         Component: Player
+    },
+    {
+        path: "spay",
+        Component: Spay
     }
 ]);

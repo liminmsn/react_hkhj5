@@ -2,7 +2,8 @@ package com.example.hkhj5.config;
 
 public class EnvConfig {
     public enum Environment {
-        DEV, RELEASE
+        DEV,
+        RELEASE
     }
-    public static Environment env = Environment.RELEASE;
+    public static Environment env = Environment.DEV;
 }

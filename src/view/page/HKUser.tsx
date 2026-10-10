@@ -11,6 +11,8 @@ import getFormData from "../../utils/getFormData";
 import dayjs from "dayjs";
 import { model_spay_init_pay } from "../../api/user/model/modelSpay";
 import { model_invite_activate } from "../../api/user/model/modelActivate";
+import GlobalWebViewEvent from "../../event/GlobalWebViewEvent";
+import { useNavigate } from "react-router";
 
 type SubmitParameter = React.FormEvent<HTMLFormElement>;
 type LoginRegisterForgotRef = {
@@ -339,6 +341,7 @@ function LoginRegisterLayout() {
 }
 
 function UserInfoTopUp() {
+    const navigate = useNavigate();
     const [select, setSelect] = useState<NetUser.Response.ModelPrice.ListItem>()
     const [list, setList] = useState<NetUser.Response.ModelPrice.ListList>();
     useEffect(() => {
@@ -415,12 +418,12 @@ function UserInfoTopUp() {
                                         <Tabs.List aria-label="选项">
                                             <Tabs.Tab id="alipay">
                                                 支付宝
-                                                <img className="ml-1" width={20} src={`/asset/zfb.png`} />
+                                                <img className="ml-1" width={20} src={`${import.meta.env.BASE_URL}asset/zfb.png`} />
                                                 <Tabs.Indicator />
                                             </Tabs.Tab>
                                             <Tabs.Tab id="wxpay">
                                                 微信
-                                                <img className="ml-1" width={20} src={`/asset/wx.svg`} />
+                                                <img className="ml-1" width={20} src={`${import.meta.env.BASE_URL}asset/wx.svg`} />
                                                 <Tabs.Indicator />
                                             </Tabs.Tab>
                                         </Tabs.List>
@@ -440,20 +443,33 @@ function UserInfoTopUp() {
                                             {/* <Modal.Icon className="bg-default text-foreground">
                                                 <CircleDollarSign className="size-5" />
                                             </Modal.Icon> */}
-                                            <img width={40} src={`/asset/${type == "alipay" ? "zfb.png" : "wx.svg"}`} />
-                                            <Modal.Heading><div className="font-bold">{type == "alipay" ? "支付宝" : "微信"}</div>扫码支付</Modal.Heading>
+                                            <img width={40} src={`${import.meta.env.BASE_URL}asset/${type == "alipay" ? "zfb.png" : "wx.svg"}`} />
+                                            <Modal.Heading><div className="font-bold">{type == "alipay" ? "支付宝" : "微信"}</div>扫码支付/直接支付</Modal.Heading>
                                         </Modal.Header>
                                         <Modal.Body>
                                             {
                                                 select ?
                                                     !spay ? <HKComLoding /> :
                                                         <div className="flex gap-3.5">
-                                                            <img src={spay.img} className="w-30 border-2 border-accent rounded-sm" />
+                                                            <img src={spay.img} className="h-35 w-35 border-2 border-accent rounded-sm" />
                                                             <div className="flex flex-col gap-y-1.5">
                                                                 <Label>订单创建状态：{spay.msg}</Label>
                                                                 <Label>订单编号：{spay.trade_no}</Label>
                                                                 <Label className="text-black/20">已经支付完成？</Label>
-                                                                <Button variant="primary">刷新数据</Button>
+                                                                <Button variant="primary" onClick={() => {
+                                                                    GlobalWebViewEvent.sendOnce(
+                                                                        {
+                                                                            id: crypto.randomUUID(),
+                                                                            type: "open_url",
+                                                                            value: spay.payurl2,
+                                                                        }
+                                                                    );
+                                                                }}>
+                                                                    支付
+                                                                </Button>
+                                                                <Button onClick={() => {
+                                                                    navigate("/spay")
+                                                                }}>已经完成支付</Button>
                                                             </div>
                                                         </div> :
                                                     <div>
@@ -497,10 +513,10 @@ function UserInfoFlowingWaterCard() {
                                 <Table.Content aria-label="Team members">
                                     <Table.Header>
                                         <Table.Column isRowHeader className="px-0">#</Table.Column>
-                                        <Table.Column >时间</Table.Column>
                                         <Table.Column className="text-nowrap">支出/收入</Table.Column>
-                                        <Table.Column className="text-nowrap">变动前</Table.Column>
                                         <Table.Column className="text-nowrap">能量</Table.Column>
+                                        <Table.Column className="text-nowrap">变动前</Table.Column>
+                                        <Table.Column >时间</Table.Column>
                                         <Table.Column>备注</Table.Column>
                                     </Table.Header>
                                     <Table.Body>
@@ -508,14 +524,14 @@ function UserInfoFlowingWaterCard() {
                                             list.map((item, idx) => {
                                                 return <Table.Row key={item.id}>
                                                     <Table.Cell className="pl-0">{idx + 1}</Table.Cell>
-                                                    <Table.Cell className="text-nowrap">{dayjs(item.createTime).format('YYYY年MM月DD日 HH:mm:ss')}</Table.Cell>
                                                     {
                                                         item.changeType == 1 ?
                                                             <Table.Cell className="text-success">+{item.balanceAfter - item.balanceBefore}</Table.Cell> :
                                                             <Table.Cell className="text-danger">{item.balanceAfter - item.balanceBefore}</Table.Cell>
                                                     }
-                                                    <Table.Cell>{item.balanceBefore}</Table.Cell>
                                                     <Table.Cell>{item.balanceAfter}</Table.Cell>
+                                                    <Table.Cell>{item.balanceBefore}</Table.Cell>
+                                                    <Table.Cell className="text-nowrap">{dayjs(item.createTime).format('YYYY年MM月DD日 HH:mm:ss')}</Table.Cell>
                                                     <Table.Cell className="text-nowrap">{item.description}</Table.Cell>
                                                 </Table.Row>
                                             })
@@ -735,7 +751,7 @@ function UserInfo() {
                 saveInfo({ ...res.data, token: info!.token })
             }
         });
-    },[])
+    }, [])
 
     return <div className="w-full p-3 pt-12 pb-24 flex flex-col gap-y-1.5">
         <Card className="">
@@ -743,7 +759,7 @@ function UserInfo() {
                 <img
                     className="w-24 h-24 pointer-events-none aspect-square rounded-2xl object-cover select-none"
                     loading="lazy"
-                    src={`/api/api${info?.avatar}`}
+                    src={`${import.meta.env["VITE_SERVICE_URL"]}/api${info?.avatar}`}
                 />
                 <div className="flex flex-col">
                     <Card.Title className="select-all">

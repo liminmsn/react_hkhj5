@@ -1,6 +1,9 @@
 package com.example.hkhj5.lib;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.webkit.WebViewAssetLoader;
@@ -67,6 +70,7 @@ public class WebView2 {
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);
         this.webView.getSettings().setDatabaseEnabled(true);
+        this.webView.getSettings().setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         this.webView.addJavascriptInterface(new Object() {
             @JavascriptInterface
             @SuppressWarnings("unused")
@@ -76,7 +80,7 @@ public class WebView2 {
         }, "webview");
 
         if (EnvConfig.env == EnvConfig.Environment.DEV) {
-            this.webView.loadUrl("http://192.168.0.100:5173/");
+            this.webView.loadUrl("http://192.168.0.103:5173/");
         }
 
         if (EnvConfig.env == EnvConfig.Environment.RELEASE) {
@@ -104,11 +108,25 @@ public class WebView2 {
 //          String id = json.optString("id");
 
             switch (type) {
+                case "open_url":
+                    String url = json.optString("value");
+                    // 2. 创建 Intent 并指定动作和数据
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    // 3. 启动系统浏览器
+                    try {
+                        context.startActivity(intent);
+                    } catch (Exception e) {
+                        // 异常处理：防止某些极端情况下手机没有可用的浏览器
+                        Toast.makeText(context, "未找到可用的浏览器", Toast.LENGTH_SHORT).show();
+                    }
+                    Log.println(Log.INFO, "open_url", url);
+                    break;
                 case "client":
                     new WebviewClientHandle(json, this::sendToJs, this.context);
                     break;
                 case "http":
-                    new WebviewHttpHandle(json, this::sendToJs);
+                    new Thread(() -> new WebviewHttpHandle(json, this::sendToJs)).start();
                     break;
                 default:
                     Toast.makeText(context, "收到 JS 消息: " + type + " / " + value, Toast.LENGTH_SHORT).show();

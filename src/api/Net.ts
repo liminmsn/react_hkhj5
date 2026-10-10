@@ -10,7 +10,7 @@ export default class Net {
         "Accept-Charset": "utf-8",
     };
 
-    protected init(
+    init(
         id: string,
         url: string,
         callback: CallbackType
