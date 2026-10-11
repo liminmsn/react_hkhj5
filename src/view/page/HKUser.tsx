@@ -166,7 +166,7 @@ function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
                             <Input placeholder="密码长度在6-20个字符之间" />
                             <FieldError />
                         </TextField>
-                        <TextField className="mb-1" isRequired name="nickname" type="text">
+                        {/* <TextField className="mb-1" isRequired name="nickname" type="text">
                             <Label>昵称</Label>
                             <Input placeholder="昵称不能超过50个字符" />
                             <FieldError />
@@ -175,7 +175,7 @@ function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
                             <Label>手机号(可选)</Label>
                             <Input placeholder="手机号必须是11位数字" />
                             <FieldError />
-                        </TextField>
+                        </TextField> */}
                         <TextField className="mb-1" isRequired name="email" type="email">
                             <Label>邮箱</Label>
                             <div className="flex">
