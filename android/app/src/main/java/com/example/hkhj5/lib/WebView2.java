@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import com.example.hkhj5.config.EnvConfig;
 import com.example.hkhj5.lib.handle.WebviewClientHandle;
 import com.example.hkhj5.lib.handle.WebviewHttpHandle;
+import com.example.hkhj5.lib.handle.WebviewMsgHandle;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,7 +81,7 @@ public class WebView2 {
         }, "webview");
 
         if (EnvConfig.env == EnvConfig.Environment.DEV) {
-            this.webView.loadUrl("http://192.168.0.103:5173/");
+            this.webView.loadUrl("http://192.168.0.102:5173/");
         }
 
         if (EnvConfig.env == EnvConfig.Environment.RELEASE) {
@@ -127,6 +128,9 @@ public class WebView2 {
                     break;
                 case "http":
                     new Thread(() -> new WebviewHttpHandle(json, this::sendToJs)).start();
+                    break;
+                case "msg":
+                    new WebviewMsgHandle(json, this.context);
                     break;
                 default:
                     Toast.makeText(context, "收到 JS 消息: " + type + " / " + value, Toast.LENGTH_SHORT).show();

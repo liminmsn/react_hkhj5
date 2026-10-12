@@ -21,6 +21,14 @@ export default function () {
     const { state } = useLocation() as { state: AnalysisHomeObjItemTypeListItem }
     const { list, add_remove } = useWatchListStore();
 
+    function searchTags(tag: string) {
+        navigate("/search", {
+            state: {
+                search: tag
+            }
+        })
+    }
+
     useEffect(() => {
         setUrlVar('--hover_bg', state.imgUrl)
         select();
@@ -58,7 +66,10 @@ export default function () {
             </Card>
             <div>
                 <Label className="text-3xl">{detail.head.title}</Label>
-                <TagGroup aria-label="Tags" selectionMode="none" className="mt-1">
+                <TagGroup aria-label="Tags" selectionMode="single" className="mt-1" onSelectionChange={(key) => {
+                    const tag = detail.head.tags[Object.values(key)[0]];
+                    searchTags(tag);
+                }}>
                     <TagGroup.List>
                         {
                             detail.head.tags.map((item, idx) => {
@@ -85,9 +96,10 @@ export default function () {
                                         Array.isArray(item.item)
                                             ? <div className="pt-1 gap-1 flex flex-wrap">
                                                 {
-                                                    item.item.map((item, idx) => <Chip key={idx} className="bg-accent-soft">
-                                                        {item.name}
-                                                    </Chip>)
+                                                    item.item.map((item, idx) =>
+                                                        <Chip key={idx} className="bg-accent-soft">
+                                                            {item.name}
+                                                        </Chip>)
                                                 }
                                             </div>
                                             : <Description>{item.item}</Description>

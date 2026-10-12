@@ -17,3 +17,7 @@ export function model_energy_flowingChat(item: { startTime: string; endTime: str
         .CarryToken()
         .get()(data => callFun(data))
 }
+
+export function model_energy_deductEnergy(name: string, callFun: (data: NetUser.ResType<any>) => void) {
+    new UserNet(`${Api.deductEnergy}?amount=3&reason="看剧支出${name}"`).CarryToken().get()(res => callFun(res))
+}

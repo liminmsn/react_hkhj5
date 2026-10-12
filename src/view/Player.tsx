@@ -3,7 +3,7 @@ import type { AnalysisDetailObjPlayListType, AnalysisDetailObjType } from "../ap
 import { Button, Card, Label, Tag, TagGroup } from "@heroui/react";
 import GlobalWebViewEbent from "../event/GlobalWebViewEvent";
 import type { PlyrPropsType } from "../components/HKPlayer";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import HKPlayList from "../components/HKPlayList";
 import type { APITypes } from "plyr-react";
 import { useEffect, useRef } from "react";
@@ -11,6 +11,7 @@ import { List } from "lucide-react";
 import type { SourceInfo } from "plyr";
 import Hls from "hls.js";
 import HKPlayer from "../components/HKPlayer";
+import { model_energy_deductEnergy } from "../api/user/model/modelEnergy";
 
 export type PlayerInfoType = {
     m3u8url: string;
@@ -42,7 +43,7 @@ const plyrProps: PlyrPropsType = {
 }
 
 export default function () {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const player = useRef<APITypes>(null);
     const { state } = useLocation() as { state: PlayerInfoType };
     const playerControl = useRef<HTMLDivElement>(null);
@@ -69,6 +70,20 @@ export default function () {
     }
 
     useEffect(() => {
+        model_energy_deductEnergy(state.detail.head.title, (res) => {
+            GlobalWebViewEbent.sendOnce({
+                id: crypto.randomUUID(),
+                type: "msg",
+                value: {
+                    type: "0",
+                    msg: res.message
+                }
+            });
+            if (res.code != 200) {
+                navigate(-1);
+            }
+        });
+
         // 绑定播放器控件
         const dom = document.querySelector(".plyr__controls");
         if (dom && playerControl.current) {
@@ -95,39 +110,28 @@ export default function () {
         setTimeout(() => {
             if (!player.current) return;
             const video = (player.current.plyr as any).media as HTMLVideoElement;
-            video.src = state.m3u8url;
-            video.load();
 
-            const isHls = state.m3u8url.toLowerCase().includes(".m3u8");
-            if (isHls) {
+            if (Hls.isSupported()) {
                 if (hlsRef.current) {
                     hlsRef.current.destroy();
                 }
-                if (Hls.isSupported()) {
-                    const hls = new Hls({ enableWorker: false });
-                    hlsRef.current = hls;
-                    hls.attachMedia(video);
-                    hls.loadSource(state.m3u8url);
-                    hls.on(Hls.Events.ERROR, (_, data) => {
-                        console.log("HLS Error:", data);
-                    });
-                } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-                    video.src = state.m3u8url;
-                    video.load();
-                }
-            } else {
-                if (hlsRef.current) {
-                    hlsRef.current.destroy();
-                    hlsRef.current = null;
-                }
+                const hls = new Hls({ enableWorker: false });
+                hlsRef.current = hls;
+                hls.attachMedia(video);
+                hls.loadSource(state.m3u8url);
+                hls.on(Hls.Events.ERROR, (_, data) => {
+                    console.log("HLS Error:", data);
+                });
+            } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
                 video.src = state.m3u8url;
                 video.load();
             }
         }, 100);
+    }, [state.m3u8url]);
 
+    useEffect(() => {
         return () => {
             hlsRef.current?.destroy();
-            hlsRef.current = null;
             GlobalWebViewEbent.sendOnce({
                 id: crypto.randomUUID(),
                 type: "client",
@@ -136,12 +140,11 @@ export default function () {
                 }
             });
         };
-
-    }, [state.m3u8url]);
+    }, [])
 
     return <div className="flex w-screen h-screen">
         <div ref={playerControl} className="absolute pointer-events-none left-0 right-0 bottom-0 h-screen text-left p-4">
-            <div className="flex pt-3">
+            <div className="flex pt-7">
                 <div className="flex-1">
                     <Label className="text-3xl text-white hk_title">{state.detail.head.title}</Label>
                     <TagGroup aria-label="Tags" selectionMode="none" className="mt-1">
@@ -154,28 +157,18 @@ export default function () {
                         </TagGroup.List>
                     </TagGroup>
                 </div>
-                {/* <div className="w-auto pointer-events-auto">
-                    <X className="cursor-pointer active:scale-90" size={28} onClick={() => {
-                        GlobalWebViewEbent.sendOnce({
-                            id: crypto.randomUUID(),
-                            type: 'client',
-                            value: { type: 'ExitFullscreen' }
-                        })
-                        setTimeout(() => navigate(-1), 100);
-                    }} />
-                </div> */}
             </div>
-            <div className="">
-                <Card ref={playerListRef} className="pointer-events-auto block backdrop-blur-sm max-h-120 p-2! mt-2 shadow-lg">
-                    <div className="flex">
-                        <HKPlayList panelStyle="max-h-90" gridCols="grid-cols-6 max-h-9/12" detail={state.detail} playList={state.playList} replace />
-                    </div>
-                </Card>
+            <div className="landscape:max-w-1/2">
                 <div className="my-2">
                     <Button className="pointer-events-auto rounded-xl" size="sm" onClick={togglePlayerListRefShow}>
                         <List />
                     </Button>
                 </div>
+                <Card ref={playerListRef} className="pointer-events-auto block backdrop-blur-sm p-2! mt-2 ">
+                    <div className="flex">
+                        <HKPlayList panelStyle="max-h-90 landscape:max-h-25" gridCols="grid-cols-6" detail={state.detail} playList={state.playList} replace />
+                    </div>
+                </Card>
             </div>
         </div>
         <HKPlayer options={plyrProps.options} source={source} />

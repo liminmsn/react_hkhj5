@@ -44,9 +44,13 @@ function Login({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
             <Fieldset.Legend>能量系统</Fieldset.Legend>
             <Description>小小能量温暖的连接你我他</Description>
             {
-                login_state == -1 &&
-                <div className='bg-danger text-center py-1'>
-                    <Label className='text-white'>登录状态过期重新登录</Label>
+                login_state == -1 && <div className="flex flex-col">
+                    <div className='bg-danger text-center py-1'>
+                        <Label className='text-white'>未登录或者登录状态过期</Label>
+                    </div>
+                    <div className='bg-success text-center py-1'>
+                        <Label className='text-white'>重新登录即可，没有账号左下角注册</Label>
+                    </div>
                 </div>
             }
             <FieldGroup>
@@ -504,7 +508,7 @@ function UserInfoFlowingWaterCard() {
         <Card.Header className="p-0 pb-0">
             <Label>流水记录</Label>
         </Card.Header>
-        <Card.Content className="overflow-y-auto">
+        <Card.Content className="overflow-y-auto max-h-45">
             {!list ? <HKComLoding /> :
                 <Table className="p-0">
                     {
@@ -561,9 +565,9 @@ function UserInfoRankingCard() {
 
     return <Card className="col-span-2">
         <Card.Header className="pb-0">
-            <Card.Title>排行榜</Card.Title>
+            <Card.Title>排行榜 20名</Card.Title>
         </Card.Header>
-        <Card.Content className="overflow-y-auto">
+        <Card.Content className="overflow-y-auto max-h-45">
             {!list ? <HKComLoding /> :
                 <ListBox aria-label="用户" selectionMode="none" className="px-0">
                     {
@@ -780,11 +784,6 @@ function UserInfo() {
                 </div>
             </div>
         </Card>
-        <UserInfoRankingCard />
-        <UserInfoFlowingWaterCard />
-        {/* <UserInfoChat /> */}
-        {/* <div className="h-100">
-            </div> */}
         <Card>
             <div className="flex justify-between items-end">
                 <Label>我的能量：{info?.energy}</Label>
@@ -802,8 +801,13 @@ function UserInfo() {
             </div>
         </Card>
         <UserInvite />
+        <UserInfoFlowingWaterCard />
+        <UserInfoRankingCard />
+        {/* <UserInfoChat /> */}
+        {/* <div className="h-100">
+            </div> */}
         <Card>
-            <Button className="w-full" variant="danger-soft" onClick={outLogin}>退出登录</Button>
+            <Button className="w-full" variant="danger-soft" onClick={() => outLogin(0)}>退出登录</Button>
         </Card>
     </div>
 }

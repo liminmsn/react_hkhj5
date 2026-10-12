@@ -8,13 +8,14 @@ import HKUser from './view/page/HKUser';
 // import HKMap from './view/page/HKMap';
 import { Blocks, CircleUserRound, FolderHeart, House } from 'lucide-react';
 import { GlobalWindowEvent } from './event/GlobalWindowEvent';
+import { useNavigate } from 'react-router';
 
 
 export default function () {
-    const selectedKey = useLayoutStore().selectedKey;
-    const setSelectedKey = useLayoutStore().setSelectedKey;
+    const { selectedKey, setSelectedKey } = useLayoutStore();
     const [scrollTop, setScrollTop] = useState(0);
     const { setUrl } = useCateGoryStore();
+    const navigate = useNavigate()
 
     const tabs = [
         {
@@ -61,11 +62,14 @@ export default function () {
     ];
 
 
-    const { outLogin, saveLoginState } = useUserInfoStore();
+    const { outLogin } = useUserInfoStore();
     GlobalWindowEvent.on("no_login", (data) => {
+        outLogin(-1);
         console.log(data);
-        saveLoginState(-1);
-        outLogin();
+        navigate("/");
+        setTimeout(() => {
+            setSelectedKey("HKUser")
+        }, 100);
     });
 
     return <Tabs className="h-screen shadow-md" selectedKey={selectedKey}

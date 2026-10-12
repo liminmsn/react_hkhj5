@@ -19,7 +19,7 @@ export default function () {
             <div className="flex items-center mb-2">
                 <Label className="text-2xl">搜索韩剧</Label>
             </div>
-            <Input className="w-full bg-field-hover" name="search" required placeholder="输入片名" />
+            <Input className="w-full bg-field-hover" name="search" required placeholder="演员名、片名、相关字段" />
             <div className="mt-3 text-right">
                 <Button variant="primary" type="submit">
                     <Search size={40} />

@@ -9,7 +9,7 @@ export default class GlobalWebViewEvent {
         window.__webviewReceive = (message: string) => {
             try {
                 const data: WebViewEventData = typeof message === 'string' ? JSON.parse(message) : message;
-                
+
                 const callback = this.listenerMap.get(data.id);
                 if (!callback) return;
                 this.listenerMap.delete(data.id);

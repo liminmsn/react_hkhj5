@@ -44,7 +44,8 @@ export default function Search() {
     }
     return <div className="py-2 p-3 pt-13">
         <div className="mb-1 flex justify-between w-full">
-            <Label className="text-xl">{search}：搜索结果</Label>
+            <Label className="text-xl">
+                <div className="inline-flex bg-success rounded-2xl p-1 text-white">{search}</div>：搜索结果</Label>
             <Button className="px-3 " variant="danger" onClick={() => navigate(-1)}>返回</Button>
         </div>
         {data.code === -1 &&
@@ -61,7 +62,7 @@ export default function Search() {
                                 <Table.Column isRowHeader>#</Table.Column>
                                 <Table.Column>片名</Table.Column>
                                 <Table.Column className="text-nowrap">类型</Table.Column>
-                                <Table.Column>演员表</Table.Column>
+                                <Table.Column className="text-nowrap min-w-45">演员表</Table.Column>
                             </Table.Header>
                             <Table.Body>
                                 {data.body.map((item, idx) => {

@@ -50,7 +50,7 @@ type UseUserInfoType = {
     info: NetUser.Response.ModelUser.Login | null;
     saveInfo: (info: NetUser.Response.ModelUser.Login) => void;
     saveLoginState: (state: number) => void;
-    outLogin: () => void;
+    outLogin: (code: number) => void;
 }
 
 
@@ -152,9 +152,9 @@ export const useUserInfoStore = create<UseUserInfoType>(set => ({
         localStorage.setItem(useUserInfoStore_INFO, JSON.stringify(info));
         set(data => ({ ...data, info }));
     },
-    outLogin() {
+    outLogin(code = 0) {
         localStorage.removeItem(useUserInfoStore_INFO);
-        set(data => ({ ...data, info: null }));
+        set(data => ({ ...data, login_state: code, info: null }));
     },
 }));
 

@@ -5,5 +5,5 @@ public class EnvConfig {
         DEV,
         RELEASE
     }
-    public static Environment env = Environment.RELEASE;
+    public static Environment env = Environment.DEV;
 }

@@ -10,6 +10,7 @@ export const Api = {
     priceList: "/api/price/list",
     initPay: "/api/spay/init_pay",
     energyRanking: "/api/energy/ranking",
+    deductEnergy: "/api/energy/deductEnergy",
     flowingWater: "/api/energy/flowing-water",
     flowingWaterChat: "/api/energy/flowing-water-chat",
     inviteActivate: "/api/invite/activate",
@@ -47,33 +48,23 @@ export default class {
                 type: "http",
                 value: data,
             },
-            (res: { status: number, body: string }) => {
-                const body: { code: number, message: string, data: any } = JSON.parse(res.body);
-                switch (body.code) {
-                    case 401: //token过期或者未登录
-                        GlobalWindowEvent.emit("no_login", body);
-                        break;
-                    default:
-                        callFun(body);
-                        break;
+            (res: { status: number, body: string, error: string }) => {
+                console.log('usernet', res);
+                if (res.status != -1) {
+                    const body: { code: number, message: string, data: any } = JSON.parse(res.body);
+                    switch (body.code) {
+                        case 401: //token过期或者未登录
+                            GlobalWindowEvent.emit("no_login", body);
+                            break;
+                        default:
+                            callFun(body);
+                            break;
+                    }
+                } else {
+                    callFun({ code: 404, message: res.error, data: null })
                 }
-                console.log('yyy', JSON.stringify(body));
             }
         );
-        // const res = await fetch(this.url, {
-        //     headers: this.header,
-        //     method: this.method,
-        //     body: this.body
-        // })
-
-        // switch (res.status) {
-        //     case 401: //token过期或者未登录
-        //         GlobalWindowEvent.emit("no_login", await res.json());
-        //         break;
-        //     default:
-        //         callFun(await res.blob());
-        //         break;
-        // }
     }
 
     CarryToken() {
