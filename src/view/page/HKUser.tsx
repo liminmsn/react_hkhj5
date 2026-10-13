@@ -763,7 +763,7 @@ function UserInfo() {
                 <img
                     className="w-24 h-24 pointer-events-none aspect-square rounded-2xl object-cover select-none"
                     loading="lazy"
-                    src={`${import.meta.env["VITE_SERVICE_URL"]}/api${info?.avatar}`}
+                    src={`${import.meta.env["VITE_AVATAR"]}/${info?.avatar}`}
                 />
                 <div className="flex flex-col">
                     <Card.Title className="select-all">

@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.hkhj5.lib.util.MessageBox;
 import com.example.hkhj5.lib.WebView2;
@@ -22,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        windowInsetsController.setAppearanceLightStatusBars(true);
         this.webView2 = new WebView2(findViewById(R.id.webview), this);
         // 拦截返回键：能回退就回退，不能回退才退出
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {

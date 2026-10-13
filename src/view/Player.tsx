@@ -127,7 +127,7 @@ export default function () {
                 video.load();
             }
         }, 100);
-    }, [state.m3u8url]);
+    }, [navigate, state.detail.head.title, state.m3u8url]);
 
     useEffect(() => {
         return () => {
