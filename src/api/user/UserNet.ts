@@ -1,22 +1,45 @@
+import GlobalWebViewEbent from "../../event/GlobalWebViewEvent";
 import { GlobalWindowEvent } from "../../event/GlobalWindowEvent";
 
 export const Api = {
-    login:                                      "/api/auth/login",
-    register:                                   "/api/auth/register",
-    sendCaptcha:                                "/api/auth/send-captcha",
-    forgotPassword:                             "/api/auth/forgot-password",
-    userinfo:                                   "/api/user/info",
-    priceList:                                  "/api/price/list",
-    initPay:                                    "/api/spay/init_pay",
-    energyRanking:                              "/api/energy/ranking",
-    deductEnergy:                                "/api/energy/deductEnergy",
-    flowingWater:                               "/api/energy/flowing-water",
-    flowingWaterChat:                           "/api/energy/flowing-water-chat",
-    inviteActivate:                             "/api/invite/activate",
-    inviteInfo:                                 "/api/invite/info",
+    login: "/api/auth/login",
+    register: "/api/auth/register",
+    sendCaptcha: "/api/auth/send-captcha",
+    forgotPassword: "/api/auth/forgot-password",
+    userinfo: "/api/user/info",
+    priceList: "/api/price/list",
+    initPay: "/api/spay/init_pay",
+    energyRanking: "/api/energy/ranking",
+    deductEnergy: "/api/energy/deductEnergy",
+    flowingWater: "/api/energy/flowing-water",
+    flowingWaterChat: "/api/energy/flowing-water-chat",
+    inviteActivate: "/api/invite/activate",
+    inviteInfo: "/api/invite/info",
 }
 
-const baseUrl: string = "/api";
+interface UserNetRes {
+    body: string;
+    error: null;
+    headers: Headers;
+    ok: boolean;
+    status: number;
+    url: string;
+}
+
+interface Headers {
+    'Cache-Control': string;
+    Connection: string;
+    'Content-Length': string;
+    'Content-Type': string;
+    Date: string;
+    Expires: string;
+    Pragma: string;
+    'X-Content-Type-Options': string;
+    'X-Frame-Options': string;
+    'X-Xss-Protection': string;
+}
+
+const baseUrl: string = import.meta.env["VITE_SERVICE_URL"];
 export default class {
     private url: string;
     private body: NetUser.BodyType;
@@ -26,24 +49,44 @@ export default class {
     } as any;
 
     constructor(url: string) {
-        this.url = (baseUrl + url) || "";
+        this.url = baseUrl + url;
     }
 
-    private async send(callFun: (res: Blob) => void) {
-        const res = await fetch(this.url, {
-            headers: this.header,
-            method: this.method,
-            body: this.body
-        })
+    private async send(callFun: (res: NetUser.ResType<any>) => void) {
+        GlobalWebViewEbent.send({
+            id: crypto.randomUUID(),
+            type: 'http',
+            value: {
+                url: this.url,
+                body: this.body,
+                headers: this.header,
+                method: this.method,
+            }
+        }, (res: UserNetRes) => {
+            // console.log(res, 'nettt');
+            switch (res.status) {
+                case 401: //token过期或者未登录
+                    GlobalWindowEvent.emit("no_login", JSON.parse(res.body));
+                    break;
+                default:
+                    callFun(JSON.parse(res.body));
+                    break;
+            }
+        });
+        // const res = await fetch(this.url, {
+        //     headers: this.header,
+        //     method: this.method,
+        //     body: this.body
+        // })
 
-        switch (res.status) {
-            case 401: //token过期或者未登录
-                GlobalWindowEvent.emit("no_login", await res.json());
-                break;
-            default:
-                callFun(await res.blob());
-                break;
-        }
+        // switch (res.status) {
+        //     case 401: //token过期或者未登录
+        //         GlobalWindowEvent.emit("no_login", await res.json());
+        //         break;
+        //     default:
+        //         callFun(await res.blob());
+        //         break;
+        // }
     }
 
     CarryToken() {
