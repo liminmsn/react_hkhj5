@@ -44,9 +44,13 @@ function Login({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
             <Fieldset.Legend>能量系统</Fieldset.Legend>
             <Description>小小能量温暖的连接你我他</Description>
             {
-                login_state == -1 &&
-                <div className='bg-danger text-center py-1'>
-                    <Label className='text-white'>登录状态过期重新登录</Label>
+                login_state == -1 && <div className="flex flex-col">
+                    <div className='bg-danger text-center py-1'>
+                        <Label className='text-white'>未登录或者登录状态过期</Label>
+                    </div>
+                    <div className='bg-success text-center py-1'>
+                        <Label className='text-white'>重新登录即可，没有账号左下角注册</Label>
+                    </div>
                 </div>
             }
             <FieldGroup>
@@ -165,7 +169,7 @@ function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
                         <Input placeholder="密码长度在6-20个字符之间" />
                         <FieldError />
                     </TextField>
-                    <TextField className="mb-1" isRequired name="nickname" type="text">
+                    {/* <TextField className="mb-1" isRequired name="nickname" type="text">
                         <Label>昵称</Label>
                         <Input placeholder="昵称不能超过50个字符" />
                         <FieldError />
@@ -174,7 +178,7 @@ function Register({ ref }: { ref?: Ref<LoginRegisterForgotRef> }) {
                         <Label>手机号(可选)</Label>
                         <Input placeholder="手机号必须是11位数字" />
                         <FieldError />
-                    </TextField>
+                    </TextField> */}
                     <TextField className="mb-1" isRequired name="email" type="email">
                         <Label>邮箱</Label>
                         <div className="flex">
@@ -456,9 +460,9 @@ function UserInfoTopUp() {
                                                                 <Label>订单编号：{spay.trade_no}</Label>
                                                                 <Label className="text-black/20">已经支付完成？</Label>
                                                                 <Button variant="primary"
-                                                                onClick={()=>{
-                                                                    navigate("/spay")
-                                                                }}
+                                                                    onClick={() => {
+                                                                        navigate("/spay")
+                                                                    }}
                                                                 >查询支付结果</Button>
                                                             </div>
                                                         </div> :

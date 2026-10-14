@@ -8,9 +8,11 @@ import HKUser from './view/page/HKUser';
 // import HKMap from './view/page/HKMap';
 import { Blocks, CircleUserRound, FolderHeart, House } from 'lucide-react';
 import { GlobalWindowEvent } from './event/GlobalWindowEvent';
+import { useNavigate } from 'react-router';
 
 
 export default function () {
+    const navigate = useNavigate();
     const selectedKey = useLayoutStore().selectedKey;
     const setSelectedKey = useLayoutStore().setSelectedKey;
     const [scrollTop, setScrollTop] = useState(0);
@@ -66,6 +68,10 @@ export default function () {
         console.log(data);
         saveLoginState(-1);
         outLogin();
+        navigate("/");
+        setTimeout(() => {
+            setSelectedKey("HKUser")
+        }, 100);
     });
 
     return <Tabs className="h-screen shadow-md" selectedKey={selectedKey}
