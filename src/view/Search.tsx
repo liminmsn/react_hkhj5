@@ -23,12 +23,15 @@ export default function Search() {
             new Analysis(crypto.randomUUID(), `${import.meta.env["VITE_URL"]}/search/`, analysis_search, res => {
                 if (res) {
                     setData(res)
-                    localStorage.setItem(search, JSON.stringify(res))
+                    // localStorage.setItem(search, JSON.stringify(res))
                 }
-            }).post({
-                show: "searchkey",
-                keyboard: search,
-            });
+            })
+                .setHeader({ "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" })
+                .setHeader({ "User-Agent": "Mozilla/5.0 (Android)" })
+                .post({
+                    show: "searchkey",
+                    keyboard: search,
+                });
         }
     }, [search]);
 
@@ -41,7 +44,8 @@ export default function Search() {
     }
     return <div className="py-2 p-3">
         <div className="mb-1 flex justify-between w-full">
-            <Label className="text-xl">{search}：搜索结果</Label>
+            <Label className="text-xl">
+                <div className="inline-flex bg-success rounded-2xl p-1 text-white">{search}</div>：搜索结果</Label>
             <Button className="px-3 " variant="danger" onClick={() => navigate(-1)}>返回</Button>
         </div>
         {data.code === -1 &&
@@ -57,15 +61,15 @@ export default function Search() {
                             <Table.Header>
                                 <Table.Column isRowHeader>#</Table.Column>
                                 <Table.Column>片名</Table.Column>
-                                <Table.Column>类型</Table.Column>
-                                <Table.Column>演员表</Table.Column>
+                                <Table.Column className="text-nowrap">类型</Table.Column>
+                                <Table.Column className="text-nowrap min-w-45">演员表</Table.Column>
                             </Table.Header>
                             <Table.Body>
                                 {data.body.map((item, idx) => {
                                     return <Table.Row key={item.url} className="cursor-pointer" onClickCapture={() => { openDetail(item.url) }}>
                                         <Table.Cell className="text-danger">{idx + 1}</Table.Cell>
-                                        <Table.Cell>{item.name}</Table.Cell>
-                                        <Table.Cell>{item.time}</Table.Cell>
+                                        <Table.Cell className="text-nowrap">{item.name}</Table.Cell>
+                                        <Table.Cell className="text-nowrap">{item.time}</Table.Cell>
                                         <Table.Cell>{item.actor}</Table.Cell>
                                     </Table.Row>
                                 })}

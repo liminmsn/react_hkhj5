@@ -734,7 +734,7 @@ function UserInfo() {
                 saveInfo({ ...res.data, token: info!.token })
             }
         });
-    })
+    }, [])
 
     return <div className="w-full h-screen p-3 pb-16 flex gap-1.5">
         <div className="h-full flex flex-col gap-y-1.5 w-1/3">
@@ -743,7 +743,8 @@ function UserInfo() {
                     <img
                         className="w-24 h-24 pointer-events-none aspect-square rounded-2xl object-cover select-none"
                         loading="lazy"
-                        src={`/api/api${info?.avatar}`}
+                        referrerPolicy="no-referrer"
+                        src={`${import.meta.env["VITE_AVATAR"]}/${info?.avatar}`}
                     />
                     <div className="flex flex-col">
                         <Card.Title className="select-all">

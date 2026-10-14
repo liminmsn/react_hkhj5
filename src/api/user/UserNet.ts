@@ -9,6 +9,7 @@ export const Api = {
     priceList:                                  "/api/price/list",
     initPay:                                    "/api/spay/init_pay",
     energyRanking:                              "/api/energy/ranking",
+    deductEnergy:                                "/api/energy/deductEnergy",
     flowingWater:                               "/api/energy/flowing-water",
     flowingWaterChat:                           "/api/energy/flowing-water-chat",
     inviteActivate:                             "/api/invite/activate",

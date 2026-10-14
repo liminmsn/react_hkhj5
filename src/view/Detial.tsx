@@ -21,6 +21,14 @@ export default function () {
     const { state } = useLocation() as { state: AnalysisHomeObjItemTypeListItem }
     const { list, add_remove } = useWatchListStore();
 
+    function searchTags(tag: string) {
+        navigate("/search", {
+            state: {
+                search: tag
+            }
+        })
+    }
+
     useEffect(() => {
         setUrlVar('--hover_bg', state.imgUrl)
         select();
@@ -34,7 +42,7 @@ export default function () {
         return <HkLoding />
     }
 
-    return <div className="pt-10 px-3 relative">
+    return <div className="px-3 relative">
         <div className="bg_blur"></div>
         <div className="text-right mb-2">
             <Button
@@ -56,7 +64,10 @@ export default function () {
             <Card className="flex-1 flex-row backdrop-blur-sm shadow-sm">
                 <div className="flex-1">
                     <Label className="text-3xl">{detail.head.title}</Label>
-                    <TagGroup aria-label="Tags" selectionMode="none" className="mt-1">
+                    <TagGroup aria-label="Tags" selectionMode="single" className="mt-1" onSelectionChange={(key) => {
+                        const tag = detail.head.tags[Object.values(key)[0]];
+                        searchTags(tag);
+                    }}>
                         <TagGroup.List>
                             {
                                 detail.head.tags.map((item, idx) => {

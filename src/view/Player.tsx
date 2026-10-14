@@ -9,8 +9,8 @@ import type { APITypes } from "plyr-react";
 import { useEffect, useRef } from "react";
 import { X, List } from "lucide-react";
 import type { SourceInfo } from "plyr";
-import { Plyr } from 'plyr-react';
 import Hls from "hls.js";
+import HKPlayer from "../components/HKPlayer";
 
 export type PlayerInfoType = {
     m3u8url: string;
@@ -22,13 +22,7 @@ export type PlayerInfoType = {
 const plyrProps: PlyrPropsType = {
     source: {
         type: "video",
-        sources: [
-            {
-                src: "https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4",
-                type: "video/mp4",
-                size: 720,
-            },
-        ],
+        sources: [],
         poster: "/poster.png",
     },
     options: {
@@ -102,39 +96,56 @@ export default function () {
 
 
             const video = (player.current.plyr as any).media as HTMLVideoElement;
-            const isHls = state.m3u8url.toLowerCase().includes(".m3u8");
-            if (isHls) {
-                if (hlsRef.current) {
-                    hlsRef.current.destroy();
-                }
-                if (Hls.isSupported()) {
-                    const hls = new Hls({ enableWorker: false });
-                    hlsRef.current = hls;
-                    hls.attachMedia(video);
-                    hls.loadSource(state.m3u8url);
-                    hls.on(Hls.Events.ERROR, (_, data) => {
-                        console.log("HLS Error:", data);
-                    });
-                } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-                    video.src = state.m3u8url;
-                    video.load();
-                }
-            } else {
-                if (hlsRef.current) {
-                    hlsRef.current.destroy();
-                    hlsRef.current = null;
-                }
+            if (hlsRef.current) {
+                hlsRef.current.destroy();
+            }
+            if (Hls.isSupported()) {
+                const hls = new Hls({ enableWorker: false });
+                hlsRef.current = hls;
+                hls.attachMedia(video);
+                hls.loadSource(state.m3u8url);
+                hls.on(Hls.Events.ERROR, (_, data) => {
+                    console.log("HLS Error:", data);
+                });
+            } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
                 video.src = state.m3u8url;
                 video.load();
             }
+            // const isHls = state.m3u8url.toLowerCase().includes(".m3u8");
+            // if (isHls) {
+            //     if (hlsRef.current) {
+            //         hlsRef.current.destroy();
+            //     }
+            //     if (Hls.isSupported()) {
+            //         const hls = new Hls({ enableWorker: false });
+            //         hlsRef.current = hls;
+            //         hls.attachMedia(video);
+            //         hls.loadSource(state.m3u8url);
+            //         hls.on(Hls.Events.ERROR, (_, data) => {
+            //             console.log("HLS Error:", data);
+            //         });
+            //     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+            //         video.src = state.m3u8url;
+            //         video.load();
+            //     }
+            // } else {
+            //     if (hlsRef.current) {
+            //         hlsRef.current.destroy();
+            //         hlsRef.current = null;
+            //     }
+            //     video.src = state.m3u8url;
+            //     video.load();
+            // }
         }, 100);
+    }, [state.m3u8url]);
 
+    useEffect(() => {
         return () => {
             hlsRef.current?.destroy();
             hlsRef.current = null;
         };
 
-    }, [state.m3u8url]);
+    }, [])
 
     return <div className="flex w-screen h-screen">
         <div ref={playerControl} className="absolute pointer-events-none left-0 right-0 bottom-0 h-screen text-left p-4">
@@ -175,6 +186,6 @@ export default function () {
                 </div>
             </div>
         </div>
-        <Plyr ref={player} options={plyrProps.options} source={source} />
+        <HKPlayer ref={player} options={plyrProps.options} source={source} />
     </div>
 }
