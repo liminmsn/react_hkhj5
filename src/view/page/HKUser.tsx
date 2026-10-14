@@ -12,6 +12,7 @@ import getFormData from "../../utils/getFormData";
 import dayjs from "dayjs";
 import { model_spay_init_pay } from "../../api/user/model/modelSpay";
 import { model_invite_activate } from "../../api/user/model/modelActivate";
+import { useNavigate } from "react-router";
 
 type SubmitParameter = React.FormEvent<HTMLFormElement>;
 type LoginRegisterForgotRef = {
@@ -338,6 +339,8 @@ function LoginRegisterLayout() {
 }
 
 function UserInfoTopUp() {
+    const navigate = useNavigate();
+
     const [select, setSelect] = useState<NetUser.Response.ModelPrice.ListItem>()
     const [list, setList] = useState<NetUser.Response.ModelPrice.ListList>();
     useEffect(() => {
@@ -452,7 +455,11 @@ function UserInfoTopUp() {
                                                                 <Label>订单创建状态：{spay.msg}</Label>
                                                                 <Label>订单编号：{spay.trade_no}</Label>
                                                                 <Label className="text-black/20">已经支付完成？</Label>
-                                                                <Button variant="primary">刷新数据</Button>
+                                                                <Button variant="primary"
+                                                                onClick={()=>{
+                                                                    navigate("/spay")
+                                                                }}
+                                                                >查询支付结果</Button>
                                                             </div>
                                                         </div> :
                                                     <div>
