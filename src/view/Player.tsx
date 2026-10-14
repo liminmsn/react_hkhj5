@@ -1,6 +1,6 @@
 import "plyr-react/plyr.css";
 import type { AnalysisDetailObjPlayListType, AnalysisDetailObjType } from "../api/analysis/analysis_detail";
-import { Button, Card, Label, Tag, TagGroup } from "@heroui/react";
+import { Button, Card, Label, Tag, TagGroup, toast, Toast } from "@heroui/react";
 import GlobalWebViewEbent from "../event/GlobalWebViewEvent";
 import type { PlyrPropsType } from "../components/HKPlayer";
 import { useLocation, useNavigate } from "react-router";
@@ -11,6 +11,7 @@ import { X, List } from "lucide-react";
 import type { SourceInfo } from "plyr";
 import Hls from "hls.js";
 import HKPlayer from "../components/HKPlayer";
+import { model_energy_deductEnergy } from "../api/user/model/modelEnergy";
 
 export type PlayerInfoType = {
     m3u8url: string;
@@ -77,11 +78,7 @@ export default function () {
             if (dom && playerControl.current) {
                 dom.appendChild(playerControl.current);
             }
-
-            const btnFull = document.querySelector(
-                "button[data-plyr='fullscreen']"
-            ) as HTMLButtonElement;
-
+            const btnFull = document.querySelector("button[data-plyr='fullscreen']") as HTMLButtonElement;
             if (btnFull) {
                 btnFull.onclick = () => {
                     GlobalWebViewEbent.sendOnce({
@@ -106,6 +103,19 @@ export default function () {
                 hls.loadSource(state.m3u8url);
                 hls.on(Hls.Events.ERROR, (_, data) => {
                     console.log("HLS Error:", data);
+                });
+                hls.on(Hls.Events.MANIFEST_PARSED, (_event, data) => {
+                    console.log("HLS 加载成功，已解析到", data.levels.length, "个清晰度");
+                    model_energy_deductEnergy(state.detail.head.title, (res) => {
+                        console.log(res, 'yyy');
+                        toast(res.message, {
+                            variant: res.code == 200 ? "success" : "danger",
+                            timeout: 1000
+                        });
+                        if (res.code != 200) {
+                            navigate(-1);
+                        }
+                    });
                 });
             } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
                 video.src = state.m3u8url;
@@ -137,7 +147,7 @@ export default function () {
             //     video.load();
             // }
         }, 100);
-    }, [state.m3u8url]);
+    }, [navigate, state.detail.head.title, state.m3u8url]);
 
     useEffect(() => {
         return () => {
@@ -148,6 +158,7 @@ export default function () {
     }, [])
 
     return <div className="flex w-screen h-screen">
+        <Toast.Provider placement="top" />
         <div ref={playerControl} className="absolute pointer-events-none left-0 right-0 bottom-0 h-screen text-left p-4">
             <div className="flex">
                 <div className="flex-1">
