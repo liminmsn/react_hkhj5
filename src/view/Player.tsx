@@ -54,12 +54,7 @@ export default function () {
     const source: SourceInfo = {
         type: "video",
         poster: "/poster.png",
-        sources: [
-            {
-                src: state.m3u8url,
-                type: "application/x-mpegURL"
-            }
-        ]
+        sources: []
     }
 
 
@@ -103,6 +98,12 @@ export default function () {
                 hls.loadSource(state.m3u8url);
                 hls.on(Hls.Events.ERROR, (_, data) => {
                     console.log("HLS Error:", data);
+                    toast(data.error.message, {
+                        variant: "danger"
+                    });
+                    setTimeout(() => {
+                        navigate(-1);
+                    }, 1000);
                 });
                 hls.on(Hls.Events.MANIFEST_PARSED, (_event, data) => {
                     console.log("HLS 加载成功，已解析到", data.levels.length, "个清晰度");
